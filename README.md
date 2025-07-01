@@ -113,54 +113,119 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 ```
 📁 .github/                  # ⚙️ Configuraciones de GitHub (workflows para CI)
 │   ├── workflows/
-│   │   ├── ci.yml          # 🔄 Integración Continua (tests, linting, build Docker images)
-│   │   └── ...             # 🚫 No se requiere un cd.yml complejo si no hay despliegue remoto
-│   └── ISSUE_TEMPLATE.md   # 📝 Plantilla para incidencias
-📁 docs/                    # 📚 Documentación del proyecto
-│   ├── arquitectura.md     # 🏗️ Diagramas y descripción de la arquitectura
+│   │   ├── ci.yml           # 🔄 Integración Continua (tests, linting, build Docker images)
+│   │   └── ...              # 🚫 No se requiere un cd.yml complejo si no hay despliegue remoto
+│   └── ISSUE_TEMPLATE.md    # 📝 Plantilla para la creación de incidencias
+
+📁 docs/                     # 📚 Documentación del proyecto
+│   ├── arquitectura.md      # 🏗️ Diagramas y descripción de la arquitectura
 │   ├── requisitos.md
-│   ├── api_reference.md    # 📖 Documentación de las APIs internas
-│   ├── setup_local.md      # 🛠️ Guía de configuración local
-│   └── user_guide.md       # 👤 Guía de usuario
+│   ├── api_reference.md     # 📖 Documentación de las APIs internas de los microservicios
+│   ├── setup_local.md       # 🛠️ Guía detallada para configurar el entorno local (incluye descarga de modelos)
+│   └── user_guide.md        # 👤 Cómo interactuar con el asistente
+
 📁 models_data/              # 🤖 Modelos de IA y datos grandes pre-descargados
-│   ├── whisper_models/             # 🗣️ Modelos base de Whisper
-│   ├── fine_tuned_whisper_models/  # 🛠️ Modelos Whisper fine-tuned
-│   ├── llm_models/                 # 🧠 Modelos LLM
-│   ├── knowledge_base_docs/        # 📄 Documentos fuente
-│   ├── vector_db_data/             # 🗃️ Archivos de la DB vectorial
-│   └── whisper_finetune_dataset/   # 🎵 Dataset de audio y transcripciones
-📁 scripts/                  # 🛠️ Scripts auxiliares
-│   ├── setup_env.sh        # ⚙️ Instalar dependencias, crear venvs
-│   ├── run_dev.sh          # 🚀 Levantar docker-compose en modo dev
-│   ├── run_prod.sh         # 🚀 Levantar docker-compose en modo prod
-│   ├── download_models.py  # ⬇️ Descargar modelos grandes
-│   ├── seed_db.py          # 🌱 Poblar la base de datos
-│   ├── ingest_docs.py      # 📥 Ingestar documentos
-│   ├── create_vector_db.py # 🏗️ Inicializar la DB vectorial
-│   ├── cleanup.sh          # 🧹 Limpiar contenedores/volúmenes Docker
-│   └── test_api.py         # 🧪 Testear la API
+│   ├── whisper_models/              # 🗣️ Modelos base de Whisper pre-descargados (ej. small.pt, medium.pt)
+│   ├── fine_tuned_whisper_models/   # 🛠️ Modelos Whisper fine-tuned
+│   │   ├── v1.0_pilot_comm/
+│   │   │   ├── model.pt             # El checkpoint del modelo
+│   │   │   └── config.json          # Configuración del modelo
+│   │   └── v1.1_noise_reduction/
+│   │       └── ...
+│   ├── llm_models/
+│   ├── knowledge_base_docs/         # 📄 Documentos fuente
+│   ├── vector_db_data/              # 🗃️ Archivos de la DB vectorial
+│   │   ├── chroma_db/               # Si usas ChromaDB, esta carpeta contendrá sus archivos
+│   │   └── faiss_index.bin          # Si usas FAISS, este será tu archivo de índice
+│   └── whisper_finetune_dataset/    # 🎵 Dataset de audio y transcripciones para fine-tuning
+│       ├── audio/                   # Archivos de audio (ej. .wav, .flac)
+│       └── transcripts/             # Archivos de transcripción (ej. .txt, .json, .tsv)
+
 📁 services/                 # 🧩 Microservicios principales
-│   ├── ingestion/          # 📥 Ingesta y procesamiento de documentos
-│   ├── asr/                # 🗣️ ASR con Whisper
-│   ├── nlp-agentic-rag/    # 🤖 NLP / Agente RAG
-│   ├── tts/                # 🔊 Text-to-Speech
-│   └── avionics-simulator/ # ✈️ Simulación de aviónica
+│   ├── ingestion/           # 📥 Microservicio para la ingesta y procesamiento de documentos
+│   │   ├── __init__.py
+│   │   ├── app.py           # 🚀 Punto de entrada de la aplicación (FastAPI/Flask)
+│   │   ├── config.py        # ⚙️ Configuración específica del microservicio (no sensibles)
+│   │   ├── application/     # 🧠 Capa de Aplicación (casos de uso, lógica de orquestación)
+│   │   │   ├── commands.py  # 📤 DTOs para comandos de entrada
+│   │   │   ├── queries.py   # 📥 DTOs para queries de salida
+│   │   │   ├── dtos.py      # 🔄 Data Transfer Objects (si son necesarios)
+│   │   │   └── use_cases/   # 🛠️ Servicios de Aplicación (gestión de acciones principales)
+│   │   ├── domain/          # 🏛️ Capa de Dominio (lógica de negocio)
+│   │   │   ├── entities/        # 🧩 Entidades principales (ej: Documento, Piloto)
+│   │   │   ├── value_objects/   # 🏷️ Objetos de valor (ej: TextoTranscrito)
+│   │   │   ├── aggregates/      # 🗂️ Agregados de entidades
+│   │   │   ├── services/        # ⚙️ Servicios de dominio (lógica que no encaja en una entidad)
+│   │   │   ├── repositories/    # 🗄️ Interfaces de repositorio (contratos para persistencia)
+│   │   │   ├── factories/       # 🏭 Factories para crear objetos complejos
+│   │   │   └── managers/        # 👨‍💼 Managers para coordinar lógica compleja
+│   │   ├── infrastructure/  # 🏗️ Capa de Infraestructura (persistencia, adaptadores externos)
+│   │   │   ├── persistence/     # 💾 Implementaciones de repositorios y conexión DB
+│   │   │   ├── adapters/        # 🔌 Adaptadores para APIs externas (ej: OCR)
+│   │   │   └── web/             # 🌐 Puntos de entrada HTTP (controladores/routers)
+│   │   ├── logging_config.py    # 📝 Configuración del logger del microservicio
+│   │   ├── Dockerfile           # 🐳 Dockerfile para contenerizar el microservicio
+│   │   ├── requirements.txt     # 📦 Dependencias del microservicio
+│   │   ├── tests/               # 🧪 Tests específicos del microservicio
+│   │   ├── README.md            # 📖 Documentación específica del microservicio
+│   │   └── .env.example         # 🗝️ Ejemplo de variables de entorno necesarias
+│   ├── asr/                 # 🗣️ Microservicio ASR con Whisper
+│   │   ├── src/
+│   │   │   ├── app.py
+│   │   │   └── ...
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   ├── tests/
+│   │   ├── README.md
+│   │   └── .env.example
+│   ├── nlp-agentic-rag/     # 🤖 Microservicio NLP / Agente RAG
+│   │   ├── src/
+│   │   │   ├── app.py
+│   │   │   └── ...
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   ├── tests/
+│   │   ├── README.md
+│   │   └── .env.example
+│   ├── tts/                 # 🔊 Microservicio Text-to-Speech (TTS)
+│   │   ├── src/
+│   │   │   ├── app.py
+│   │   │   └── ...
+│   │   ├── Dockerfile
+│   │   ├── requirements.txt
+│   │   ├── tests/
+│   │   ├── README.md
+│   │   └── .env.example
+│   └── avionics-simulator/  # ✈️ Microservicio para la simulación de la aviónica
+│       ├── src/
+│       │   ├── app.py
+│       │   └── ...
+│       ├── Dockerfile
+│       ├── requirements.txt
+│       ├── tests/
+│       ├── README.md
+│       └── .env.example
+
 📁 common/                   # 🔗 Módulos/librerías compartidas
 │   ├── utils/              # 🛠️ Utilidades comunes
 │   └── models/             # 📦 Modelos de datos compartidos
+
 📁 infrastructure/           # 🏗️ Configuración de orquestación local
 │   ├── docker-compose.yml      # 🐳 Orquestación para desarrollo
 │   ├── docker-compose.prod.yml # 🐳 Orquestación para producción
 │   ├── .env.dev                # ⚙️ Variables de entorno dev
 │   ├── .env.prod               # ⚙️ Variables de entorno prod
 │   └── README.md               # 📖 Instrucciones de infraestructura
+
 📁 notebooks/                # 📓 Jupyter Notebooks para experimentación
 │   ├── data_exploration.ipynb
 │   └── whisper_fine_tuning.ipynb
+
 📁 tests/                    # 🧪 Tests globales
 │   ├── unit/                # 🧩 Tests unitarios
 │   └── e2e/                 # 🔄 Tests end-to-end
 │       └── e2e_tests.py
+
 📝 .gitignore                # 🚫 Ignorar archivos/carpetas
 📝 LICENSE                   # 📄 Licencia del proyecto
 📝 README.md                 # 📘 README principal
