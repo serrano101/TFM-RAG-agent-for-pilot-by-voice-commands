@@ -102,6 +102,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
    ```bash
    pip install -r requirements.txt
    ```
+   > **ℹ️ Nota:** Para consultar las últimas versiones de las librerías puedes visitar [PyPI](https://pypi.org/)
 4. Ejecuta los microservicios según la documentación de cada uno.
 
 ---
@@ -145,24 +146,25 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 │   ├── ingestion/           # 📥 Microservicio para la ingesta y procesamiento de documentos
 │   │   ├── __init__.py
 │   │   ├── app.py           # 🚀 Punto de entrada de la aplicación (FastAPI/Flask)
-│   │   ├── config.py        # ⚙️ Configuración específica del microservicio (no sensibles)
-│   │   ├── application/     # 🧠 Capa de Aplicación (casos de uso, lógica de orquestación)
-│   │   │   ├── commands.py  # 📤 DTOs para comandos de entrada
-│   │   │   ├── queries.py   # 📥 DTOs para queries de salida
-│   │   │   ├── dtos.py      # 🔄 Data Transfer Objects (si son necesarios)
-│   │   │   └── use_cases/   # 🛠️ Servicios de Aplicación (gestión de acciones principales)
-│   │   ├── domain/          # 🏛️ Capa de Dominio (lógica de negocio)
-│   │   │   ├── entities/        # 🧩 Entidades principales (ej: Documento, Piloto)
-│   │   │   ├── value_objects/   # 🏷️ Objetos de valor (ej: TextoTranscrito)
-│   │   │   ├── aggregates/      # 🗂️ Agregados de entidades
-│   │   │   ├── services/        # ⚙️ Servicios de dominio (lógica que no encaja en una entidad)
-│   │   │   ├── repositories/    # 🗄️ Interfaces de repositorio (contratos para persistencia)
-│   │   │   ├── factories/       # 🏭 Factories para crear objetos complejos
-│   │   │   └── managers/        # 👨‍💼 Managers para coordinar lógica compleja
-│   │   ├── infrastructure/  # 🏗️ Capa de Infraestructura (persistencia, adaptadores externos)
-│   │   │   ├── persistence/     # 💾 Implementaciones de repositorios y conexión DB
-│   │   │   ├── adapters/        # 🔌 Adaptadores para APIs externas (ej: OCR)
-│   │   │   └── web/             # 🌐 Puntos de entrada HTTP (controladores/routers)
+│   │   ├── config.yaml        # ⚙️ Configuración específica del microservicio (no sensibles)
+│   │   ├── src/ 
+│   │   │   ├── application/     # 🧠 Capa de Aplicación (casos de uso, lógica de orquestación)
+│   │   │   │   ├── commands.py  # 📤 DTOs para comandos de entrada
+│   │   │   │   ├── queries.py   # 📥 DTOs para queries de salida
+│   │   │   │   ├── dtos.py      # 🔄 Data Transfer Objects (si son necesarios)
+│   │   │   │   └── use_cases/   # 🛠️ Servicios de Aplicación (gestión de acciones principales)
+│   │   │   ├── domain/          # 🏛️ Capa de Dominio (lógica de negocio)
+│   │   │   │   ├── entities/        # 🧩 Entidades principales (ej: Documento, Piloto)
+│   │   │   │   ├── value_objects/   # 🏷️ Objetos de valor (ej: TextoTranscrito)
+│   │   │   │   ├── aggregates/      # 🗂️ Agregados de entidades
+│   │   │   │   ├── services/        # ⚙️ Servicios de dominio (lógica que no encaja en una entidad)
+│   │   │   │   ├── repositories/    # 🗄️ Interfaces de repositorio (contratos para persistencia)
+│   │   │   │   ├── factories/       # 🏭 Factories para crear objetos complejos
+│   │   │   │   └── managers/        # 👨‍💼 Managers para coordinar lógica compleja
+│   │   │   ├── infrastructure/  # 🏗️ Capa de Infraestructura (persistencia, adaptadores externos)
+│   │   │   │   ├── persistence/     # 💾 Implementaciones de repositorios y conexión DB
+│   │   │   │   ├── adapters/        # 🔌 Adaptadores para APIs externas (ej: OCR)
+│   │   │   │   └── web/             # 🌐 Puntos de entrada HTTP (controladores/routers)
 │   │   ├── logging_config.py    # 📝 Configuración del logger del microservicio
 │   │   ├── Dockerfile           # 🐳 Dockerfile para contenerizar el microservicio
 │   │   ├── requirements.txt     # 📦 Dependencias del microservicio
@@ -173,6 +175,7 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 │   │   ├── src/
 │   │   │   ├── app.py
 │   │   │   └── ...
+│   │   ├── logging_config.py
 │   │   ├── Dockerfile
 │   │   ├── requirements.txt
 │   │   ├── tests/
@@ -182,6 +185,7 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 │   │   ├── src/
 │   │   │   ├── app.py
 │   │   │   └── ...
+│   │   ├── logging_config.py
 │   │   ├── Dockerfile
 │   │   ├── requirements.txt
 │   │   ├── tests/
@@ -191,6 +195,7 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 │   │   ├── src/
 │   │   │   ├── app.py
 │   │   │   └── ...
+│   │   ├── logging_config.py
 │   │   ├── Dockerfile
 │   │   ├── requirements.txt
 │   │   ├── tests/
@@ -200,6 +205,7 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 │       ├── src/
 │       │   ├── app.py
 │       │   └── ...
+│       ├── logging_config.py
 │       ├── Dockerfile
 │       ├── requirements.txt
 │       ├── tests/
