@@ -230,7 +230,7 @@ A continuación, se muestra la idea inicial de la estructuración del proyecto:
 📝 LICENSE                   # 📄 Licencia del proyecto
 📝 README.md                 # 📘 README principal
 📝 CONTRIBUTING.md           # 🤝 Guía para contribuyentes
-📝 pyproject.toml            # ⚙️ Configuración de proyectos Python
+📝 requirements.txt          # ⚙️ Librerias necesarias que hay que instalar
 ```
 
 ---
