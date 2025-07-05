@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: asr_service
     ports:
-      - "8001:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
+      - "8000:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
@@ -22,3 +22,16 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+  ingestion:
+    build:
+      context: ../services/ingestion
+      dockerfile: Dockerfile
+    container_name: ingestion_service
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/ingestion:/app
+      - ../docs/dataset_procedures:/app/docs/dataset_procedures
+      - ../common/vector_db:/app/common/vector_db
+      - ../common/embedders:/app/common/embedders
+
