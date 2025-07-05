@@ -15,6 +15,9 @@ def read_root():
 
 @app.post("/transcribe/")
 async def transcribe_endpoint(file: UploadFile = File(...)):
+    """
+    Endpoint para transcribir audio a texto.
+    """
     audio_bytes = await file.read()
     transcription = transcribe_audio(audio_bytes, asr_service)
     return JSONResponse(content={"transcription": transcription})

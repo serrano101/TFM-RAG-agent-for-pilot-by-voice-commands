@@ -8,5 +8,4 @@ openai-whisper==20250625
 
 # Importar Numpy ya que es necesario para  utilizar GPU
 numpy==1.26.4
-libnvrtc11.6
 

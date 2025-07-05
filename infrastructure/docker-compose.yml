@@ -1,0 +1,24 @@
+# docker-compose.yml para levantar el microservicio ASR
+version: '3.8'
+services:
+  asr:
+    build:
+      context: ../services/asr
+      dockerfile: Dockerfile
+    container_name: asr_service
+    ports:
+      - "8001:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/asr:/app  # Monta el código fuente para desarrollo
+      # Los modelos de Whisper se descargarán automáticamente por el microservicio ASR según requirements.txt
+    restart: unless-stopped
+    # Si necesitas GPU, añade:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

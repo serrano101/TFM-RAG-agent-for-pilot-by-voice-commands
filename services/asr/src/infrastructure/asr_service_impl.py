@@ -6,7 +6,12 @@ import torch
 # Verifica si hay una GPU disponible y establece el dispositivo
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-
+print("CUDA available:", torch.cuda.is_available())
+print("CUDA device count:", torch.cuda.device_count())
+if torch.cuda.is_available():
+    print("CUDA device name:", torch.cuda.get_device_name(0))
+else:
+    print("No GPU detected")
 class ASRServiceImpl(ASRService):
 
     def __init__(self, model_name="large-v3-turbo"):
