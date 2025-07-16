@@ -32,6 +32,6 @@ services:
     volumes:
       - ../services/ingestion:/app
       - ../docs/dataset_procedures:/app/docs/dataset_procedures
-      - ../common/vector_db:/app/common/vector_db
-      - ../common/embedders:/app/common/embedders
+      # - ../common/vector_db:/app/common/vector_db
+      # - ../common/embedders:/app/common/embedders
 

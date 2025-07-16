@@ -6,15 +6,19 @@ python-dotenv==1.1.1
 chromadb==1.0.15
 
 # OCR
-pymupdf==1.26.3
-pytesseract==0.3.13
-Pillow==11.3.0
+# pymupdf==1.26.3
+# pytesseract==0.3.13
+# Pillow==11.3.0
+docling==2.41.0
 
 # Chunks
 langchain==0.3.26
 
 # Embeddings
-sentence-transformers==5.0.0
+# sentence-transformers==5.0.0
 
 # Watchdog para activar el micro cuando haya un archivo nuevo
 watchdog==3.0.0
+
+# Otros
+uuid==1.30

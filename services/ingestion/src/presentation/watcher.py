@@ -31,7 +31,7 @@ if __name__ == "__main__":
     os.makedirs(path, exist_ok=True)
 
     # Procesar PDFs existentes al arrancar solo si no están ya en la base de datos
-    db_path = os.getenv("VECTOR_DB_FOLDER")
+    db_path = os.getenv("VECTOR_DB_URL")
     db_repo = ChromaDBRepository(db_path)
 
     pdfs_existentes = [f for f in os.listdir(path) if f.lower().endswith('.pdf') and os.path.isfile(os.path.join(path, f))]
