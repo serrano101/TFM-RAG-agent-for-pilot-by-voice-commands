@@ -1,11 +1,18 @@
+# Soporte para variables de entorno desde .env
+python-dotenv==1.1.1
+
 # Servicio de API --> FastAPI
 python-multipart==0.0.20
 fastapi==0.115.14
 uvicorn==0.35.0
+requests==2.32.4
 
 # Modelos de ASR
 openai-whisper==20250625
 
 # Importar Numpy ya que es necesario para  utilizar GPU
 numpy==1.26.4
+
+# Importar torch para utilizar GPU
+torch==2.7.1
 

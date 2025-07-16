@@ -80,7 +80,65 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
      ```
 
    > **ℹ️ Nota:** Recuerda activar el entorno virtual cada vez que vayas a trabajar en el proyecto y desactivarlo con `deactivate` cuando hayas terminado.
+5. **Cargar LLM's locales: Mistral-7B-Instruct**
 
+   Para descargar y utilizar modelos LLM restringidos (como Mistral-7B-Instruct) de HuggingFace en local, sigue estos pasos:
+
+   - **Crea una cuenta en HuggingFace** en https://huggingface.co/join
+   - Solicita acceso al modelo desde la página del modelo (por ejemplo, [Mistral-7B-Instruct-v0.3](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)).
+   - Una vez concedido el acceso, obtén tu token personal en https://huggingface.co/settings/tokens
+   - Autentícate en tu terminal ejecutando:
+     ```bash
+     huggingface-cli login
+     ```
+     e introduce tu token cuando lo solicite.
+   - Descarga el modelo en local (por ejemplo, usando transformers):
+     ```python
+     from transformers import AutoModelForCausalLM, AutoTokenizer
+     model_name = "mistralai/Mistral-7B-Instruct-v0.3"
+     save_dir = "./models_data/llm_models/mistral-7b-instruct"
+     AutoModelForCausalLM.from_pretrained(model_name, cache_dir=save_dir)
+     AutoTokenizer.from_pretrained(model_name, cache_dir=save_dir)
+     ```
+   - O bien, al ejecutar tu microservicio, asegúrate de que el modelo se carga desde la ruta local y que el contenedor tiene acceso a la carpeta `models_data`.
+
+   > **Nota:** El acceso a modelos restringidos requiere autenticación y permisos concedidos por HuggingFace. Si no tienes acceso, solicita permiso desde la página del modelo antes de intentar la descarga.
+6. **Carga de Ollama en docker con GPU NVIDIA**
+    Para usar Ollama (u otros contenedores con IA) con aceleración GPU, instala el NVIDIA Container Toolkit en tu sistema host:
+
+    #### Instalar con Apt (Debian/Ubuntu)
+
+    **Configura el repositorio:**
+    ```bash
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
+        | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+    curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+        | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
+        | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo apt-get update
+    ```
+
+    **Instala el toolkit:**
+    ```bash
+    sudo apt-get install -y nvidia-container-toolkit
+    ```
+
+    #### Configura Docker para usar el driver Nvidia
+    ```bash
+    sudo nvidia-ctk runtime configure --runtime=docker
+    sudo systemctl restart docker
+    ```
+ QUITAR  LAS DOS COSAS DE ABAJO
+    #### Arranca el contenedor Ollama con GPU
+    ```bash
+    docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+    ```
+
+    #### Ejecuta un modelo localmente con Ollama
+    Ahora puedes ejecutar un modelo (por ejemplo, mistral:instruct) dentro del contenedor:
+    ```bash
+    docker exec -it ollama ollama pull mistral:instruct
+    ```
 ---
 
 ## 🚀 Uso del proyecto

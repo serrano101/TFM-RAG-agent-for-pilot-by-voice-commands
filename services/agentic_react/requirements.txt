@@ -1,0 +1,32 @@
+# Cargar variables de entorno
+python-dotenv==1.1.1
+
+# Servicio de API --> FastAPI
+python-multipart==0.0.20
+fastapi==0.115.14
+uvicorn==0.35.0
+pydantic==2.11.7
+requests==2.32.4
+
+# Importar Numpy ya que es necesario para  utilizar GPU
+numpy==1.26.4
+
+# Embeddings
+sentence-transformers==5.0.0
+
+# LLM
+langchain-ollama
+# transformers==4.53.1
+# huggingface_hub==0.33.2
+# mistral_inference==1.6.0
+# torch==2.2.0 # Se instala en el Dockerfile
+
+# DB vectorial 
+chromadb==1.0.15
+
+# Agente React
+langchain_core
+langchain
+
+
+

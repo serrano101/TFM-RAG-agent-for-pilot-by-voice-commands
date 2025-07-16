@@ -1,5 +1,4 @@
 # docker-compose.yml para levantar el microservicio ASR
-version: '3.8'
 services:
   asr:
     build:
@@ -7,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: asr_service
     ports:
-      - "8000:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
+      - "8001:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
@@ -34,4 +33,57 @@ services:
       - ../docs/dataset_procedures:/app/docs/dataset_procedures
       - ../common/vector_db:/app/common/vector_db
       - ../common/embedders:/app/common/embedders
+
+  agentic_react:
+    build:
+      context: ../services/agentic_react
+      dockerfile: Dockerfile
+    container_name: agentic_react_service
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/agentic_react:/app
+      # - ../common/vector_db:/app/common/vector_db
+      - ../common/embedders:/app/common/embedders
+      # - ../models_data/llms/mistral_models/7B-Instruct-v0.3:/app/models_data/llms/mistral_models/7B-Instruct-v0.3
+    ports:
+      - "8002:8000" # host:8002 → contenedor:8000
+    depends_on:
+      - asr
+      - chromadb
+      - ollama
+    # Si necesitas GPU, añade:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  chromadb:
+    image: chromadb/chroma
+    container_name: chromadb_service
+    volumes:
+      - ../common/vector_db:/data
+    ports:
+      - "8003:8000"
+  ollama:
+    build:
+      context: ../services/ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+volumes:
+  ollama:
+
 
