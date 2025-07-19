@@ -1,22 +1,24 @@
 import chromadb
-
+import uuid
 class ChromaDBRepository:
     def __init__(self, db_path):
-        self.client = chromadb.PersistentClient(path=db_path)
+        if db_path.startswith("http"):
+            self.client = chromadb.HttpClient(host=db_path)
+        else:
+            self.client = chromadb.PersistentClient(path=db_path)
         self.collection = self.client.get_or_create_collection("documentos")
 
-    def add_chunks(self, chunks, embeddings, metadatas):
+    def add_chunks(self, chunks, metadatas):
         self.collection.add(
-            embeddings=embeddings,
+            ids=[str(uuid.uuid4()) for _ in range(len(chunks))],
             documents=chunks,
             metadatas=metadatas,
-            ids=[meta["id"] for meta in metadatas]  # Usa el id único por chunk
         )
 
     def is_document_processed(self, document_name):
         results = self.collection.get()
         if "metadatas" in results:
             for meta in results["metadatas"]:
-                if meta and meta.get("document_name") == document_name:
+                if meta and meta.get("origin", {}).get("filename") == document_name:
                     return True
         return False

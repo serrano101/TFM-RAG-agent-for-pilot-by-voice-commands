@@ -19,7 +19,7 @@ class PDFHandler(FileSystemEventHandler):
             print(f"Nuevo PDF detectado: {event.src_path}")
             load_dotenv()
             if not self.db_repo.is_document_processed(pdf_name):
-                run_ingestion(os.path.dirname(event.src_path), os.getenv("VECTOR_DB_FOLDER"))
+                run_ingestion(os.path.dirname(event.src_path), os.getenv("VECTOR_DB_URL"))
             else:
                 print(f"PDF ya procesado, se omite: {pdf_name}")
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     os.makedirs(path, exist_ok=True)
 
     # Procesar PDFs existentes al arrancar solo si no están ya en la base de datos
-    db_path = os.getenv("VECTOR_DB_FOLDER")
+    db_path = os.getenv("VECTOR_DB_URL")
     db_repo = ChromaDBRepository(db_path)
 
     pdfs_existentes = [f for f in os.listdir(path) if f.lower().endswith('.pdf') and os.path.isfile(os.path.join(path, f))]

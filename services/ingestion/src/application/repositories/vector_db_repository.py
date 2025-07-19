@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class VectorDBRepository(ABC):
     @abstractmethod
-    def add_chunks(self, chunks, embeddings, metadatas):
+    def add_chunks(self, chunks, metadatas):
         pass
 
     @abstractmethod
