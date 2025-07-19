@@ -1,3 +1,6 @@
+common/vector_db/*
+services/agentic_react/None/chroma.sqlite3
+services/ingestion/http:
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
