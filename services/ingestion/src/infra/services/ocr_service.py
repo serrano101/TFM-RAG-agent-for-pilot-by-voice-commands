@@ -2,7 +2,7 @@
 # import pytesseract
 # from PIL import Image
 from docling.document_converter import DocumentConverter
-import io
+# import io
 
 class OCRService:
     # def extract_text(self, pdf_path):

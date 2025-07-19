@@ -19,7 +19,7 @@ class PDFHandler(FileSystemEventHandler):
             print(f"Nuevo PDF detectado: {event.src_path}")
             load_dotenv()
             if not self.db_repo.is_document_processed(pdf_name):
-                run_ingestion(os.path.dirname(event.src_path), os.getenv("VECTOR_DB_FOLDER"))
+                run_ingestion(os.path.dirname(event.src_path), os.getenv("VECTOR_DB_URL"))
             else:
                 print(f"PDF ya procesado, se omite: {pdf_name}")
 

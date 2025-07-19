@@ -10,7 +10,7 @@ chromadb==1.0.15
 # pytesseract==0.3.13
 # Pillow==11.3.0
 docling==2.41.0
-
+tiktoken
 # Chunks
 langchain==0.3.26
 
