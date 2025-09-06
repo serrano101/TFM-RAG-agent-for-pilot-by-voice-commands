@@ -1,24 +1,42 @@
+
+# =============================
+# Configuración y utilidades
+# =============================
 # Cargar variables de entorno
-python-dotenv==1.1.1
+PyYAML==6.0.2          # Se usa para leer config.yaml
 
-
-# DB vectorial 
+# =============================
+# Bases de datos vectoriales
+# =============================
 chromadb==1.0.15
 
-# OCR
-# pymupdf==1.26.3
-# pytesseract==0.3.13
-# Pillow==11.3.0
+# =============================
+# OCR y procesamiento de documentos
+# =============================
+# pymupdf==1.26.3        # No se usa actualmente
+# pytesseract==0.3.13    # No se usa actualmente
+# Pillow==11.3.0         # No se usa actualmente
 docling==2.41.0
-tiktoken
-# Chunks
-langchain==0.3.26
+tiktoken==0.11.0
 
+# =============================
 # Embeddings
-# sentence-transformers==5.0.0
+# =============================
+sentence-transformers==5.0.0
 
+
+# =============================
 # Watchdog para activar el micro cuando haya un archivo nuevo
+# =============================
 watchdog==3.0.0
 
+# =============================
 # Otros
+# =============================
+# IDs
 uuid==1.30
+
+# Langchain
+langchain==0.3.27
+langchain-chroma==0.2.5
+langchain-core==0.3.75

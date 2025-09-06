@@ -1,0 +1,3 @@
+Extract the main procedure or heading from the following query.
+Return only the heading, no explanation.
+Query: {query}
