@@ -1,0 +1,23 @@
+
+# =============================
+# Configuración y utilidades
+# =============================
+PyYAML==6.0.2          # Se usa para leer config.yaml
+
+# =============================
+# Servicio de API (FastAPI)
+# =============================
+fastapi==0.115.14
+uvicorn==0.35.0
+python-multipart==0.0.20  # Necesario para UploadFile/File en FastAPI
+httpx==0.28.1
+
+# =============================
+# Modelos de ASR y dependencias
+# =============================
+openai-whisper==20250625
+torch==2.7.1
+numpy==1.26.4           # Requerido por whisper/torch
+
+# Metodos que no sirves
+deprecated==1.2.18

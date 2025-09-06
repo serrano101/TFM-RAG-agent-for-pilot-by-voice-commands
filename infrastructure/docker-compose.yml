@@ -1,0 +1,123 @@
+# docker-compose.yml para levantar el microservicio ASR
+services:
+  asr:
+    build:
+      context: ../services/asr
+      dockerfile: Dockerfile
+    container_name: asr_service
+    # restart: unless-stopped
+    ports:
+      - "8001:8000"  # El Dockerfile expone el 8000, mapeamos al 8001 del host
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/asr:/app  # Monta el código fuente para desarrollo
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      # Los modelos de Whisper se descargarán automáticamente por el microservicio ASR según requirements.txt
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  ingestion:
+    build:
+      context: ../services/ingestion
+      dockerfile: Dockerfile
+    container_name: ingestion_service
+    # restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/ingestion:/app
+      - ../docs/dataset_procedures:/app/docs/dataset_procedures
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    depends_on:
+      - chromadb
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  rag:
+    build:
+      context: ../services/rag
+      dockerfile: Dockerfile
+    container_name: rag_service
+    # restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../services/rag:/app
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "8002:8000" # host:8002 → contenedor:8000
+    depends_on:
+      - asr
+      - chromadb
+      - ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  chromadb:
+    image: chromadb/chroma
+    container_name: chromadb_service
+    # restart: unless-stopped
+    volumes:
+      - ../common/vector_db:/data # Asegura que aparte del micro se guarda en local
+    ports:
+      - "8003:8000"
+  ollama:
+    build:
+      context: ../services/ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  streamlit:
+    build:
+      context: ../services/streamlit
+      dockerfile: Dockerfile
+    container_name: streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../services/streamlit:/app
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    depends_on:
+      - asr
+      - rag
+      - chromadb
+      - ollama
+volumes:
+  ollama:
+
+
+
