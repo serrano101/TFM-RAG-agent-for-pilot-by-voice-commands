@@ -1,0 +1,25 @@
+
+# =============================
+# Requisitos para Streamlit UI
+# =============================
+
+# Streamlit: Framework para apps web interactivas en Python
+streamlit==1.49.1
+
+# Requests: Cliente HTTP para consumir APIs REST
+requests==2.32.4
+
+# Cargar variables de entorno
+PyYAML==6.0.2          # Se usa para leer config.yaml
+
+# DB vectorial 
+chromadb==1.0.15
+
+# Gráficas
+matplotlib==3.10.6
+
+# =============================
+# Servicio de API (FastAPI)
+# =============================
+fastapi==0.115.14
+python-multipart==0.0.20  # Necesario para UploadFile/File en FastAPI

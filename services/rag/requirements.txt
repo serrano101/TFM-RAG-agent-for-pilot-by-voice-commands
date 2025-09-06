@@ -1,0 +1,47 @@
+# =============================
+# Configuración y utilidades
+# =============================
+# Cargar variables de entorno
+PyYAML==6.0.2
+
+# =============================
+# Servicio de API (FastAPI)
+# =============================
+# Servicio de API --> FastAPI
+# python-multipart==0.0.20 # Solo es necesario si se suben archivos
+fastapi==0.115.14
+uvicorn==0.35.0
+pydantic==2.11.7
+# requests==2.32.4
+
+# =============================
+# Embeddings y modelos
+# =============================
+# Importar Numpy ya que es necesario para  utilizar GPU
+# numpy==1.26.4
+
+# Embeddings
+sentence-transformers==5.0.0
+
+# =============================
+# LLM y agentes
+# =============================
+# LLM
+langchain-ollama
+# transformers==4.53.1
+# huggingface_hub==0.33.2
+# mistral_inference==1.6.0
+# torch==2.2.0 # Se instala en el Dockerfile
+
+# =============================
+# Bases de datos vectoriales
+# =============================
+# DB vectorial 
+chromadb==1.0.15
+
+# =============================
+# Otros: LANGCHAIN
+# =============================
+langchain==0.3.27
+langchain-chroma==0.2.5
+langchain-core==0.3.75

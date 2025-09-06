@@ -20,11 +20,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # RUN pip install torch==1.13.1+cu116 --index-url https://download.pytorch.org/whl/cu116
 
 # Copiar el resto del código de la aplicación
-COPY . .
+COPY src/ ./src/
 
 # Exponer el puerto por defecto de Uvicorn/FastAPI
 EXPOSE 8000
 
 # Comando para lanzar el servidor
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000"]
 
