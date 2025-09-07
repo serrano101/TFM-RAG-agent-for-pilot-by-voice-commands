@@ -2,6 +2,7 @@
 
 Este proyecto consiste en la creación de un asistente para el piloto, que permite la comunicación por voz y por escrito. El sistema abarca desde el reconocimiento de voz (Speech to Text) hasta el agente RAG, encargado de entender la consulta y generar la respuesta utilizando la base de datos proporcionada.
 
+![Diagrama general](docs/diagramas/diagrama_v3_070925.png)
 ---
 
 ## ⭐ Consideraciones principales
@@ -82,47 +83,47 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
    > **ℹ️ Nota:** Recuerda activar el entorno virtual cada vez que vayas a trabajar en el proyecto y desactivarlo con `deactivate` cuando hayas terminado.
 5. **Carga automática de LLM por microservicio Ollama**
 
-  El modelo LLM (por ejemplo, Mistral-7B-Instruct) se descarga automáticamente por el microservicio de Ollama al arrancar, según la configuración indicada en el archivo `config.yaml` correspondiente. No es necesario descargar el modelo manualmente ni gestionar tokens de HuggingFace en la mayoría de los casos.
+    El modelo LLM (por ejemplo, Mistral-7B-Instruct) se descarga automáticamente por el microservicio de Ollama al arrancar, según la configuración indicada en el archivo `config.yaml` correspondiente. No es necesario descargar el modelo manualmente ni gestionar tokens de HuggingFace en la mayoría de los casos.
 
-  > **Nota:** El microservicio Ollama gestiona la descarga y actualización del modelo de forma automática. Solo asegúrate de que el archivo de configuración (`config.yaml`) especifica el modelo deseado y que el contenedor tiene acceso a internet la primera vez que se arranca para descargar el modelo (después se podrá utilizar sin internet).
+    > **Nota:** El microservicio Ollama gestiona la descarga y actualización del modelo de forma automática. Solo asegúrate de que el archivo de configuración (`config.yaml`) especifica el modelo deseado y que el contenedor tiene acceso a internet la primera vez que se arranca para descargar el modelo (después se podrá utilizar sin internet).
 
-  > **Nota adicional:** Si el modelo LLM que deseas utilizar requiere permisos especiales de HuggingFace (por ejemplo, Mistral-7B-Instruct), es posible que debas:
-  > - Crear una cuenta en HuggingFace en https://huggingface.co/join
-  > - Solicitar acceso al modelo desde la página correspondiente (ejemplo: Mistral-7B-Instruct-v0.3)
-  > - Obtener tu token personal en https://huggingface.co/settings/tokens
-  > - Autenticarte en tu terminal ejecutando:
-  >   ```bash
-  >   huggingface-cli login
-  >   ```
-  >   e introducir tu token cuando lo solicite.
-  > Estos pasos solo son necesarios si Ollama o el microservicio lo solicita explícitamente al descargar el modelo.
+    > **Nota adicional:** Si el modelo LLM que deseas utilizar requiere permisos especiales de HuggingFace (por ejemplo, Mistral-7B-Instruct), es posible que debas:
+    > - Crear una cuenta en HuggingFace en https://huggingface.co/join
+    > - Solicitar acceso al modelo desde la página correspondiente (ejemplo: Mistral-7B-Instruct-v0.3)
+    > - Obtener tu token personal en https://huggingface.co/settings/tokens
+    > - Autenticarte en tu terminal ejecutando:
+    >   ```bash
+    >   huggingface-cli login
+    >   ```
+    >   e introducir tu token cuando lo solicite.
+    > Estos pasos solo son necesarios si Ollama o el microservicio lo solicita explícitamente al descargar el modelo.
 6. **Soporte GPU para Ollama y microservicios IA**
-  Para usar Ollama (y otros microservicios de IA) con aceleración GPU, debes instalar el NVIDIA Container Toolkit en tu sistema host. Los pasos de instalación y configuración de Docker para GPU son los siguientes:
+    Para usar Ollama (y otros microservicios de IA) con aceleración GPU, debes instalar el NVIDIA Container Toolkit en tu sistema host. Los pasos de instalación y configuración de Docker para GPU son los siguientes:
 
-  #### Instalar NVIDIA Container Toolkit (Debian/Ubuntu)
+    #### Instalar NVIDIA Container Toolkit (Debian/Ubuntu)
 
-  **Configura el repositorio:**
-  ```bash
-  curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
-    | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
-  curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
-    | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
-    | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-  sudo apt-get update
-  ```
+      **Configura el repositorio:**
+      ```bash
+      curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
+        | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+      curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+        | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
+        | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+      sudo apt-get update
+      ```
 
-  **Instala el toolkit:**
-  ```bash
-  sudo apt-get install -y nvidia-container-toolkit
-  ```
+      **Instala el toolkit:**
+      ```bash
+      sudo apt-get install -y nvidia-container-toolkit
+      ```
 
-  **Configura Docker para usar el driver Nvidia:**
-  ```bash
-  sudo nvidia-ctk runtime configure --runtime=docker
-  sudo systemctl restart docker
-  ```
+      **Configura Docker para usar el driver Nvidia:**
+      ```bash
+      sudo nvidia-ctk runtime configure --runtime=docker
+      sudo systemctl restart docker
+      ```
 
-  > **Nota:** El arranque de Ollama y el resto de microservicios se realiza mediante docker-compose, que ya incluye la configuración para usar GPU si está disponible. No es necesario arrancar manualmente los contenedores ni ejecutar modelos manualmente, salvo para pruebas avanzadas.
+      > **Nota:** El arranque de Ollama y el resto de microservicios se realiza mediante docker-compose, que ya incluye la configuración para usar GPU si está disponible. No es necesario arrancar manualmente los contenedores ni ejecutar modelos manualmente, salvo para pruebas avanzadas.
 ---
 
 ## 🚀 Uso del proyecto
@@ -296,7 +297,8 @@ No aparece como carpeta propia en la estructura porque se monta automáticamente
 - El RAG básico no devuelve información de la base de datos correctamente; revisar la lógica de recuperación y respuesta o más bien como se guarda en la db.
 - El agente ReAct puede generar explicaciones que no provienen de la base de datos; mejorar la integración y control de fuentes.
 - Añadir en las estadísticas de Streamlit un parámetro que muestre el tiempo de respuesta medio según el tipo de agente (RAG/ReAct) y el total.
-- "Profesionalizar" el microservicio de StreamLit: asegurar los tipos de I/O de los métodos, crear clases/métodos y que no sea tan largo el scripts. Mejorar la parte visual. 
+- "Profesionalizar" el microservicio de StreamLit: asegurar los tipos de I/O de los métodos, crear clases/métodos y que no sea tan largo el scripts. Mejorar la parte visual.
+- Incluir y documentar la estructura y organización basada en Domain Driven Design (DDD), mostrando cómo se distribuyen los dominios, entidades, servicios y módulos principales del sistema.
 
 ---
 

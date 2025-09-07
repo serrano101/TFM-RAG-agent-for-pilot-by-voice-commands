@@ -14,7 +14,7 @@ services:
       - ../services/asr:/app  # Monta el código fuente para desarrollo
       - ../infrastructure/config.yaml:/app/config.yaml
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # - /etc/timezone:/etc/timezone:ro
       # Los modelos de Whisper se descargarán automáticamente por el microservicio ASR según requirements.txt
     deploy:
       resources:
@@ -36,7 +36,7 @@ services:
       - ../docs/dataset_procedures:/app/docs/dataset_procedures
       - ../infrastructure/config.yaml:/app/config.yaml
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # - /etc/timezone:/etc/timezone:ro
     depends_on:
       - chromadb
     deploy:
@@ -58,7 +58,7 @@ services:
       - ../services/rag:/app
       - ../infrastructure/config.yaml:/app/config.yaml
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # - /etc/timezone:/etc/timezone:ro
     ports:
       - "8002:8000" # host:8002 → contenedor:8000
     depends_on:
@@ -91,7 +91,7 @@ services:
       - ollama:/root/.ollama
       - ../infrastructure/config.yaml:/app/config.yaml
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # - /etc/timezone:/etc/timezone:ro
     deploy:
       resources:
         reservations:
@@ -110,7 +110,7 @@ services:
       - ../services/streamlit:/app
       - ../infrastructure/config.yaml:/app/config.yaml
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # - /etc/timezone:/etc/timezone:ro
     depends_on:
       - asr
       - rag
