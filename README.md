@@ -1,3 +1,8 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+![Docker](https://img.shields.io/badge/Docker-28.3.0-blue?logo=docker)
+![VSCode](https://img.shields.io/badge/VSCode-1.103.2-blue?logo=visual-studio-code)
+![Python](https://img.shields.io/badge/Python-3.10.12-blue?logo=python)
+
 # 🛩️ Agente RAG para Asistir al Piloto por Comandos de Voz - TFM
 
 Este proyecto consiste en la creación de un asistente para el piloto, que permite la comunicación por voz y por escrito. El sistema abarca desde el reconocimiento de voz (Speech to Text) hasta el agente RAG, encargado de entender la consulta y generar la respuesta utilizando la base de datos proporcionada.
@@ -311,4 +316,4 @@ Si deseas contribuir, por favor abre un issue o un pull request.
 
 ## 📄 Licencia
 
-Actualmente no se ha incluido ningún tipo de licencia. **Pendiente de realizarla**
+Este proyecto está licenciado bajo la licencia [Apache License 2.0](./LICENSE).
