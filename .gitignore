@@ -1,7 +1,7 @@
-common/vector_db/
+common/vector_db/*
+docs/statistics_response/*
 services/agentic_react/None
 services/ingestion/http:
-common/vector_db/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

@@ -7,7 +7,8 @@ VECTOR_DB:
   EMBEDDER_NAME: "all-MiniLM-L6-v2"
 
 ASR:
-  URL: http://asr:8000
+  TRANSCRIPTION_URL: http://asr:8000/transcribe
+  LANGUAGES_URL: http://asr:8000/languages
   WHISPER_MODEL_NAME: "large-v3-turbo"
 
 LLM:
@@ -30,3 +31,9 @@ RAG:
     # lambda_mult: 0.5 # Diversidad de resultados obtenidos por MMR;1 para diversidad mínima y 0 para máxima. (Valor predeterminado: 0,5)
     # where_document: {"$contains": heading} # Filtrar por metadatos del documento
     # filter: {"headings": {"$in": heading}}
+
+# Timeouts (segundos) para las llamadas HTTP desde Streamlit
+TIMEOUTS:
+  ASR: 100         # Tiempo máximo para transcribir audio
+  RAG: 100          # Tiempo máximo para la respuesta del servicio RAG
+  AGENT_REACT: 100  # Tiempo máximo para la respuesta del Agent React
