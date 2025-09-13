@@ -133,26 +133,38 @@ if menu == "Chatbot":
             input_text = st.session_state.get('last_text_input', '')
             input_audio = st.session_state.get('last_audio_input', '')
             transcription_time = st.session_state.get('last_transcription_time', '')
+
+            rag_status_code = results.get('rag_status_code', None)            
+            rag_status = results.get('rag_status', '')            
+            rag_error_message = results.get('rag_error_message', None)  # Nuevo campo
             rag_answer = results.get('rag_answer', '')
+            rag_context = results.get('rag_context', None)  # Nuevo campo            
             rag_time = results.get('rag_time', '')
-            rag_status = results.get('rag_status', '')
-            agent_answer = results.get('agent_answer', '')
-            agent_time = results.get('agent_time', '')
+
+            agent_status_code = results.get('agent_status_code', None)
             agent_status = results.get('agent_status', '')
+            agent_error_message = results.get('agent_error_message', None)  # Nuevo campo
+            agent_answer = results.get('agent_answer', '')
+            agent_context = results.get('agent_context', None)  # Nuevo campo            
+            agent_time = results.get('agent_time', '')
+
             today = time.strftime('%d/%m/%Y')
+
             write_header = not os.path.exists(STATS_FILE)
             with open(STATS_FILE, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 if write_header:
                     writer.writerow([
                         'Text Input', 'Audio Input', 'Transcription Time',
-                        'RAG Answer', 'RAG Response Time', 'RAG Status',
-                        'AgentReact Answer', 'AgentReact Response Time', 'AgentReact Status', 'Date'
+                        'RAG Status Code', 'RAG Status', 'RAG Error Message', 'RAG Answer', 'RAG Context', 'RAG Response Time',
+                        'AgentReact Status Code', 'AgentReact Status', 'AgentReact Error Message', 'AgentReact Answer', 'AgentReact Context', 'AgentReact Response Time',
+                        'Date'
                     ])
                 writer.writerow([
                     input_text, input_audio, transcription_time,
-                    rag_answer, rag_time, rag_status,
-                    agent_answer, agent_time, agent_status, today
+                    rag_status_code, rag_status, rag_error_message, rag_answer, rag_context, rag_time,
+                    agent_status_code, agent_status, agent_error_message, agent_answer, agent_context, agent_time,
+                    today
                 ])
 
     with tabs[1]:
@@ -163,11 +175,10 @@ if menu == "Chatbot":
     
     # --- TAB 2: Estadísticas del chatbot ---
     with tabs[2]:
-        st.header("Statistics")
         if os.path.exists(STATS_FILE):
             df = pd.read_csv(STATS_FILE)
 
-            # Convert numeric columns safely
+            # Convertir columnas numéricas de manera segura
             for col_name in [
                 'Transcription Time',
                 'RAG Response Time',
@@ -178,66 +189,199 @@ if menu == "Chatbot":
 
             # KPIs
             st.subheader("Overview")
-            kpi1, kpi2, kpi3 = st.columns(3)
+            kpi1, kpi2, kpi3, kpi4 = st.columns(4)  # Primera fila: métricas generales
             with kpi1:
                 st.metric("Total Interactions", len(df))
             with kpi2:
-                avg_transc = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
-                st.metric("Avg Transcription (s)", f"{avg_transc:.2f}" if avg_transc is not None and not pd.isna(avg_transc) else "—")
+                text_interactions = df['Text Input'].notna().sum() if 'Text Input' in df.columns else 0
+                st.metric("Text Interactions", text_interactions)
             with kpi3:
-                avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
-                st.metric("Avg RAG (s)", f"{avg_rag:.2f}" if avg_rag is not None and not pd.isna(avg_rag) else "—")
-
-            kpi4, kpi5, _ = st.columns(3)
+                audio_interactions = df['Audio Input'].notna().sum() if 'Audio Input' in df.columns else 0
+                st.metric("Audio Interactions", audio_interactions)
             with kpi4:
-                avg_agent = df['AgentReact Response Time'].mean() if 'AgentReact Response Time' in df.columns else None
-                st.metric("Avg AgentReact (s)", f"{avg_agent:.2f}" if avg_agent is not None and not pd.isna(avg_agent) else "—")
-            with kpi5:
                 st.metric("Today", df['Date'].eq(time.strftime('%d/%m/%Y')).sum() if 'Date' in df.columns else 0)
 
-            # Two-column layout: left = time histograms, right = status pies
-            col_left, col_right = st.columns(2)
+            kpi5, kpi6, kpi7, kpi8 = st.columns(4)  # Segunda fila: métricas relacionadas con tiempos y errores
+            with kpi5:
+                avg_transc = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
+                st.metric("Avg Transcription (s)", f"{avg_transc:.2f}" if avg_transc is not None and not pd.isna(avg_transc) else "—")
+            with kpi6:
+                avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
+                st.metric("Avg RAG (s)", f"{avg_rag:.2f}" if avg_rag is not None and not pd.isna(avg_rag) else "—")
+            with kpi7:
+                avg_agent = df['AgentReact Response Time'].mean() if 'AgentReact Response Time' in df.columns else None
+                st.metric("Avg AgentReact (s)", f"{avg_agent:.2f}" if avg_agent is not None and not pd.isna(avg_agent) else "—")
+            with kpi8:
+                error_count = df['RAG Error Message'].notna().sum() + df['AgentReact Error Message'].notna().sum()
+                st.metric("Total Errors", error_count)
 
-            with col_left:
-                st.subheader("Response Time Distributions")
+            st.markdown("---")
+            
+            # Definir una paleta de colores uniforme
+            palette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
+
+            # --- Estadísticas de Audio Input ---
+            st.subheader("Audio Input Statistics")
+            col1, col2 = st.columns(2)
+
+            # Gráfico 1: Distribución del tiempo de transcripción (frecuencia en intervalos de 1 segundo)
+            with col1:
+                if 'Transcription Time' in df.columns and df['Transcription Time'].notna().any():
+                    st.markdown("<h4 style='text-align: center;'>Transcription Time Distribution</h4>", unsafe_allow_html=True)
+                    fig_transc, ax_transc = plt.subplots(figsize=(4, 4))
+                    df['Transcription Time'].dropna().plot(kind='hist', bins=range(0, int(df['Transcription Time'].max()) + 2), ax=ax_transc, color='#1f77b4', alpha=0.8)
+                    ax_transc.set_xlabel('Seconds')
+                    ax_transc.set_ylabel('Frequency')
+                    ax_transc.grid(axis='y', linestyle='--', alpha=0.5)
+                    st.pyplot(fig_transc)
+
+            # Gráfico 2: Frecuencia de valores de Audio Input
+            with col2:
+                if 'Audio Input' in df.columns:
+                    st.markdown("<h4 style='text-align: center;'>Audio Input Frequency</h4>", unsafe_allow_html=True)
+                    fig_audio, ax_audio = plt.subplots(figsize=(4, 4))
+                    
+                    # Truncar los valores de Audio Input para mostrar solo las primeras palabras
+                    audio_input_counts = df['Audio Input'].value_counts()
+                    truncated_labels = [label[:10] + "..." if len(label) > 10 else label for label in audio_input_counts.index]
+                    
+                    audio_input_counts.index = truncated_labels  # Actualizar los índices con los valores truncados
+                    audio_input_counts.plot(kind='bar', ax=ax_audio, color='#ff7f0e', alpha=0.8)
+                    
+                    ax_audio.set_xlabel('Audio Input')
+                    ax_audio.set_ylabel('Frequency')
+                    ax_audio.grid(axis='y', linestyle='--', alpha=0.5)
+                    plt.xticks(rotation=45, ha='right')  # Rotar las etiquetas para mejor legibilidad
+                    st.pyplot(fig_audio)
+
+            # --- Primera fila: RAG ---
+            st.header("RAG Statistics")
+            col1, col2, col3 = st.columns(3)
+
+            # Gráfico 1: Distribución del tiempo de respuesta (frecuencia en intervalos de 1 segundo)
+            with col1:
                 if 'RAG Response Time' in df.columns and df['RAG Response Time'].notna().any():
-                    fig_rt, ax_rt = plt.subplots()
-                    df['RAG Response Time'].dropna().plot(kind='hist', bins=15, ax=ax_rt, color='#1f77b4', alpha=0.8)
-                    ax_rt.set_title('RAG Response Time (s)')
+                    st.markdown("<h4 style='text-align: center;'>Response Time Distribution</h4>", unsafe_allow_html=True)
+                    fig_rt, ax_rt = plt.subplots(figsize=(4, 4))
+                    df['RAG Response Time'].dropna().plot(kind='hist', bins=range(0, int(df['RAG Response Time'].max()) + 2), ax=ax_rt, color=palette[0], alpha=0.8)
                     ax_rt.set_xlabel('Seconds')
-                    ax_rt.grid(axis='y', linestyle='--', alpha=0.4)
+                    ax_rt.set_ylabel('Frequency')
+                    ax_rt.grid(axis='y', linestyle='--', alpha=0.5)
                     st.pyplot(fig_rt)
-                if 'AgentReact Response Time' in df.columns and df['AgentReact Response Time'].notna().any():
-                    fig_at, ax_at = plt.subplots()
-                    df['AgentReact Response Time'].dropna().plot(kind='hist', bins=15, ax=ax_at, color='#ff7f0e', alpha=0.8)
-                    ax_at.set_title('AgentReact Response Time (s)')
-                    ax_at.set_xlabel('Seconds')
-                    ax_at.grid(axis='y', linestyle='--', alpha=0.4)
-                    st.pyplot(fig_at)
 
-            with col_right:
-                st.subheader("Status Distribution")
+            # Gráfico 2: Frecuencia de códigos de estado
+            with col2:
+                if 'RAG Status Code' in df.columns:
+                    st.markdown("<h4 style='text-align: center;'>Status Code Frequency</h4>", unsafe_allow_html=True)
+                    fig_bar, ax_bar = plt.subplots(figsize=(4, 4))
+                    rag_status_code_counts = df['RAG Status Code'].value_counts()
+                    rag_status_code_counts.plot(kind='bar', ax=ax_bar, color=palette[0], alpha=0.8)
+                    ax_bar.set_xlabel('Status Code')
+                    ax_bar.set_ylabel('Frequency')
+                    ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
+                    st.pyplot(fig_bar)
+
+            # Gráfico 3: Porcentaje de estados (no códigos de estado)
+            with col3:
                 if 'RAG Status' in df.columns:
-                    rag_counts = df['RAG Status'].value_counts()
-                    if not rag_counts.empty:
-                        fig_rs, ax_rs = plt.subplots()
-                        colors = plt.cm.Set2(range(len(rag_counts)))
-                        ax_rs.pie(rag_counts.values, labels=rag_counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-                        ax_rs.set_title('RAG Status')
-                        ax_rs.axis('equal')
-                        st.pyplot(fig_rs)
-                if 'AgentReact Status' in df.columns:
-                    agent_counts = df['AgentReact Status'].value_counts()
-                    if not agent_counts.empty:
-                        fig_as, ax_as = plt.subplots()
-                        colors = plt.cm.Set3(range(len(agent_counts)))
-                        ax_as.pie(agent_counts.values, labels=agent_counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-                        ax_as.set_title('AgentReact Status')
-                        ax_as.axis('equal')
-                        st.pyplot(fig_as)
+                    st.markdown("<h4 style='text-align: center;'>Status Percentage</h4>", unsafe_allow_html=True)
+                    rag_status_counts = df['RAG Status'].value_counts()
+                    if not rag_status_counts.empty:
+                        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
+                        rag_status_counts.plot(
+                            kind='pie',
+                            ax=ax_pie,
+                            autopct='%1.1f%%',
+                            startangle=90,
+                            colors=palette[:len(rag_status_counts)],  # Usar colores dinámicos de la paleta
+                            textprops={'fontsize': 10}
+                        )
+                        ax_pie.set_ylabel('')
+                        st.pyplot(fig_pie)
 
-            # Download and full table at the end
-            st.subheader("All Interactions")
+            st.markdown("---")
+            
+            # --- Segunda fila: Agent React ---
+            st.header("Agent React Statistics")
+            col1, col2, col3 = st.columns(3)
+
+            # Gráfico 1: Distribución del tiempo de respuesta (frecuencia en intervalos de 1 segundo)
+            with col1:
+                if 'AgentReact Response Time' in df.columns and df['AgentReact Response Time'].notna().any():
+                    st.markdown("<h4 style='text-align: center;'>Response Time Distribution</h4>", unsafe_allow_html=True)
+                    fig_rt, ax_rt = plt.subplots(figsize=(4, 4))
+                    df['AgentReact Response Time'].dropna().plot(kind='hist', bins=range(0, int(df['AgentReact Response Time'].max()) + 2), ax=ax_rt, color=palette[0], alpha=0.8)
+                    ax_rt.set_xlabel('Seconds')
+                    ax_rt.set_ylabel('Frequency')
+                    ax_rt.grid(axis='y', linestyle='--', alpha=0.5)
+                    st.pyplot(fig_rt)
+
+            # Gráfico 2: Frecuencia de códigos de estado
+            with col2:
+                if 'AgentReact Status Code' in df.columns:
+                    st.markdown("<h4 style='text-align: center;'>Status Code Frequency</h4>", unsafe_allow_html=True)
+                    fig_bar, ax_bar = plt.subplots(figsize=(4, 4))
+                    agent_status_code_counts = df['AgentReact Status Code'].value_counts()
+                    agent_status_code_counts.plot(kind='bar', ax=ax_bar, color=palette[0], alpha=0.8)
+                    ax_bar.set_xlabel('Status Code')
+                    ax_bar.set_ylabel('Frequency')
+                    ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
+                    st.pyplot(fig_bar)
+
+            # Gráfico 3: Porcentaje de estados (no códigos de estado)
+            with col3:
+                if 'AgentReact Status' in df.columns:
+                    st.markdown("<h4 style='text-align: center;'>Status Percentage</h4>", unsafe_allow_html=True)
+                    agent_status_counts = df['AgentReact Status'].value_counts()
+                    if not agent_status_counts.empty:
+                        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
+                        agent_status_counts.plot(
+                            kind='pie',
+                            ax=ax_pie,
+                            autopct='%1.1f%%',
+                            startangle=90,
+                            colors=palette[:len(agent_status_counts)],  # Usar colores dinámicos de la paleta
+                            textprops={'fontsize': 10}
+                        )
+                        ax_pie.set_ylabel('')
+                        st.pyplot(fig_pie)
+
+            # --- Tablas finales ---
+            st.markdown("---")            
+            st.header("Error Messages")
+            # Dos tablas en la misma fila
+            col_1, col_2 = st.columns(2)
+            with col_1:
+                st.markdown("### RAG")
+                if 'RAG Error Message' in df.columns:
+                    rag_error_counts = df['RAG Error Message'].value_counts()
+                    st.table(rag_error_counts)
+
+            with col_2:
+                st.markdown("### Agent React")
+                if 'AgentReact Error Message' in df.columns:
+                    agent_error_counts = df['AgentReact Error Message'].value_counts()
+                    st.table(agent_error_counts)
+            
+            st.markdown("---")
+
+            # Dos tablas en la misma fila            
+            st.header("Contexts")
+            col_1, col_2 = st.columns(2)
+            with col_1:
+                st.markdown("### RAG")
+                if 'RAG Context' in df.columns:
+                    rag_context_counts = df['RAG Context'].value_counts().head(5)
+                    st.table(rag_context_counts)
+            with col_2:
+                st.markdown("### Agent React")
+                if 'AgentReact Context' in df.columns:
+                    agent_context_counts = df['AgentReact Context'].value_counts().head(5)
+                    st.table(agent_context_counts)
+            
+            st.markdown("---")
+            # Descargar CSV
+            st.header("All Interactions")
             st.download_button(
                 label="Download CSV",
                 data=df.to_csv(index=False).encode('utf-8'),

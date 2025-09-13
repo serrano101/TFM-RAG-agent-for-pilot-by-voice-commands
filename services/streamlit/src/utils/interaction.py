@@ -172,39 +172,60 @@ def query_services(
     rag_placeholder = col_rag.empty()
     agent_placeholder = col_agent.empty()
 
-    queue: "Queue[tuple[str, Optional[Dict[str, Any]], Optional[str], Optional[str], Optional[float]]]" = Queue()
+    # Crear cola    [who, status_code, status, error,            resp,                 elapsed]
+    queue: "Queue[tuple[str, float, str, Optional[str], Optional[Dict[str, Any]], Optional[float]]]" = Queue()
 
     def fetch_rag_async(text: str, q: Queue):
         try:
             logger.info(f"Enviando consulta a RAG: {text}")
             start_rag = time.time()
             response_rag = requests.post(rag_url, json={"transcription": text}, timeout=rag_timeout)
-            response_rag.raise_for_status()
+            # response_rag.raise_for_status()
             end_rag = time.time()
+            time_response = end_rag - start_rag
             rag_json = response_rag.json()
-            status = rag_json.get("status", "")
-            resp = rag_json.get("response", {})
-            q.put(("rag", resp, status, None, end_rag - start_rag))
+            status_code = response_rag.status_code
+            if status_code == 200:                
+                status = rag_json.get("status", "success")
+                error_message = None
+                resp = rag_json.get("response", {})
+            elif status_code == 422:
+                status = rag_json.get("status", "no_results")
+                error_message = rag_json.get("message", "No relevant documents found.")
+                resp = rag_json.get("response", {})    
+            else:
+                status = rag_json.get("status", "unknown_error")
+                error_message = rag_json.get("message", f"HTTP {status_code}")
+                resp = rag_json.get("response", None)
+            q.put(("rag", status_code, status, error_message, resp, time_response))
         except requests.Timeout:
-            q.put(("rag", None, "timeout", "Request to RAG timed out", None))
+            q.put(("rag", 500, "timeout", "Request to RAG timed out", None, None))
         except Exception as e:
-            q.put(("rag", None, None, str(e), None))
+            q.put(("rag", 500, "unknown_error", str(e), None, None))
 
     def fetch_agent_async(text: str, q: Queue):
         try:
             logger.info(f"Enviando consulta a Agent React: {text}")
             start_agent = time.time()
             response_agent = requests.post(agent_react_url, json={"transcription": text}, timeout=agent_timeout)
-            response_agent.raise_for_status()
+            # response_agent.raise_for_status()
             end_agent = time.time()
+            time_response = end_agent - start_agent
             agent_json = response_agent.json()
-            status = agent_json.get("status", "")
-            resp = agent_json.get("response", {})
-            q.put(("agent", resp, status, None, end_agent - start_agent))
+            status_code = response_agent.status_code
+            if status_code == 200:                
+                status = agent_json.get("status", "success")
+                error_message = None
+                resp = agent_json.get("response", {})
+            else:
+                status = agent_json.get("status", "unknown_error")
+                error_message = agent_json.get("message", f"HTTP {status_code}")
+                resp = agent_json.get("response", None)
+            q.put(("agent", status_code, status, error_message, resp, time_response))
         except requests.Timeout:
-            q.put(("agent", None, "timeout", "Request to Agent React timed out", None))
+            q.put(("agent", 500, "timeout", "Request to Agent React timed out", None, None))
         except Exception as e:
-            q.put(("agent", None, None, str(e), None))
+            q.put(("agent", 500, "unknown_error", str(e), None, None))
 
     thread_rag = threading.Thread(target=fetch_rag_async, args=(user_input, queue))
     thread_agent = threading.Thread(target=fetch_agent_async, args=(user_input, queue))
@@ -228,61 +249,89 @@ def query_services(
     agent_time: Optional[float] = None
 
     for _ in range(2):
-        who, resp, status, error, elapsed = queue.get()
+        who, status_code, status, error_message, resp, elapsed = queue.get()
         if who == "rag":
-            rag_answer = resp.get("answer", "") if resp else ""
+            # resp = {input: , context: , answer: }
+            rag_status_code = status_code
             rag_status = status
+            rag_error_message = error_message
+            rag_answer = resp.get("answer", "") if resp else "" 
+            rag_input = resp.get("input", "") if resp else ""
+            rag_context = resp.get("context", "") if resp else ""            
             rag_time = elapsed
             rag_placeholder.empty()
             with rag_placeholder.container():
                 st.subheader("RAG")
-                if error:
-                    if status == "timeout":
-                        st.warning("RAG took too long. Please try again or refine your query.")
-                    else:
-                        st.error("RAG error while fetching response.")
-                    logger.exception(f"Error en RAG: {error}")
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] Error: {error}"})
-                else:
+                if rag_status_code == 200: # Caso éxito
                     st.chat_message("assistant").write(rag_answer)
                     st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] {rag_answer}"})
                     with st.expander("RAG Details", expanded=False):
+                        st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
                         st.markdown(f"**🟢 Status:** {rag_status}")
-                        st.markdown(f"**📝 Input:** {resp.get('input', '') if resp else ''}")
-                        st.markdown(f"**📚 Context:** {resp.get('context', '') if resp else ''}")
+                        st.markdown(f"**📝 Input:** {rag_input}")
+                        st.markdown(f"**📚 Context:** {rag_context}")
                         if rag_time is not None:
                             st.markdown(f"**⏱️ Response Time:** {rag_time:.1f} seconds")
+                elif rag_status_code == 422: # Caso que no hay resultados
+                    st.chat_message("assistant").write(rag_error_message)
+                    st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] {rag_error_message}"})
+                    with st.expander("RAG Details", expanded=False):
+                        st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
+                        st.markdown(f"**🟡 Status:** {rag_status}")
+                        st.markdown(f"**📝 Input:** {rag_input}")
+                        st.markdown(f"**➡️ Answer:** {rag_answer}")
+                        st.markdown(f"**📚 Context:** {rag_context}")
+                        if rag_time is not None:
+                            st.markdown(f"**⏱️ Response Time:** {rag_time:.1f} seconds")
+                else: # Error de otros tipos
+                    st.error(rag_error_message)
+                    with st.expander("RAG Details", expanded=False):
+                        st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
+                        st.markdown(f"**🔴 Status:** {rag_status}")
+                    logger.exception(f"Error en RAG: {rag_error_message}")
+                    st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] Error: {rag_error_message}"})
+
         elif who == "agent":
-            agent_answer = resp.get("output", "") if resp else ""
+            # resp = {input: , output: }
+            agent_status_code = status_code
             agent_status = status
+            agent_error_message = error_message
+            agent_answer = resp.get("output", "") if resp else "" 
+            agent_input = resp.get("input", "") if resp else ""
+            agent_context = resp.get("context", "") if resp else "" # Por ahora no existe
             agent_time = elapsed
             agent_placeholder.empty()
             with agent_placeholder.container():
-                st.subheader("Agent React")
-                if error:
-                    if status == "timeout":
-                        st.warning("Agent React took too long. Please try again or refine your query.")
-                    else:
-                        st.error("Agent React error while fetching response.")
-                    logger.exception(f"Error en Agent React: {error}")
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent React] Error: {error}"})
-                else:
+                st.subheader("Agent ReAct")
+                if agent_status_code == 200: # Caso éxito
                     st.chat_message("assistant").write(agent_answer)
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent React] {agent_answer}"})
-                    with st.expander("Agent React Details", expanded=False):
+                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] {agent_answer}"})
+                    with st.expander("Agent ReAct Details", expanded=False):
+                        st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
                         st.markdown(f"**🟢 Status:** {agent_status}")
-                        st.markdown(f"**📝 Input:** {resp.get('input', '') if resp else ''}")
-                        if resp and 'context' in resp:
-                            st.markdown(f"**📚 Context:** {resp.get('context', '')}")
+                        st.markdown(f"**📝 Input:** {agent_input}")
                         if agent_time is not None:
-                            st.markdown(f"**⏱️ Agent React Response Time:** {agent_time:.1f} seconds")
+                            st.markdown(f"**⏱️ Response Time:** {agent_time:.1f} seconds")            
+                else: # Error de otros tipos
+                    st.error(agent_error_message)
+                    with st.expander("Agent ReAct Details", expanded=False):
+                        st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
+                        st.markdown(f"**🔴 Status:** {agent_status}")
+                    logger.exception(f"Error en Agent ReAct: {agent_error_message}")
+                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] Error: {agent_error_message}"})
 
     return {
-        'rag_answer': rag_answer or '',
+        'rag_status_code': rag_status_code,
         'rag_status': rag_status,
+        'rag_error_message': rag_error_message,        
+        'rag_answer': rag_answer or '',
+        'rag_context': rag_context,
         'rag_time': rag_time,
-        'agent_answer': agent_answer or '',
+        'agent_status_code': agent_status_code,
         'agent_status': agent_status,
+        'agent_error_message': agent_error_message,
+        'agent_answer': agent_answer or '',
+        'agent_context': agent_context,
         'agent_time': agent_time,
         'input_text': user_input,
         'input_audio': st.session_state.get('last_audio_input', ''),
@@ -316,12 +365,18 @@ def transcribe_audio(
         data = {"language": language} if language else None
         start_transcription = time.time()
         response = requests.post(asr_transcription_url, files=files, data=data, timeout=asr_timeout)
-        response.raise_for_status()
+        # response.raise_for_status()
         end_transcription = time.time()
-        transcribed = response.json().get("transcription")
         transcription_time = end_transcription - start_transcription
-        logger.info(f"Transcripción recibida: {transcribed}")
-        return transcribed, transcription_time
+        response_data = response.json()
+        status_code = response.status_code
+        if status_code != 200:
+            error_message = response_data.get("message", "unknown error")
+            logger.error(f"Error en transcripción de audio: {error_message}")
+            st.error(f"{status_code} - Error while transcribing audio: {error_message}")
+            return None
+        logger.info(f"Transcripción recibida: {response_data.get('transcription', '')}")
+        return response_data.get('transcription', ''), transcription_time
     except requests.Timeout:
         logger.exception("Timeout en transcripción de audio")
         st.warning("ASR took too long. Please try again or reduce audio length.")
@@ -331,7 +386,10 @@ def transcribe_audio(
         st.error("Error while transcribing audio.")
         return None
 
-def fetch_supported_languages(asr_languages_url: str, asr_timeout: int = 60) -> Dict[str, Optional[str]]:
+def fetch_supported_languages(
+        asr_languages_url: str, 
+        asr_timeout: int = 60
+) -> Dict[str, Optional[str]]:
     """
     Obtiene Name->Code desde el micro ASR (sin parámetros).
 
@@ -344,9 +402,9 @@ def fetch_supported_languages(asr_languages_url: str, asr_timeout: int = 60) -> 
     """
     try:
         resp = requests.get(asr_languages_url.rstrip("/"), params=None, timeout=asr_timeout)
-        resp.raise_for_status()
-        data = resp.json() or {}
-        if data.get("status") == "success":
+        # resp.raise_for_status()
+        data = resp.json()
+        if resp.status_code == 200:
             langs = data.get("languages", "")
             if isinstance(langs, dict) and langs:
                 return langs
@@ -355,14 +413,4 @@ def fetch_supported_languages(asr_languages_url: str, asr_timeout: int = 60) -> 
     except requests.Timeout:
         logger.warning("Timeout al obtener idiomas del ASR")
     except Exception as e:
-        logger.error(f"Error al obtener idiomas soportados: {e}", exc_info=True)
-
-    # Fallback local (sin red)
-    try:
-        from whisper.tokenizer import LANGUAGES, TO_LANGUAGE_CODE
-        mapping = {name.title(): code for code, name in LANGUAGES.items()}
-        for alias_name, code in TO_LANGUAGE_CODE.items():
-            mapping.setdefault(alias_name.title(), code)
-        return dict(sorted(mapping.items(), key=lambda kv: kv[0]))
-    except Exception:
-        return {}
+        logger.error(f"Error al obtener idiomas soportados: {e}", exc_info=True)        

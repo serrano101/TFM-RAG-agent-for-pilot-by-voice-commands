@@ -109,7 +109,7 @@ services:
     volumes:
       - ../services/streamlit:/app
       - ../infrastructure/config.yaml:/app/config.yaml
-      - ../docs/statistics_response:/data/statistics_response
+      - ../docs/statistics_response:/data/statistics_response:rw
       - /etc/localtime:/etc/localtime:ro
       # - /etc/timezone:/etc/timezone:ro
     depends_on:
