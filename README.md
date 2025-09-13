@@ -103,7 +103,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
     >   e introducir tu token cuando lo solicite.
     > Estos pasos solo son necesarios si Ollama o el microservicio lo solicita explícitamente al descargar el modelo.
 6. **Soporte GPU para Ollama y microservicios IA**
-    Para usar Ollama (y otros microservicios de IA) con aceleración GPU, debes instalar el NVIDIA Container Toolkit en tu sistema host. Los pasos de instalación y configuración de Docker para GPU son los siguientes:
+    Para usar Ollama (y otros microservicios de IA) con aceleración GPU, debes instalar el NVIDIA Container Toolkit en tu sistema host: [Ollama-Docker](https://hub.docker.com/r/ollama/ollama). Los pasos de instalación y configuración de Docker para GPU son los siguientes:
 
     #### Instalar NVIDIA Container Toolkit (Debian/Ubuntu)
 
