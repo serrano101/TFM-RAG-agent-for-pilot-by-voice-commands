@@ -132,7 +132,12 @@ async def receive_asr_rag_result(request: Request) -> JSONResponse:
                 status_code=500,
                 content={"status": "processing_error", "message": "RAG execution failed", "response": None}
             )
-        
+        if not rag_result.get("context"):
+            rag_result["context"] = None            
+            return JSONResponse(
+                status_code=422,
+                content={"status": "no_results", "message": "No relevant documents found.", "response": rag_result}
+            )
         return JSONResponse(
             status_code=200, 
             content={"status": "success", "response": rag_result}
