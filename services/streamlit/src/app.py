@@ -11,11 +11,10 @@ import streamlit as st
 import requests
 import chromadb
 from src.utils.logger import setup_logger
-import threading
-from queue import Queue
+from src.utils.interaction import query_services, manager_input, fetch_supported_languages
 import pandas as pd
 import matplotlib.pyplot as plt
-from fastapi import UploadFile, File
+from typing import Dict, Any
 # Cargar configuración desde config.yaml
 try:
     with open("/app/config.yaml", "r") as f:
@@ -39,16 +38,28 @@ class WatchdogFilter(logging.Filter):
 for handler in logging.getLogger().handlers:
     handler.addFilter(WatchdogFilter())
 
+# Silenciar loggers ruidosos de terceros (evita "matplotlib.font_manager" DEBUG, etc.)
+logging.getLogger("matplotlib").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
+logging.getLogger("PIL").setLevel(logging.INFO)
+logging.getLogger("PIL.PngImagePlugin").setLevel(logging.INFO)
 
 STATS_FILE = '/data/statistics_response/statistics.csv'
 
 # =====================
 # 2. Definir endpoints de los microservicios
 # =====================
-ASR_URL = config.get("ASR", {}).get("URL", "http://asr:8000") + "/transcribe"
+ASR_URL_TRANSCRIBE = config.get("ASR", {}).get("TRANSCRIPTION_URL", "http://asr:8000/transcribe")
+ASR_URL_LANGUAGES = config.get("ASR", {}).get("LANGUAGES_URL", "http://asr:8000/languages")
 RAG_URL = config.get("RAG", {}).get("WEBHOOK_RAG_URL", "http://rag:8000/rag_result")
 AGENT_REACT_URL = config.get("RAG", {}).get("WEBHOOK_AGENT_REACT_URL", "http://rag:8000/react_agent_result")
 CHROMADB_URL = config.get("VECTOR_DB", {}).get("URL", "http://chromadb:8000")
+
+# Timeouts configurable desde config.yaml
+_timeouts_cfg = config.get("TIMEOUTS", {})
+ASR_TIMEOUT = int(_timeouts_cfg.get("ASR", 60))
+RAG_TIMEOUT = int(_timeouts_cfg.get("RAG", 60))
+AGENT_TIMEOUT = int(_timeouts_cfg.get("AGENT_REACT", 60))
 
 # =====================
 # 3. Configuración de la interfaz Streamlit
@@ -57,7 +68,7 @@ st.set_page_config(page_title="RAG Pilot Chatbot", layout="wide")
 st.title("🛩️ RAG Pilot Chatbot")
 
 # Menú lateral para navegación
-menu = st.sidebar.radio("Navegación", ["Chatbot", "Vector Database"])
+menu = st.sidebar.radio("Navigation", ["Chatbot", "Vector Database"])
 
 # =====================
 # 4. Lógica del Chatbot
@@ -68,225 +79,53 @@ if menu == "Chatbot":
         st.header("Interactive Chatbot")
         st.write("Type your query below. You will get responses from RAG and Agent React in parallel.")
 
-        # Function definitions and logic must be inside this block
-        def _query_services(user_input:str):
-            col_rag, col_agent = st.columns(2)
-            rag_placeholder = col_rag.empty()
-            agent_placeholder = col_agent.empty()
-            queue = Queue()
-            def fetch_rag_async(user_input, queue):
-                try:                    
-                    logger.info(f"Enviando consulta a RAG: {user_input}")
-                    start_rag = time.time()
-                    response_rag = requests.post(RAG_URL, json={"transcription": user_input}, timeout=60)
-                    response_rag.raise_for_status()
-                    end_rag = time.time()
-                    rag_json = response_rag.json()
-                    status = rag_json.get("status", "")
-                    resp = rag_json.get("response", {})                    
-                    queue.put(("rag", resp, status, None, end_rag - start_rag))
-                except Exception as e:
-                    queue.put(("rag", None, None, str(e), None))
-            def fetch_agent_async(user_input, queue):
-                try:                    
-                    logger.info(f"Enviando consulta a Agent React: {user_input}")
-                    start_agent = time.time()
-                    response_agent = requests.post(AGENT_REACT_URL, json={"transcription": user_input}, timeout=60)
-                    response_agent.raise_for_status()                    
-                    end_agent = time.time()
-                    agent_json = response_agent.json()
-                    status = agent_json.get("status", "")
-                    resp = agent_json.get("response", {})
-                    queue.put(("agent", resp, status, None, end_agent - start_agent))
-                except Exception as e:
-                    queue.put(("agent", None, None, str(e), None))
-            thread_rag = threading.Thread(target=fetch_rag_async, args=(user_input, queue))
-            thread_agent = threading.Thread(target=fetch_agent_async, args=(user_input, queue))
-            thread_rag.start()
-            thread_agent.start()
-            shown = {"rag": False, "agent": False}
-            results = {"rag": None, "agent": None}
-            errors = {"rag": None, "agent": None}
-            statuses = {"rag": None, "agent": None}
-            times = {"rag": None, "agent": None}
-            # Mostrar título y spinner inicial en ambos
-            with rag_placeholder.container():
-                st.subheader("RAG")
-                st.info("Waiting for RAG response...")
-            with agent_placeholder.container():
-                st.subheader("Agent React")
-                st.info("Waiting for Agent React response...")
-            # Variables para guardar en CSV
-            rag_answer, rag_status, rag_time = None, None, None
-            agent_answer, agent_status, agent_time = None, None, None
-            input_text, input_audio, transcription_time = None, None, None
-            today = time.strftime('%d/%m/%Y')
-            for _ in range(2):
-                who, resp, status, error, elapsed = queue.get()
-                results[who] = resp
-                errors[who] = error
-                statuses[who] = status
-                times[who] = elapsed
-                shown[who] = True
-                # Actualizar el chat_history con la respuesta real
-                if who == "rag":
-                    rag_answer = resp.get("answer", "") if resp else ""
-                    rag_status = status
-                    rag_time = elapsed
-                    rag_placeholder.empty()
-                    with rag_placeholder.container():
-                        st.subheader("RAG")
-                        if error:
-                            st.error(error)
-                            st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] Error: {error}"})
-                        else:
-                            st.chat_message("assistant").write(rag_answer)
-                            st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] {rag_answer}"})
-                            with st.expander("RAG Details", expanded=False):
-                                st.markdown(f"**🟢 Status:** {rag_status}")
-                                st.markdown(f"**📝 Input:** {resp.get('input', '') if resp else ''}")
-                                st.markdown(f"**📚 Context:** {resp.get('context', '') if resp else ''}")
-                                if rag_time is not None:
-                                    st.markdown(f"**⏱️ Response Time:** {rag_time:.1f} seconds")
-                elif who == "agent":
-                    agent_answer = resp.get("output", "") if resp else ""
-                    agent_status = status
-                    agent_time = elapsed
-                    agent_placeholder.empty()
-                    with agent_placeholder.container():
-                        st.subheader("Agent React")
-                        if error:
-                            st.error(error)
-                            st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent React] Error: {error}"})
-                        else:
-                            st.chat_message("assistant").write(agent_answer)
-                            st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent React] {agent_answer}"})
-                            with st.expander("Agent React Details", expanded=False):
-                                st.markdown(f"**🟢 Status:** {agent_status}")
-                                st.markdown(f"**📝 Input:** {resp.get('input', '') if resp else ''}")
-                                if resp and 'context' in resp:
-                                    st.markdown(f"**📚 Context:** {resp.get('context', '')}")
-                                if agent_time is not None:
-                                    st.markdown(f"**⏱️ Agent React Response Time:** {agent_time:.1f} seconds")
-            # Return collected values so caller can write CSV or further process
-            return {
-                'rag_answer': rag_answer,
-                'rag_status': rag_status,
-                'rag_time': rag_time,
-                'agent_answer': agent_answer,
-                'agent_status': agent_status,
-                'agent_time': agent_time,
-                'input_text': user_input,
-                'input_audio': st.session_state.get('last_audio_input', ''),
-                'transcription_time': st.session_state.get('last_transcription_time', '')
-            }
-
-        def _transcribe_audio(
-            audio_name: str = "default_audio", 
-            audio_file: UploadFile = File(...),
-            audio_type: str = "audio/wav"
-        ) -> str:
-            try:
-                if hasattr(audio_file, "read"):
-                    audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format=audio_type)
-                    # Volver al paso anterior para que se pueda mandar a transcribir
-                    if hasattr(audio_file, "seek"):
-                        audio_file.seek(0)
-                else:
-                    st.warning("Could not get audio to play.")
-                with st.spinner("Transcribing audio..."):
-                    logger.info("Sending audio to ASR for transcription")
-                    files = {"file": (audio_name, audio_file, audio_type)}
-                    start_transcription = time.time()
-                    response = requests.post(ASR_URL, files=files, timeout=300)
-                    response.raise_for_status()
-                    end_transcription = time.time()
-                    transcribed = response.json().get("transcription")
-                    transcription_time = end_transcription - start_transcription
-                    # Guardar info para estadísticas
-                    st.session_state['last_text_input'] = ''
-                    st.session_state['last_audio_input'] = transcribed
-                    st.session_state['last_transcription_time'] = f"{transcription_time:.1f}"
-                    st.chat_message("user").write(f"[Audio]: {st.session_state['last_audio_input']}")
-                    st.session_state.chat_history.append({"role": "user", "content": f"[Audio]: {st.session_state['last_audio_input']}"})
-                    logger.info(f"Transcription received: {transcribed}")
-                    st.info(f"Transcription time: {transcription_time:.1f} seconds", icon="⏱️")
-                    return transcribed
-            except Exception as e:
-                st.error(f"Error in audio transcription: {e}")
-
-        # Inicializar historial de chat en la sesión si no existe
+        ## Inicializar historial de chat en la sesión si no existe
         if "chat_history" not in st.session_state:
-            st.session_state.chat_history = []
+            st.session_state.chat_history = []   
 
-        # Input y audio en dos columnas, input más grande y audio bien visible
-        col_input, col_audio = st.columns([4, 1])
+        ## Input y audio en dos columnas, input más grande y audio bien visible
+        col_input, col_audio, col_language = st.columns([3,1.5,1.5])
         with col_input:
             user_input = st.chat_input(
                 "Type your query...",
                 accept_file=True,
                 file_type=["wav", "mp3"],
             )
-        with col_audio:
+        with col_audio:           
             recorded_audio = st.audio_input(
                 label="Record audio",
-                help="Record your query by voice",
-                label_visibility="visible",
-                width=180
+                # help="Record your query by voice",
+                label_visibility="collapsed", # "visible", "collapsed"
             )
             logger.info(f"recorded_audio: {recorded_audio}")
-        # Procesar entrada del usuario (texto y/o audio)
-        text_input = None
-        # Si el usuario envía solo texto
-        if user_input and user_input["text"] and not user_input["files"]:
-            st.session_state['last_text_input'] = user_input["text"]
-            st.session_state['last_audio_input'] = ''
-            st.session_state['last_transcription_time'] = ''
-            st.chat_message("user").write(user_input["text"])
-            st.session_state.chat_history.append({"role": "user", "content": user_input["text"]})
-            text_input = user_input["text"]
-        # Si el usuario sube  solo audio
-        elif user_input and user_input["files"] and not user_input["text"]:
-            audio_name = user_input["files"][0].name
-            audio_file = user_input["files"][0]
-            audio_type = user_input["files"][0].type
-            text_input = _transcribe_audio(audio_name, audio_file, audio_type)
-            if not text_input:
-                raise ValueError("No se pudo transcribir el audio subido.")
-        # Si el usuario sube audio y texto, los combinamos
-        elif user_input and user_input["text"] and user_input["files"]:
-            audio_name = user_input["files"][0].name
-            audio_file = user_input["files"][0]
-            audio_type = user_input["files"][0].type
-            text_audio = _transcribe_audio(audio_name, audio_file, audio_type)
-            # Asegurar que el texto escrito por el usuario quede registrado como tal
-            st.session_state['last_text_input'] = user_input['text']
-            # Mostrar también el texto escrito en el historial del chat
-            st.chat_message("user").write(user_input["text"])
-            st.session_state.chat_history.append({"role": "user", "content": user_input["text"]})
-            if text_audio:
-                text_input = f"{user_input['text']} and {text_audio}"
+        with col_language:
+            lang_map = fetch_supported_languages(asr_languages_url=ASR_URL_LANGUAGES, asr_timeout=ASR_TIMEOUT)
+            if lang_map:
+                lang_names = list(lang_map.keys())
+                default_label = "Auto-detect/Multi-language"
+                default_index = lang_names.index(default_label) if default_label in lang_names else 0
+                selected_name = st.selectbox("Select the audio language to improve transcription.", options=lang_names, index=default_index)
+                language = lang_map.get(selected_name)
             else:
-                text_input = user_input['text']
+                selected_name = "Auto-detect/Multi-language"
+                language = None
+            logger.info(f"Selected language for ASR: {selected_name} -> {language}")
 
-        # Si el usuario graba audio, lo transcribimos y lo añadimos al historial
-        if recorded_audio and not user_input:
-            audio_name = recorded_audio.name
-            audio_file = recorded_audio
-            audio_type = recorded_audio.type
-            text_input = _transcribe_audio(audio_name, audio_file, audio_type)
-            if not text_input:
-                raise ValueError("No se pudo transcribir el audio grabado.")
-
+        ## Procesar entrada del usuario (texto y/o audio)
+        text_input = manager_input(
+            user_input=user_input,
+            recorded_audio=recorded_audio,
+            asr_transcription_url=ASR_URL_TRANSCRIBE,
+            asr_timeout=ASR_TIMEOUT,
+            language=language
+        )
         # Si hay input (texto o audio transcrito), consultar RAG y Agent React
         if text_input:
             logger.info(f"Usuario ha enviado la consulta: {text_input}")
             # Use centralized _query_services to perform calls and update UI
-            results = _query_services(text_input)
+            results = query_services(text_input, rag_url=RAG_URL, agent_react_url=AGENT_REACT_URL, rag_timeout=RAG_TIMEOUT, agent_timeout=AGENT_TIMEOUT)
             # Guardar info de la interacción en CSV usando los resultados retornados
-            stats_file = STATS_FILE
-            os.makedirs(os.path.dirname(stats_file), exist_ok=True)
+            os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)
             # Para el CSV, distinguir correctamente:
             # - Text Input: solo el texto escrito por el usuario
             # - Audio Input: solo la transcripción del audio
@@ -301,8 +140,8 @@ if menu == "Chatbot":
             agent_time = results.get('agent_time', '')
             agent_status = results.get('agent_status', '')
             today = time.strftime('%d/%m/%Y')
-            write_header = not os.path.exists(stats_file)
-            with open(stats_file, 'a', newline='', encoding='utf-8') as f:
+            write_header = not os.path.exists(STATS_FILE)
+            with open(STATS_FILE, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 if write_header:
                     writer.writerow([
@@ -318,8 +157,9 @@ if menu == "Chatbot":
 
     with tabs[1]:
         st.header("Conversation History")
-        for msg in st.session_state.chat_history:
-            st.chat_message(msg["role"]).write(msg["content"])
+        # Render history at the top
+        for m in st.session_state.chat_history:
+            st.chat_message(m["role"]).markdown(m["content"])
     
     # --- TAB 2: Estadísticas del chatbot ---
     with tabs[2]:
