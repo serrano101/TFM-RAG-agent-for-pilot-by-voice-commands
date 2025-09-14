@@ -3,7 +3,7 @@ RUNNING:
 
 VECTOR_DB:
   URL: http://chromadb:8000
-  COLLECTION_NAME: "documentos"
+  COLLECTION_NAME: "test"
   EMBEDDER_NAME: "all-MiniLM-L6-v2"
 
 ASR:
@@ -21,11 +21,13 @@ RAG:
   WEBHOOK_AGENT_REACT_URL: http://rag:8000/react_agent_result
   WEBHOOK_RAG_URL: http://rag:8000/rag_result
   REACT_AGENT_PROMPT: "/app/src/prompts/agent_react_v2.txt"
-  RAG_PROMPT: "/app/src/prompts/rag_basic.txt"
+  RAG_PROMPT: "/app/src/prompts/rag_basic_v1.txt"
   RAG_EXTRACT_HEADING_PROMPT: "/app/src/prompts/extract_heading.txt"
+  OUTPUT_NO_CONTEXT_ANSWER: "No relevant information found in the documents."
+  OUTPUT_NOT_MATCH_ANSWER_CONTEXT : "The question does not match with the context provided."
   SEARCH_TYPE: "similarity_score_threshold" # También puede ser similarity, mmr
   SEARCH_KWARGS:
-    k: 5 # Nº de documentos que devuelve (por defecto 4)
+    k: 3 # Nº de documentos que devuelve (por defecto 4)
     score_threshold: 0.7 # Umbral mínimo de relevancia para similarity_score_threshold
     # fetch_k: 20 # Cantidad de documentos que se deben pasar al algoritmo mmr
     # lambda_mult: 0.5 # Diversidad de resultados obtenidos por MMR;1 para diversidad mínima y 0 para máxima. (Valor predeterminado: 0,5)

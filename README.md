@@ -7,7 +7,7 @@
 
 Este proyecto consiste en la creación de un asistente para el piloto, que permite la comunicación por voz y por escrito. El sistema abarca desde el reconocimiento de voz (Speech to Text) hasta el agente RAG, encargado de entender la consulta y generar la respuesta utilizando la base de datos proporcionada.
 
-![Diagrama general](docs/diagramas/diagrama_v3_070925.png)
+![Diagrama general](docs/diagramas/diagrama_v31_150925.png)
 ---
 
 ## ⭐ Consideraciones principales
@@ -257,6 +257,7 @@ A continuación, se muestra la estructura real y actual del proyecto:
 │       ├── src/
 │       │   ├── app.py                   # 🚀 Punto de entrada del frontend
 │       │   └── utils/
+│       │       ├── interaction.py       # 📝 Gestión de la ui de streamlit
 │       │       └── logger.py            # 📝 Configuración y utilidades de logging
 │       ├── Dockerfile           # 🐳 Imagen Docker del frontend
 │       └── requirements.txt     # 📦 Dependencias del frontend
@@ -277,10 +278,8 @@ Encargado de convertir audio en texto utilizando el modelo Whisper. Recibe archi
 Responsable de la ingesta y procesamiento de documentos. Observa cambios en la carpeta `docs/dataset_procedures/`, realiza OCR en PDFs, segmenta el texto (chunking) y genera embeddings con Sentence Transformers. Los documentos procesados se almacenan en la base de datos vectorial (ChromaDB).
 
 ### 3. Microservicio RAG (Retrieval-Augmented Generation)
-Implementa dos tipos de agentes para la recuperación y generación de respuestas:
+Implementa un tipo de agente para la recuperación y generación de respuestas:
   - **RAG básico:** Recupera información relevante de la base de datos vectorial y genera una respuesta basada en los documentos encontrados.
-  - **Agente ReAct:** Utiliza un enfoque de razonamiento y acción, combinando recuperación de información y generación explicativa.
-Ambos agentes se conectan con ChromaDB para obtener los chunks relevantes y con Ollama para la generación de texto.
 
 ### 4. Microservicio Ollama (LLM)
 Encargado de descargar y servir el modelo LLM (por ejemplo, Mistral-7B-Instruct). El modelo se descarga automáticamente al arrancar el contenedor según la configuración en `config.yaml`. Ollama se comunica con el microservicio RAG para la generación de respuestas.
@@ -296,13 +295,8 @@ No aparece como carpeta propia en la estructura porque se monta automáticamente
 
 ## ❗ Puntos de mejora y tareas pendientes
 
-- Revisar que el microservicio de Ingestion ignore correctamente los documentos ya presentes en la base de datos.
-- Probar la ingesta y recuperación con documentos más sencillos (ejemplo: PDF básico sin tablas).
-- Incorporar otros tipos de archivos, no solo PDFs.
-- El RAG básico no devuelve información de la base de datos correctamente; revisar la lógica de recuperación y respuesta o más bien como se guarda en la db.
-- El agente ReAct puede generar explicaciones que no provienen de la base de datos; mejorar la integración y control de fuentes.
-- Añadir en las estadísticas de Streamlit un parámetro que muestre el tiempo de respuesta medio según el tipo de agente (RAG/ReAct) y el total.
-- "Profesionalizar" el microservicio de StreamLit: asegurar los tipos de I/O de los métodos, crear clases/métodos y que no sea tan largo el scripts. Mejorar la parte visual.
+- Incorporar otros tipos de archivos, no solo PDFs (Línea futura).
+- Mejorar el manejo de respuestas no JSON en el microservicio RAG, añadiendo validaciones adicionales o soporte para otros formatos.
 - Incluir y documentar la estructura y organización basada en Domain Driven Design (DDD), mostrando cómo se distribuyen los dominios, entidades, servicios y módulos principales del sistema.
 
 ---

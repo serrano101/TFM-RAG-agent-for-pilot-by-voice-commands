@@ -143,9 +143,10 @@ def query_services(
     user_input: str,
     *,
     rag_url: str,
-    agent_react_url: str,
+    # agent_react_url: str,
     rag_timeout: int = 60,
-    agent_timeout: int = 60,
+    # agent_timeout: int = 60,
+    output_not_match_answer_context: str = "The question does not match with the context provided."
 ) -> Dict[str, Any]:
     """Query RAG and Agent React services in parallel and render results.
 
@@ -168,9 +169,10 @@ def query_services(
             - input_audio (str)
             - transcription_time (str)
     """
-    col_rag, col_agent = st.columns(2)
-    rag_placeholder = col_rag.empty()
-    agent_placeholder = col_agent.empty()
+    # col_rag, col_agent = st.columns(2)
+    # rag_placeholder = col_rag.empty()
+    # agent_placeholder = col_agent.empty()
+    rag_placeholder = st.empty()
 
     # Crear cola    [who, status_code, status, error,            resp,                 elapsed]
     queue: "Queue[tuple[str, float, str, Optional[str], Optional[Dict[str, Any]], Optional[float]]]" = Queue()
@@ -189,10 +191,6 @@ def query_services(
                 status = rag_json.get("status", "success")
                 error_message = None
                 resp = rag_json.get("response", {})
-            elif status_code == 422:
-                status = rag_json.get("status", "no_results")
-                error_message = rag_json.get("message", "No relevant documents found.")
-                resp = rag_json.get("response", {})    
             else:
                 status = rag_json.get("status", "unknown_error")
                 error_message = rag_json.get("message", f"HTTP {status_code}")
@@ -203,52 +201,60 @@ def query_services(
         except Exception as e:
             q.put(("rag", 500, "unknown_error", str(e), None, None))
 
-    def fetch_agent_async(text: str, q: Queue):
-        try:
-            logger.info(f"Enviando consulta a Agent React: {text}")
-            start_agent = time.time()
-            response_agent = requests.post(agent_react_url, json={"transcription": text}, timeout=agent_timeout)
-            # response_agent.raise_for_status()
-            end_agent = time.time()
-            time_response = end_agent - start_agent
-            agent_json = response_agent.json()
-            status_code = response_agent.status_code
-            if status_code == 200:                
-                status = agent_json.get("status", "success")
-                error_message = None
-                resp = agent_json.get("response", {})
-            else:
-                status = agent_json.get("status", "unknown_error")
-                error_message = agent_json.get("message", f"HTTP {status_code}")
-                resp = agent_json.get("response", None)
-            q.put(("agent", status_code, status, error_message, resp, time_response))
-        except requests.Timeout:
-            q.put(("agent", 500, "timeout", "Request to Agent React timed out", None, None))
-        except Exception as e:
-            q.put(("agent", 500, "unknown_error", str(e), None, None))
+    # def fetch_agent_async(text: str, q: Queue):
+    #     try:
+    #         logger.info(f"Enviando consulta a Agent React: {text}")
+    #         start_agent = time.time()
+    #         response_agent = requests.post(agent_react_url, json={"transcription": text}, timeout=agent_timeout)
+    #         # response_agent.raise_for_status()
+    #         end_agent = time.time()
+    #         time_response = end_agent - start_agent
+    #         agent_json = response_agent.json()
+    #         status_code = response_agent.status_code
+    #         if status_code == 200:                
+    #             status = agent_json.get("status", "success")
+    #             error_message = None
+    #             resp = agent_json.get("response", {})
+    #         else:
+    #             status = agent_json.get("status", "unknown_error")
+    #             error_message = agent_json.get("message", f"HTTP {status_code}")
+    #             resp = agent_json.get("response", None)
+    #         q.put(("agent", status_code, status, error_message, resp, time_response))
+    #     except requests.Timeout:
+    #         q.put(("agent", 500, "timeout", "Request to Agent React timed out", None, None))
+    #     except Exception as e:
+    #         q.put(("agent", 500, "unknown_error", str(e), None, None))
 
     thread_rag = threading.Thread(target=fetch_rag_async, args=(user_input, queue))
-    thread_agent = threading.Thread(target=fetch_agent_async, args=(user_input, queue))
+    # thread_agent = threading.Thread(target=fetch_agent_async, args=(user_input, queue))
     thread_rag.start()
-    thread_agent.start()
+    # thread_agent.start()
 
     # Placeholders with initial state
     with rag_placeholder.container():
-        st.subheader("RAG")
+        # st.subheader("RAG")
         st.info("Waiting for RAG response...")
-    with agent_placeholder.container():
-        st.subheader("Agent React")
-        st.info("Waiting for Agent React response...")
-
-    rag_answer: Optional[str] = None
+    # with agent_placeholder.container():
+    #     st.subheader("Agent React")
+    #     st.info("Waiting for Agent React response...")
+    
+    rag_status_code: Optional[float] = None
     rag_status: Optional[str] = None
+    rag_error_message: Optional[str] = None
+    rag_input: Optional[str] = None
+    rag_context: Optional[str] = None
+    rag_answer: Optional[str] = None
     rag_time: Optional[float] = None
 
-    agent_answer: Optional[str] = None
+    agent_status_code: Optional[float] = None
     agent_status: Optional[str] = None
+    agent_error_message: Optional[str] = None
+    agent_input: Optional[str] = None
+    agent_context: Optional[str] = None
+    agent_answer: Optional[str] = None
     agent_time: Optional[float] = None
 
-    for _ in range(2):
+    for _ in range(1): #CAMBIARLO
         who, status_code, status, error_message, resp, elapsed = queue.get()
         if who == "rag":
             # resp = {input: , context: , answer: }
@@ -257,33 +263,34 @@ def query_services(
             rag_error_message = error_message
             rag_answer = resp.get("answer", "") if resp else "" 
             rag_input = resp.get("input", "") if resp else ""
-            rag_context = resp.get("context", "") if resp else ""            
+            rag_context_raw = resp.get("context", []) if resp else []
+            rag_context = [
+                {"content": doc.get("content", ""), "score": doc.get("score", 0)}
+                for doc in rag_context_raw
+            ]          
             rag_time = elapsed
             rag_placeholder.empty()
             with rag_placeholder.container():
-                st.subheader("RAG")
+                # st.subheader("RAG")
                 if rag_status_code == 200: # Caso éxito
-                    st.chat_message("assistant").write(rag_answer)
+                    if isinstance(rag_answer, dict):
+                        rag_answer = format_rag_answer(rag_answer)
+                    st.chat_message("assistant").markdown(rag_answer, unsafe_allow_html=True)
                     st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] {rag_answer}"})
+                    icon_warning = "⚠️" if rag_answer == output_not_match_answer_context or not rag_context else "🟢"
                     with st.expander("RAG Details", expanded=False):
                         st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
-                        st.markdown(f"**🟢 Status:** {rag_status}")
+                        st.markdown(f"**{icon_warning} Status:** {rag_status}")
                         st.markdown(f"**📝 Input:** {rag_input}")
-                        st.markdown(f"**📚 Context:** {rag_context}")
                         if rag_time is not None:
                             st.markdown(f"**⏱️ Response Time:** {rag_time:.1f} seconds")
-                elif rag_status_code == 422: # Caso que no hay resultados
-                    st.chat_message("assistant").write(rag_error_message)
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] {rag_error_message}"})
-                    with st.expander("RAG Details", expanded=False):
-                        st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
-                        st.markdown(f"**🟡 Status:** {rag_status}")
-                        st.markdown(f"**📝 Input:** {rag_input}")
-                        st.markdown(f"**➡️ Answer:** {rag_answer}")
-                        st.markdown(f"**📚 Context:** {rag_context}")
-                        if rag_time is not None:
-                            st.markdown(f"**⏱️ Response Time:** {rag_time:.1f} seconds")
-                else: # Error de otros tipos
+                        st.markdown("**📚 Context:**")
+                        for item in rag_context:
+                            st.markdown(f" {item['content']}")
+                            st.markdown(f"  **Score:** {item['score']}")
+                            st.markdown("---")
+                        
+                else:
                     st.error(rag_error_message)
                     with st.expander("RAG Details", expanded=False):
                         st.markdown(f"**ℹ️ Status code:** {rag_status_code}")
@@ -291,51 +298,51 @@ def query_services(
                     logger.exception(f"Error en RAG: {rag_error_message}")
                     st.session_state.chat_history.append({"role": "assistant", "content": f"[RAG] Error: {rag_error_message}"})
 
-        elif who == "agent":
-            # resp = {input: , output: }
-            agent_status_code = status_code
-            agent_status = status
-            agent_error_message = error_message
-            agent_answer = resp.get("output", "") if resp else "" 
-            agent_input = resp.get("input", "") if resp else ""
-            agent_context = resp.get("context", "") if resp else "" # Por ahora no existe
-            agent_time = elapsed
-            agent_placeholder.empty()
-            with agent_placeholder.container():
-                st.subheader("Agent ReAct")
-                if agent_status_code == 200: # Caso éxito
-                    st.chat_message("assistant").write(agent_answer)
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] {agent_answer}"})
-                    with st.expander("Agent ReAct Details", expanded=False):
-                        st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
-                        st.markdown(f"**🟢 Status:** {agent_status}")
-                        st.markdown(f"**📝 Input:** {agent_input}")
-                        if agent_time is not None:
-                            st.markdown(f"**⏱️ Response Time:** {agent_time:.1f} seconds")            
-                else: # Error de otros tipos
-                    st.error(agent_error_message)
-                    with st.expander("Agent ReAct Details", expanded=False):
-                        st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
-                        st.markdown(f"**🔴 Status:** {agent_status}")
-                    logger.exception(f"Error en Agent ReAct: {agent_error_message}")
-                    st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] Error: {agent_error_message}"})
+        # elif who == "agent":
+        #     # resp = {input: , output: }
+        #     agent_status_code = status_code
+        #     agent_status = status
+        #     agent_error_message = error_message
+        #     agent_answer = resp.get("output", "") if resp else "" 
+        #     agent_input = resp.get("input", "") if resp else ""
+        #     agent_context = resp.get("context", "") if resp else "" # Por ahora no existe
+        #     agent_time = elapsed
+        #     agent_placeholder.empty()
+        #     with agent_placeholder.container():
+        #         st.subheader("Agent ReAct")
+        #         if agent_status_code == 200: # Caso éxito
+        #             st.chat_message("assistant").write(agent_answer)
+        #             st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] {agent_answer}"})
+        #             with st.expander("Agent ReAct Details", expanded=False):
+        #                 st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
+        #                 st.markdown(f"**🟢 Status:** {agent_status}")
+        #                 st.markdown(f"**📝 Input:** {agent_input}")
+        #                 if agent_time is not None:
+        #                     st.markdown(f"**⏱️ Response Time:** {agent_time:.1f} seconds")            
+        #         else: # Error de otros tipos
+        #             st.error(agent_error_message)
+        #             with st.expander("Agent ReAct Details", expanded=False):
+        #                 st.markdown(f"**ℹ️ Status code:** {agent_status_code}")
+        #                 st.markdown(f"**🔴 Status:** {agent_status}")
+        #             logger.exception(f"Error en Agent ReAct: {agent_error_message}")
+        #             st.session_state.chat_history.append({"role": "assistant", "content": f"[Agent ReAct] Error: {agent_error_message}"})
 
     return {
-        'rag_status_code': rag_status_code,
-        'rag_status': rag_status,
-        'rag_error_message': rag_error_message,        
-        'rag_answer': rag_answer or '',
-        'rag_context': rag_context,
-        'rag_time': rag_time,
-        'agent_status_code': agent_status_code,
-        'agent_status': agent_status,
-        'agent_error_message': agent_error_message,
-        'agent_answer': agent_answer or '',
-        'agent_context': agent_context,
-        'agent_time': agent_time,
-        'input_text': user_input,
-        'input_audio': st.session_state.get('last_audio_input', ''),
-        'transcription_time': st.session_state.get('last_transcription_time', '')
+        'rag_status_code': rag_status_code or None,
+        'rag_status': rag_status or None,
+        'rag_error_message': rag_error_message or None,        
+        'rag_answer': rag_answer or None,
+        'rag_context': rag_context or None,
+        'rag_time': rag_time or None,
+        'agent_status_code': agent_status_code or None,
+        'agent_status': agent_status or None,
+        'agent_error_message': agent_error_message or None,
+        'agent_answer': agent_answer or None,
+        'agent_context': agent_context or None,
+        'agent_time': agent_time or None,
+        'input_text': user_input or None,
+        'input_audio': st.session_state.get('last_audio_input', None),
+        'transcription_time': st.session_state.get('last_transcription_time', None)
     }
 
 
@@ -413,4 +420,44 @@ def fetch_supported_languages(
     except requests.Timeout:
         logger.warning("Timeout al obtener idiomas del ASR")
     except Exception as e:
-        logger.error(f"Error al obtener idiomas soportados: {e}", exc_info=True)        
+        logger.error(f"Error al obtener idiomas soportados: {e}", exc_info=True)
+
+def format_rag_answer(rag_answer: dict) -> str:
+    """
+    Formatea el contenido de rag_answer como una cadena de texto para mostrar en un mensaje de chat.
+
+    Args:
+        rag_answer (dict): Respuesta del RAG con las claves "procedure", "conditions", "steps", y "notes".
+
+    Returns:
+        str: Cadena formateada con las claves en negrita y los valores en texto normal.
+    """
+    if not rag_answer:
+        return "No hay respuesta para mostrar."
+
+    formatted_answer = []
+    for key, value in rag_answer.items():
+        # Agregar la clave en negrita
+        formatted_answer.append(f"**{key.capitalize()}:**")
+
+        # Si el valor es una lista, numerar los elementos
+        if isinstance(value, list):
+            if value:  # Si la lista no está vacía
+                if len(value) == 1:  # Si solo hay un elemento, no numerarlo
+                    formatted_answer.append(value[0])
+                else:  # Numerar los elementos si hay más de uno
+                    for i, item in enumerate(value, start=1):
+                        formatted_answer.append(f"{i}. {item}")
+            else:
+                formatted_answer.append("_No data available_")  # Mostrar mensaje si la lista está vacía
+        # Si el valor es un string o está vacío
+        elif isinstance(value, str):
+            if value.strip():  # Si el string no está vacío
+                formatted_answer.append(value)
+            else:
+                formatted_answer.append("_No data available_")  # Mostrar mensaje si el string está vacío
+        else:
+            formatted_answer.append("_Unsupported data type_")  # Manejar otros tipos de datos
+
+    # Unir las líneas con saltos de línea
+    return "\n\n".join(formatted_answer)

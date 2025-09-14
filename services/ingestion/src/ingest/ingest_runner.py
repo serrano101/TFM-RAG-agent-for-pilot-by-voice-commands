@@ -30,9 +30,10 @@ def run_ingestion(file_folder: str, ocr_service: OCRService, chunker: Chunker, v
             file_path = os.path.join(file_folder, filename)
             try:
                 logger.info(f"Procesando archivo: {file_path}")
-                dl_doc = ocr_service.convert_document(file_path)
-                chunks, metadatas = chunker.chunk_docling(dl_doc)
-                vector_db_repo.add_chunks(chunks, metadatas)
+                # dl_doc = ocr_service.convert_document(file_path)
+                # chunks, metadatas = chunker.chunk_docling(dl_doc)
+                documents, metadatas = chunker.chunk_pymupdf(file_path)
+                vector_db_repo.add_chunks(documents, metadatas)
                 logger.info(f"Archivo procesado y almacenado correctamente: {filename}")
             except Exception as e:
                 logger.error(f"Error al procesar el archivo '{filename}': {e}", exc_info=True)
