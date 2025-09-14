@@ -2,11 +2,12 @@
 
 from docling.chunking import HybridChunker
 import json
+import os
 import tiktoken
 import logging
 from docling_core.types import DoclingDocument
 from typing import List, Tuple, Dict
-
+import fitz  # PyMuPDF
 logger = logging.getLogger(__name__)
 
 class Chunker:
@@ -81,3 +82,78 @@ class Chunker:
         except Exception as e:
             logger.error(f"[Chunker] Error al chunkear el documento: {e}", exc_info=True)
             raise RuntimeError(f"[Chunker] Error al chunkear el documento: {e}") from e
+
+    def chunk_pymupdf(self, pdf_path:str) -> Tuple[List[str], List[Dict]]:
+        chunks = []
+        metadata = []
+        chunk_index = 0
+        current_procedure = None
+        current_section = None
+        procedure_data = {}
+        filename = os.path.basename(pdf_path)
+
+        try:
+            doc = fitz.open(pdf_path)
+
+            for page_number, page in enumerate(doc, start=1):
+                lines = page.get_text("text").split("\n")
+
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+
+                    if line.startswith("PROCEDURE:"):
+                        # Guardar procedimiento anterior
+                        if current_procedure and procedure_data:
+                            content_str = f"PROCEDURE: {current_procedure}\n\n"
+                            for section, values in procedure_data.items():
+                                content_str += f"{section}:\n"
+                                for v in values:
+                                    content_str += f" {v}\n"
+                                content_str += "\n"  # salto de línea extra entre secciones
+
+                            chunks.append(content_str.strip())
+                            metadata.append({
+                                "procedure": current_procedure,
+                                "page_number": page_number,
+                                "chunk_index": chunk_index,
+                                "filename": filename
+                            })
+                            chunk_index += 1
+
+                        # Nuevo procedimiento
+                        current_procedure = line.replace("PROCEDURE:", "").strip()
+                        procedure_data = {}
+                        current_section = None
+
+                    elif line.endswith(":"):  # Ej: CONDITIONS:, STEPS:, NOTES:
+                        current_section = line.replace(":", "").strip()
+                        procedure_data[current_section] = []
+
+                    else:
+                        if current_section:
+                            procedure_data[current_section].append(line)
+
+            # Guardar el último procedimiento
+            if current_procedure and procedure_data:
+                content_str = f"PROCEDURE: {current_procedure}\n\n"
+                for section, values in procedure_data.items():
+                    content_str += f"{section}:\n"
+                    for v in values:
+                        content_str += f" {v}\n"
+                    content_str += "\n"
+
+                chunks.append(content_str.strip())
+                metadata.append({
+                    "procedure": current_procedure,
+                    "page_number": page_number,
+                    "chunk_index": chunk_index,
+                    "filename": filename
+                })
+
+        except Exception as e:
+            print(f"[ERROR] Error parsing {pdf_path}: {e}")
+
+        return chunks, metadata
+

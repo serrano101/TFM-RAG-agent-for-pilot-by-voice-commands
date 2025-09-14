@@ -34,12 +34,18 @@ class VectorDBRepository:
             host = parsed.hostname
             port = parsed.port or 8000  # Usa 8000 por defecto si no está en la URL
 
+            def custom_relevance_score_fn(similarity_score: float) -> float:
+                # Example calculation (customize as needed)
+                relevance_score = 1 / (1 + similarity_score)
+                return relevance_score
+
             self.vector_store = Chroma(
                 collection_name=collection_name,
                 embedding_function=embedding_function,
                 host=host,
                 port=port,
-                create_collection_if_not_exists=False # Aqui no interesa crear una colección ya que se asume que ya existe y solo se realizan consultas
+                create_collection_if_not_exists=False, # Aqui no interesa crear una colección ya que se asume que ya existe y solo se realizan consultas
+                relevance_score_fn=custom_relevance_score_fn
             )
             logger.info(f"[VectorDBRepository] Conectado a ChromaDB remoto en '{db_path}'")
         except Exception as e:

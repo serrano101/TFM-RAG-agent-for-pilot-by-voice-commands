@@ -11,7 +11,7 @@ setup_logger(level)
 logger = logging.getLogger(__name__)
 
 # --- FastAPI Application Setup ---
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 import httpx
 import asyncio
@@ -84,7 +84,7 @@ def read_root() -> JSONResponse:
     )
 
 @app.post("/transcribe")
-async def transcribe_endpoint(file: UploadFile = File(...)) -> JSONResponse:
+async def transcribe_endpoint(file: UploadFile = File(...), language: str | None = Form(default=None)) -> JSONResponse:
     """
     Endpoint para transcribir audio a texto.
 
@@ -100,27 +100,48 @@ async def transcribe_endpoint(file: UploadFile = File(...)) -> JSONResponse:
         if not audio_bytes:
             logger.warning("Archivo de audio vacío o no recibido")
             return JSONResponse(
-                status_code=400, 
+                status_code=400,
                 content={"status": "validation_error", "message": "Audio file is empty or missing", "transcription": None}
             )
         # Transcribir el audio
-        transcription = asr_service.transcribe(audio_bytes)
+        transcription = asr_service.transcribe(audio_bytes, language=language)
         if not transcription or not transcription.strip():
             logger.warning("Transcripción vacía")
             return JSONResponse(
-                status_code=400, 
+                status_code=400,
                 content={"status": "validation_error", "message": "Transcription is empty", "transcription": None}
             )
-        
+
         # await notify_rag_microservice(transcription)  # Deprecated: la notificación se gestiona desde Streamlit
 
         return JSONResponse(
-            status_code=200, 
+            status_code=200,
             content={"status": "success", "transcription": transcription}
         )
     except Exception as e:
         logger.error(f"Error en transcribe_endpoint: {str(e)}", exc_info=True)
         return JSONResponse(
-            status_code=500, 
+            status_code=500,
             content={"status": "processing_error", "message": f"Error processing audio: {str(e)}", "transcription": None}
+        )
+
+@app.get("/languages")
+def languages_options() -> JSONResponse:
+    """
+    Endpoint para obtener las opciones de idiomas soportados por Whisper.
+
+    Returns:
+        JSONResponse: Respuesta con la lista de idiomas soportados.{"status": "success", "languages": {Name->Code}}
+    """
+    try:
+        languages = asr_service.languages_options()        
+        return JSONResponse(
+            status_code=200,
+            content={"status": "success", "languages": languages}
+        )
+    except Exception as e:
+        logger.error(f"Error en languages_options: {str(e)}", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": f"Error retrieving languages: {str(e)}", "languages": []}
         )

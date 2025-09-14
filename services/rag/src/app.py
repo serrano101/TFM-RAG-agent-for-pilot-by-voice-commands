@@ -59,12 +59,15 @@ try:
     prompt_content_rag_extract_heading = open_prompt(prompt_path=prompt_rag_extract_heading_path)
     search_type = config["RAG"]["SEARCH_TYPE"]
     search_kwargs = config["RAG"]["SEARCH_KWARGS"]
+    output_no_context_answer = config["RAG"]["OUTPUT_NO_CONTEXT_ANSWER"]
+    output_not_match_answer_context = config["RAG"]["OUTPUT_NOT_MATCH_ANSWER_CONTEXT"]
     rag_service = RAG(
         # embedder, 
         vector_db = vector_db,
         llm = llm,
         prompt = prompt_content_rag,
-        prompt_heading = prompt_content_rag_extract_heading,
+        output_no_context_answer = output_no_context_answer,
+        output_not_match_answer_context = output_not_match_answer_context,
         search_type = search_type,
         search_kwargs = search_kwargs
     )
@@ -124,7 +127,7 @@ async def receive_asr_rag_result(request: Request) -> JSONResponse:
 
     # Execute RAG
     try:
-        rag_result = rag_service.execute(transcription, use_custom_search = False)
+        rag_result = rag_service.execute(query = transcription)
         last_rag_result = rag_result
         if not rag_result:
             logger.warning("La ejecución de RAG devolvió un resultado vacío")
@@ -132,7 +135,18 @@ async def receive_asr_rag_result(request: Request) -> JSONResponse:
                 status_code=500,
                 content={"status": "processing_error", "message": "RAG execution failed", "response": None}
             )
-        
+        if not rag_result.get("context"):
+            logger.warning("La ejecución de RAG no devolvió contexto relevante")
+            return JSONResponse(
+            status_code=200, 
+            content={"status": "no_results", "response": rag_result}
+        )
+        if rag_result.get("answer") == output_not_match_answer_context:
+            logger.warning("La ejecución de RAG indica que la pregunta no coincide con el contexto")
+            return JSONResponse(
+            status_code=200, 
+            content={"status": "no_match", "response": rag_result}
+        )        
         return JSONResponse(
             status_code=200, 
             content={"status": "success", "response": rag_result}
