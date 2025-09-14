@@ -13,7 +13,7 @@ chromadb==1.0.15
 # =============================
 # OCR y procesamiento de documentos
 # =============================
-# pymupdf==1.26.3        # No se usa actualmente
+pymupdf==1.26.3
 # pytesseract==0.3.13    # No se usa actualmente
 # Pillow==11.3.0         # No se usa actualmente
 docling==2.41.0

@@ -8,13 +8,12 @@ import csv
 import yaml
 import logging
 import streamlit as st
-import requests
 import chromadb
 from src.utils.logger import setup_logger
 from src.utils.interaction import query_services, manager_input, fetch_supported_languages
 import pandas as pd
 import matplotlib.pyplot as plt
-from typing import Dict, Any
+
 # Cargar configuración desde config.yaml
 try:
     with open("/app/config.yaml", "r") as f:
@@ -52,14 +51,17 @@ STATS_FILE = '/data/statistics_response/statistics.csv'
 ASR_URL_TRANSCRIBE = config.get("ASR", {}).get("TRANSCRIPTION_URL", "http://asr:8000/transcribe")
 ASR_URL_LANGUAGES = config.get("ASR", {}).get("LANGUAGES_URL", "http://asr:8000/languages")
 RAG_URL = config.get("RAG", {}).get("WEBHOOK_RAG_URL", "http://rag:8000/rag_result")
-AGENT_REACT_URL = config.get("RAG", {}).get("WEBHOOK_AGENT_REACT_URL", "http://rag:8000/react_agent_result")
+# AGENT_REACT_URL = config.get("RAG", {}).get("WEBHOOK_AGENT_REACT_URL", "http://rag:8000/react_agent_result")
 CHROMADB_URL = config.get("VECTOR_DB", {}).get("URL", "http://chromadb:8000")
 
 # Timeouts configurable desde config.yaml
 _timeouts_cfg = config.get("TIMEOUTS", {})
 ASR_TIMEOUT = int(_timeouts_cfg.get("ASR", 60))
 RAG_TIMEOUT = int(_timeouts_cfg.get("RAG", 60))
-AGENT_TIMEOUT = int(_timeouts_cfg.get("AGENT_REACT", 60))
+# AGENT_TIMEOUT = int(_timeouts_cfg.get("AGENT_REACT", 60))
+
+# Errores
+OUTPUT_NOT_MATCH_ANSWER_CONTEXT = config.get("RAG", {}).get("OUTPUT_NOT_MATCH_ANSWER_CONTEXT", "The question does not match with the context provided.")
 
 # =====================
 # 3. Configuración de la interfaz Streamlit
@@ -123,7 +125,14 @@ if menu == "Chatbot":
         if text_input:
             logger.info(f"Usuario ha enviado la consulta: {text_input}")
             # Use centralized _query_services to perform calls and update UI
-            results = query_services(text_input, rag_url=RAG_URL, agent_react_url=AGENT_REACT_URL, rag_timeout=RAG_TIMEOUT, agent_timeout=AGENT_TIMEOUT)
+            results = query_services(
+                text_input, 
+                rag_url=RAG_URL, 
+                # agent_react_url=AGENT_REACT_URL, 
+                rag_timeout=RAG_TIMEOUT, 
+                # agent_timeout=AGENT_TIMEOUT, 
+                output_not_match_answer_context=OUTPUT_NOT_MATCH_ANSWER_CONTEXT
+            )
             # Guardar info de la interacción en CSV usando los resultados retornados
             os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)
             # Para el CSV, distinguir correctamente:
@@ -425,21 +434,27 @@ elif menu == "Vector Database":
                     total_chunks += len(metadatas)
                     for meta in metadatas:
                         if isinstance(meta, dict):
-                            origin = meta.get("origin")
-                            filename = None
-                            import json
-                            if origin:
-                                try:
-                                    if isinstance(origin, str):
-                                        origin_dict = json.loads(origin)
-                                    else:
-                                        origin_dict = origin
-                                    filename = origin_dict.get("filename")
-                                except Exception:
-                                    filename = None
-                            if filename:
-                                doc_filenames.setdefault(filename, 0)
-                                doc_filenames[filename] += 1
+                            if "origin" in meta:
+                                origin = meta.get("origin")
+                                filename = None
+                                import json
+                                if origin:
+                                    try:
+                                        if isinstance(origin, str):
+                                            origin_dict = json.loads(origin)
+                                        else:
+                                            origin_dict = origin
+                                        filename = origin_dict.get("filename")
+                                    except Exception:
+                                        filename = None
+                                if filename:
+                                    doc_filenames.setdefault(filename, 0)
+                                    doc_filenames[filename] += 1
+                            elif "filename" in meta:
+                                filename = meta.get("filename")
+                                if filename:
+                                    doc_filenames.setdefault(filename, 0)
+                                    doc_filenames[filename] += 1
                 # Gráficos visuales
                 st.markdown(f"**Total collections:** {len(col_names)}")
                 st.markdown(f"**Collections:** {', '.join(col_names)}")
@@ -467,35 +482,46 @@ elif menu == "Vector Database":
                         st.pyplot(fig_pie)
             # --- TAB 2: Chunks ---
             with tabs[1]:
-                for col in collections:
-                    st.markdown(f"### Collection: {col.name}")
-                    collection = client.get_collection(col.name)
+                # Obtener lista de colecciones
+                collection_names = [col.name for col in collections]
+                selected_collection = st.selectbox("Select a collection", collection_names, key="collection_selector")
+
+                if selected_collection:
+                    # Obtener la colección seleccionada
+                    collection = client.get_collection(selected_collection)
                     docs = collection.get()
                     ids = docs.get("ids", [])
                     metadatas = docs.get("metadatas", [])
                     documents = docs.get("documents", [])
+
                     # --- Filtros ---
                     # Obtener lista de filenames únicos
                     filenames = []
                     for meta in metadatas:
                         if isinstance(meta, dict):
-                            origin = meta.get("origin")
-                            import json
-                            filename = None
-                            if origin:
-                                try:
-                                    if isinstance(origin, str):
-                                        origin_dict = json.loads(origin)
-                                    else:
-                                        origin_dict = origin
-                                    filename = origin_dict.get("filename")
-                                except Exception:
-                                    filename = None
-                            if filename:
-                                filenames.append(filename)
+                            if "origin" in meta:
+                                origin = meta.get("origin")
+                                import json
+                                filename = None
+                                if origin:
+                                    try:
+                                        if isinstance(origin, str):
+                                            origin_dict = json.loads(origin)
+                                        else:
+                                            origin_dict = origin
+                                        filename = origin_dict.get("filename")
+                                    except Exception:
+                                        filename = None
+                                if filename:
+                                    filenames.append(filename)
+                            elif "filename" in meta:
+                                filename = meta.get("filename")
+                                if filename:
+                                    filenames.append(filename)
                     filenames = sorted(list(set(filenames)))
-                    selected_filename = st.selectbox("Filter by document (filename)", ["All"] + filenames, key=f"filename_{col.name}")
-                    keyword = st.text_input("Filter by keyword in chunk", value="", key=f"keyword_{col.name}")
+                    selected_filename = st.selectbox("Filter by document (filename)", ["All"] + filenames, key=f"filename_{selected_collection}")
+                    keyword = st.text_input("Filter by keyword in chunk", value="", key=f"keyword_{selected_collection}")
+
                     # --- Mostrar chunks filtrados ---
                     filtered_idxs = []
                     for idx, meta in enumerate(metadatas):
