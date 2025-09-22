@@ -265,7 +265,7 @@ def query_services(
             rag_input = resp.get("input", "") if resp else ""
             rag_context_raw = resp.get("context", []) if resp else []
             rag_context = [
-                {"content": doc.get("content", ""), "score": doc.get("score", 0)}
+                {"content": doc.get("content", ""), "score": doc.get("score", 0), "page_number": doc.get("page_number", "unknown")}
                 for doc in rag_context_raw
             ]          
             rag_time = elapsed
@@ -288,6 +288,7 @@ def query_services(
                         for item in rag_context:
                             st.markdown(f" {item['content']}")
                             st.markdown(f"  **Score:** {item['score']}")
+                            st.markdown(f"  **Page:** {item['page_number']}")
                             st.markdown("---")
                         
                 else:
