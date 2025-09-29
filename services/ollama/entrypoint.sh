@@ -12,7 +12,7 @@ sleep 5
 # MODEL=$(python3 -c "import yaml; f=open('/app/config.yaml'); print(yaml.safe_load(f)['LLM']['OLLAMA'])" 2>/dev/null)
 
 # echo "Descargando modelo Ollama: $MODEL"
-ollama pull "mistral:instruct"
+ollama pull "gemma2:2b"
 
 # Espera a que termine el servidor
 wait
