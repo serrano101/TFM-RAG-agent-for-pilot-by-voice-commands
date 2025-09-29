@@ -7,7 +7,7 @@
 
 Este proyecto consiste en la creación de un asistente para el piloto, que permite la comunicación por voz y por escrito. El sistema abarca desde el reconocimiento de voz (Speech to Text) hasta el agente RAG, encargado de entender la consulta y generar la respuesta utilizando la base de datos proporcionada.
 
-![Diagrama general](docs/diagramas/diagrama_v32_220925.png)
+![Diagrama general](docs/diagramas/diagrama_v33_260925.png)
 ---
 
 ## ⭐ Consideraciones principales

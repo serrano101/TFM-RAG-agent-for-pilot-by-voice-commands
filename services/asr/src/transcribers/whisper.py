@@ -78,7 +78,7 @@ class ASRWhisper:
                 tmp.flush()
                 # Si 'language' es None, Whisper hará autodetección
                 result = self.model.transcribe(tmp.name, language=language)
-                logger.debug(f"[ASRWhisper] Resultado de la transcripción: {result}")
+                logger.debug(f"[ASRWhisper] Resultado de la transcripción: \n{result}")
             logger.info("[ASRWhisper] Transcripción completada correctamente.")
             return result["text"]
         except Exception as e:
