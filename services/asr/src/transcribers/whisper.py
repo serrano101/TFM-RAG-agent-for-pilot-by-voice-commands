@@ -1,3 +1,4 @@
+import os
 import whisper
 from whisper.tokenizer import LANGUAGES, TO_LANGUAGE_CODE
 import tempfile
@@ -44,6 +45,8 @@ class ASRWhisper:
             logger.info(f"[ASRWhisper] Cargando modelo Whisper '{model_name}' en dispositivo: {DEVICE}")
             self.model = whisper.load_model(model_name, device=DEVICE)
             logger.info("[ASRWhisper] Modelo Whisper cargado correctamente.")
+            self._warmup()  # Calienta el modelo al inicializar
+            logger.info("[ASRWhisper] Warmup completado correctamente.")
         except Exception as e:
             logger.error(f"[ASRWhisper] Error al cargar el modelo Whisper: {e}", exc_info=True)
             raise RuntimeError(f"Error al cargar el modelo Whisper: {e}")
@@ -75,7 +78,7 @@ class ASRWhisper:
                 tmp.flush()
                 # Si 'language' es None, Whisper hará autodetección
                 result = self.model.transcribe(tmp.name, language=language)
-                logger.debug(f"[ASRWhisper] Resultado de la transcripción: {result}")
+                logger.debug(f"[ASRWhisper] Resultado de la transcripción: \n{result}")
             logger.info("[ASRWhisper] Transcripción completada correctamente.")
             return result["text"]
         except Exception as e:
@@ -122,3 +125,35 @@ class ASRWhisper:
         except Exception as e:
             logger.exception("[ASRWhisper] Error construyendo el mapa de idiomas", exc_info=True)
             raise
+    def transcribe_path(self, audio_path: str, language: Optional[str] = None) -> str:
+        """
+        Transcribe directamente desde un archivo (wav/m4a/mp3...).
+        """
+        if not os.path.isfile(audio_path):
+            raise FileNotFoundError(f"Audio no encontrado: {audio_path}")
+        try:
+            if language:
+                logger.info(f"[ASRWhisper] Transcribiendo archivo '{audio_path}' con idioma='{language}'...")
+            else:
+                logger.info(f"[ASRWhisper] Transcribiendo archivo '{audio_path}' (auto idioma)...")
+            result = self.model.transcribe(audio_path, language=language)
+            logger.debug(f"[ASRWhisper] Resultado de la transcripción (archivo): {result}")
+            logger.info("[ASRWhisper] Transcripción de archivo completada.")
+            return result.get("text", "")
+        except Exception as e:
+            logger.error(f"[ASRWhisper] Error transcribiendo archivo '{audio_path}': {e}", exc_info=True)
+            raise RuntimeError(f"Error transcribiendo archivo '{audio_path}': {e}")
+    def _warmup(self, audio_path: Optional[str] = "/app/docs/audio_examples/warmup.m4a", language: Optional[str] = "en"):
+        """
+        Calienta el modelo ejecutando una transcripción rápida de un audio montado.
+        Silencioso ante fallos (no bloquea el arranque).
+        """
+        if not audio_path or not os.path.isfile(audio_path):
+            logger.info(f"[ASRWhisper] Warmup omitido (no existe {audio_path}).")
+            return
+        try:
+            logger.info(f"[ASRWhisper] Warmup con audio: {audio_path}")
+            _ = self.transcribe_path(audio_path, language=language)
+            logger.info("[ASRWhisper] Warmup completado.")
+        except Exception as e:
+            logger.warning(f"[ASRWhisper] Warmup falló: {e}")

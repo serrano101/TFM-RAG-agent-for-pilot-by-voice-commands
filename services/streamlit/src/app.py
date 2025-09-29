@@ -1,19 +1,17 @@
 # =====================
 # 1. Cargar configuración y logging
 # =====================
-import time
+import time, requests, streamlit as st
 from urllib.parse import urlparse
 import os
 import csv
 import yaml
 import logging
-import streamlit as st
 import chromadb
 from src.utils.logger import setup_logger
 from src.utils.interaction import query_services, manager_input, fetch_supported_languages
 import pandas as pd
 import matplotlib.pyplot as plt
-
 # Cargar configuración desde config.yaml
 try:
     with open("/app/config.yaml", "r") as f:
@@ -30,6 +28,31 @@ except Exception as e:
     st.warning(f"No se pudo configurar el logger: {e}")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def wait_ready(base_url: str, timeout: int = 300, label: str = "Inicializando..."):
+    base = base_url.rstrip("/")
+    key = f"warmup_sent::{base}"
+    if key not in st.session_state:
+        st.session_state[key] = False
+
+    with st.spinner(label):
+        start = time.time()
+        while time.time() - start < timeout:
+            try:
+                if not st.session_state[key]:
+                    logger.info(f"[INIT] warmup -> {base}/warmup")
+                    requests.post(f"{base}/warmup", timeout=timeout)
+                    st.session_state[key] = True
+                r = requests.get(f"{base}/readyz", timeout=timeout)
+                if r.ok and r.json().get("ready"):
+                    logger.info(f"[INIT] {base} listo")
+                    return True
+            except Exception as ex:
+                logger.warning(f"[INIT] error contactando {base}: {ex}")
+            time.sleep(1.5)
+    st.error(f"Timeout inicializando {base}")
+    return False
+
 # Filtrar los logs DEBUG de watchdog.observers.inotify_buffer
 class WatchdogFilter(logging.Filter):
     def filter(self, record):
@@ -72,6 +95,11 @@ st.title("🛩️ RAG Pilot Chatbot")
 # Menú lateral para navegación
 menu = st.sidebar.radio("Navigation", ["Chatbot", "Vector Database"])
 
+# Inicializar
+if not wait_ready("http://asr:8000", label="Inicializando ASR..."):
+    st.stop()
+if not wait_ready("http://rag:8000", label="Inicializando RAG..."):
+    st.stop()
 # =====================
 # 4. Lógica del Chatbot
 # =====================
@@ -135,46 +163,79 @@ if menu == "Chatbot":
             )
             # Guardar info de la interacción en CSV usando los resultados retornados
             os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)
-            # Para el CSV, distinguir correctamente:
-            # - Text Input: solo el texto escrito por el usuario
-            # - Audio Input: solo la transcripción del audio
-            # Estos valores se mantienen en session_state por _transcribe_audio y por las ramas de input
+
+            # Valores de entrada
             input_text = st.session_state.get('last_text_input', '')
             input_audio = st.session_state.get('last_audio_input', '')
             transcription_time = st.session_state.get('last_transcription_time', '')
 
-            rag_status_code = results.get('rag_status_code', None)            
-            rag_status = results.get('rag_status', '')            
-            rag_error_message = results.get('rag_error_message', None)  # Nuevo campo
+            # Extraer métricas de RAG
+            rag_status_code = results.get('rag_status_code', None)
+            rag_status = results.get('rag_status', '')
+            rag_error_message = results.get('rag_error_message', None)
             rag_answer = results.get('rag_answer', '')
-            rag_context = results.get('rag_context', None)  # Nuevo campo            
+            rag_context = results.get('rag_context', None) or []
             rag_time = results.get('rag_time', '')
 
-            agent_status_code = results.get('agent_status_code', None)
-            agent_status = results.get('agent_status', '')
-            agent_error_message = results.get('agent_error_message', None)  # Nuevo campo
-            agent_answer = results.get('agent_answer', '')
-            agent_context = results.get('agent_context', None)  # Nuevo campo            
-            agent_time = results.get('agent_time', '')
+            # Nuevas métricas: scores y páginas
+            rag_scores = [float(x.get("score", 0) or 0) for x in rag_context if isinstance(x, dict)]
+            rag_pages_list = [x.get("page_number", "unknown") for x in rag_context if isinstance(x, dict)]
+            rag_context_size = len(rag_context)
+            rag_top_score = max(rag_scores) if rag_scores else None
+            rag_avg_score = (sum(rag_scores) / len(rag_scores)) if rag_scores else None
+            # Página más frecuente (excluye unknown si hay otras)
+            from collections import Counter
+            pages_counter = Counter([p for p in rag_pages_list if p is not None])
+            if pages_counter:
+                # Si hay páginas válidas distintas de 'unknown', priorízalas
+                pages_no_unknown = Counter([p for p in rag_pages_list if p not in (None, "", "unknown")])
+                rag_top_page = (pages_no_unknown or pages_counter).most_common(1)[0][0]
+            else:
+                rag_top_page = None
+            # Serializa páginas para el CSV (p.ej. "3;4;4;5")
+            rag_pages_serialized = ";".join([str(p) for p in rag_pages_list]) if rag_pages_list else ""
 
             today = time.strftime('%d/%m/%Y')
 
-            write_header = not os.path.exists(STATS_FILE)
-            with open(STATS_FILE, 'a', newline='', encoding='utf-8') as f:
+            # Esquema del CSV (solo RAG + nuevas métricas)
+            headers = [
+                'Text Input', 'Audio Input', 'Transcription Time',
+                'RAG Status Code', 'RAG Status', 'RAG Error Message',
+                'RAG Answer', 'RAG Response Time',
+                'RAG Context Size', 'RAG Top Score', 'RAG Avg Score',
+                'RAG Top Page', 'RAG Pages',
+                'Date'
+            ]
+
+            row = [
+                input_text, input_audio, transcription_time,
+                rag_status_code, rag_status, rag_error_message,
+                rag_answer, rag_time,
+                rag_context_size, rag_top_score, rag_avg_score,
+                rag_top_page, rag_pages_serialized,
+                today
+            ]
+
+            # Escribir CSV con rotación si cambia el esquema
+            write_mode = 'a'
+            write_header = False
+            if not os.path.exists(STATS_FILE):
+                write_mode, write_header = 'w', True
+            else:
+                try:
+                    with open(STATS_FILE, 'r', encoding='utf-8') as f:
+                        first_line = f.readline().strip()
+                    existing_cols = [c.strip() for c in first_line.split(',')] if first_line else []
+                    if existing_cols != headers:
+                        write_mode, write_header = 'w', True
+                except Exception:
+                    write_mode, write_header = 'w', True
+
+            with open(STATS_FILE, write_mode, newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 if write_header:
-                    writer.writerow([
-                        'Text Input', 'Audio Input', 'Transcription Time',
-                        'RAG Status Code', 'RAG Status', 'RAG Error Message', 'RAG Answer', 'RAG Context', 'RAG Response Time',
-                        'AgentReact Status Code', 'AgentReact Status', 'AgentReact Error Message', 'AgentReact Answer', 'AgentReact Context', 'AgentReact Response Time',
-                        'Date'
-                    ])
-                writer.writerow([
-                    input_text, input_audio, transcription_time,
-                    rag_status_code, rag_status, rag_error_message, rag_answer, rag_context, rag_time,
-                    agent_status_code, agent_status, agent_error_message, agent_answer, agent_context, agent_time,
-                    today
-                ])
+                    writer.writerow(headers)
+                writer.writerow(row)
 
     with tabs[1]:
         st.header("Conversation History")
@@ -191,215 +252,150 @@ if menu == "Chatbot":
             for col_name in [
                 'Transcription Time',
                 'RAG Response Time',
-                'AgentReact Response Time'
+                # 'RAG Context Size',  # eliminado: el contexto siempre es 3-4, no aporta
+                'RAG Top Score',
+                'RAG Avg Score'
             ]:
                 if col_name in df.columns:
                     df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
 
             # KPIs
             st.subheader("Overview")
-            kpi1, kpi2, kpi3, kpi4 = st.columns(4)  # Primera fila: métricas generales
+            kpi1, kpi2, kpi3, kpi4 = st.columns(4)
             with kpi1:
                 st.metric("Total Interactions", len(df))
             with kpi2:
-                text_interactions = df['Text Input'].notna().sum() if 'Text Input' in df.columns else 0
-                st.metric("Text Interactions", text_interactions)
-            with kpi3:
-                audio_interactions = df['Audio Input'].notna().sum() if 'Audio Input' in df.columns else 0
-                st.metric("Audio Interactions", audio_interactions)
-            with kpi4:
                 st.metric("Today", df['Date'].eq(time.strftime('%d/%m/%Y')).sum() if 'Date' in df.columns else 0)
-
-            kpi5, kpi6, kpi7, kpi8 = st.columns(4)  # Segunda fila: métricas relacionadas con tiempos y errores
-            with kpi5:
+            with kpi3:
                 avg_transc = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
                 st.metric("Avg Transcription (s)", f"{avg_transc:.2f}" if avg_transc is not None and not pd.isna(avg_transc) else "—")
-            with kpi6:
+            with kpi4:
                 avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
                 st.metric("Avg RAG (s)", f"{avg_rag:.2f}" if avg_rag is not None and not pd.isna(avg_rag) else "—")
-            with kpi7:
-                avg_agent = df['AgentReact Response Time'].mean() if 'AgentReact Response Time' in df.columns else None
-                st.metric("Avg AgentReact (s)", f"{avg_agent:.2f}" if avg_agent is not None and not pd.isna(avg_agent) else "—")
-            with kpi8:
-                error_count = df['RAG Error Message'].notna().sum() + df['AgentReact Error Message'].notna().sum()
-                st.metric("Total Errors", error_count)
+
+            # Solo mantenemos Avg Top Score (quitamos Avg Context Size)
+            kpi5 = st.container()
+            with kpi5:
+                avg_top_score = df['RAG Top Score'].mean() if 'RAG Top Score' in df.columns else None
+                st.metric("Avg Top Score", f"{avg_top_score:.3f}" if avg_top_score is not None and not pd.isna(avg_top_score) else "—")
 
             st.markdown("---")
-            
-            # Definir una paleta de colores uniforme
             palette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
 
-            # --- Estadísticas de Audio Input ---
-            st.subheader("Audio Input Statistics")
-            col1, col2 = st.columns(2)
+            # Top Score Distribution (a ancho completo). Eliminada la gráfica de Context Size.
+            if 'RAG Top Score' in df.columns and df['RAG Top Score'].notna().any():
+                st.markdown("<h4 style='text-align: center;'>Top Score Distribution</h4>", unsafe_allow_html=True)
+                fig_ts, ax_ts = plt.subplots(figsize=(8, 4))
+                df['RAG Top Score'].dropna().plot(kind='hist', bins=20, ax=ax_ts, color=palette[0], alpha=0.85)
+                ax_ts.set_xlabel('Score')
+                ax_ts.set_ylabel('Frequency')
+                ax_ts.grid(axis='y', linestyle='--', alpha=0.5)
+                st.pyplot(fig_ts)
+            else:
+                st.info("No data to plot Top Score Distribution.")
 
-            # Gráfico 1: Distribución del tiempo de transcripción (frecuencia en intervalos de 1 segundo)
-            with col1:
-                if 'Transcription Time' in df.columns and df['Transcription Time'].notna().any():
-                    st.markdown("<h4 style='text-align: center;'>Transcription Time Distribution</h4>", unsafe_allow_html=True)
-                    fig_transc, ax_transc = plt.subplots(figsize=(4, 4))
-                    df['Transcription Time'].dropna().plot(kind='hist', bins=range(0, int(df['Transcription Time'].max()) + 2), ax=ax_transc, color='#1f77b4', alpha=0.8)
-                    ax_transc.set_xlabel('Seconds')
-                    ax_transc.set_ylabel('Frequency')
-                    ax_transc.grid(axis='y', linestyle='--', alpha=0.5)
-                    st.pyplot(fig_transc)
+            # Response time vs top score (left) AND Pages frequency (right) side by side
+            col_left, col_right = st.columns(2)
 
-            # Gráfico 2: Frecuencia de valores de Audio Input
-            with col2:
-                if 'Audio Input' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Audio Input Frequency</h4>", unsafe_allow_html=True)
-                    fig_audio, ax_audio = plt.subplots(figsize=(4, 4))
-                    
-                    # Truncar los valores de Audio Input para mostrar solo las primeras palabras
-                    audio_input_counts = df['Audio Input'].value_counts()
-                    truncated_labels = [label[:10] + "..." if len(label) > 10 else label for label in audio_input_counts.index]
-                    
-                    audio_input_counts.index = truncated_labels  # Actualizar los índices con los valores truncados
-                    audio_input_counts.plot(kind='bar', ax=ax_audio, color='#ff7f0e', alpha=0.8)
-                    
-                    ax_audio.set_xlabel('Audio Input')
-                    ax_audio.set_ylabel('Frequency')
-                    ax_audio.grid(axis='y', linestyle='--', alpha=0.5)
-                    plt.xticks(rotation=45, ha='right')  # Rotar las etiquetas para mejor legibilidad
-                    st.pyplot(fig_audio)
+            with col_left:
+                if {'RAG Response Time', 'RAG Top Score'}.issubset(df.columns):
+                    st.markdown("<h4 style='text-align: center;'>Response Time vs Top Score</h4>", unsafe_allow_html=True)
+                    mask = df['RAG Response Time'].notna() & df['RAG Top Score'].notna()
+                    if mask.any():
+                        fig_sc, ax_sc = plt.subplots(figsize=(5, 4))
+                        ax_sc.scatter(df.loc[mask, 'RAG Response Time'], df.loc[mask, 'RAG Top Score'], color=palette[2], alpha=0.7)
+                        ax_sc.set_xlabel('RAG Response Time (s)')
+                        ax_sc.set_ylabel('Top Score')
+                        ax_sc.grid(axis='both', linestyle='--', alpha=0.4)
+                        st.pyplot(fig_sc)
+                    else:
+                        st.info("No data to plot.")
+                else:
+                    st.info("Missing columns to plot.")
 
-            # --- Primera fila: RAG ---
-            st.header("RAG Statistics")
-            col1, col2, col3 = st.columns(3)
+            with col_right:
+                if 'RAG Pages' in df.columns and df['RAG Pages'].notna().any():
+                    st.markdown("<h4 style='text-align: center;'>Pages Frequency (across all responses)</h4>", unsafe_allow_html=True)
+                    all_pages = []
+                    for s in df['RAG Pages'].dropna().astype(str).tolist():
+                        all_pages.extend([p for p in s.split(';') if p])
+                    if all_pages:
+                        import collections
+                        page_counts = collections.Counter(all_pages)
+                        # Ordenar por número de página ascendente; no numéricos al final
+                        df_pages = pd.DataFrame(page_counts.items(), columns=["Page", "Count"])
+                        df_pages["Page_num"] = pd.to_numeric(df_pages["Page"], errors="coerce")
+                        df_pages = df_pages.sort_values(by=["Page_num", "Page"], ascending=[True, True])
+                        fig_pg, ax_pg = plt.subplots(figsize=(5, 4))
+                        ax_pg.bar(df_pages["Page"].astype(str), df_pages["Count"], color=palette[3])
+                        ax_pg.set_xlabel('Page')
+                        ax_pg.set_ylabel('Count')
+                        ax_pg.grid(axis='y', linestyle='--', alpha=0.5)
+                        plt.xticks(rotation=45, ha='right')
+                        st.pyplot(fig_pg)
+                    else:
+                        st.info("No pages data.")
+                else:
+                    st.info("No 'RAG Pages' data.")
 
-            # Gráfico 1: Distribución del tiempo de respuesta (frecuencia en intervalos de 1 segundo)
-            with col1:
-                if 'RAG Response Time' in df.columns and df['RAG Response Time'].notna().any():
-                    st.markdown("<h4 style='text-align: center;'>Response Time Distribution</h4>", unsafe_allow_html=True)
-                    fig_rt, ax_rt = plt.subplots(figsize=(4, 4))
-                    df['RAG Response Time'].dropna().plot(kind='hist', bins=range(0, int(df['RAG Response Time'].max()) + 2), ax=ax_rt, color=palette[0], alpha=0.8)
-                    ax_rt.set_xlabel('Seconds')
-                    ax_rt.set_ylabel('Frequency')
-                    ax_rt.grid(axis='y', linestyle='--', alpha=0.5)
-                    st.pyplot(fig_rt)
+            # --- Nueva fila: Response Time y Frecuencia por Status Code ---
+            st.markdown("---")
+            st.markdown("### Response Time and Frequency by Status Code")
+            col_sleft, col_sright = st.columns(2)
 
-            # Gráfico 2: Frecuencia de códigos de estado
-            with col2:
+            with col_sleft:
+                if {'RAG Response Time', 'RAG Status Code'}.issubset(df.columns):
+                    # Filtra válidos
+                    df_rt = df[['RAG Response Time', 'RAG Status Code']].dropna()
+                    if not df_rt.empty:
+                        # Agrupa por status code
+                        grouped = df_rt.groupby('RAG Status Code')['RAG Response Time'].apply(list)
+                        if not grouped.empty:
+                            st.markdown("<h4 style='text-align: center;'>Response Time by Status Code</h4>", unsafe_allow_html=True)
+                            labels = [str(int(k)) if pd.notna(k) else "NaN" for k in grouped.index]
+                            data = [v for v in grouped.values]
+                            fig_box, ax_box = plt.subplots(figsize=(5, 4))
+                            ax_box.boxplot(data, labels=labels, patch_artist=True,
+                                           boxprops=dict(facecolor="#cfe2f3", color="#1f77b4"),
+                                           medianprops=dict(color="#d62728"),
+                                           whiskerprops=dict(color="#1f77b4"),
+                                           capprops=dict(color="#1f77b4"))
+                            ax_box.set_xlabel('Status Code')
+                            ax_box.set_ylabel('RAG Response Time (s)')
+                            ax_box.grid(axis='y', linestyle='--', alpha=0.4)
+                            st.pyplot(fig_box)
+                        else:
+                            st.info("No data to plot Response Time by Status Code.")
+                    else:
+                        st.info("No data to plot Response Time by Status Code.")
+                else:
+                    st.info("Missing columns to plot Response Time by Status Code.")
+
+            with col_sright:
                 if 'RAG Status Code' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Status Code Frequency</h4>", unsafe_allow_html=True)
-                    fig_bar, ax_bar = plt.subplots(figsize=(4, 4))
-                    rag_status_code_counts = df['RAG Status Code'].value_counts()
-                    rag_status_code_counts.plot(kind='bar', ax=ax_bar, color=palette[0], alpha=0.8)
-                    ax_bar.set_xlabel('Status Code')
-                    ax_bar.set_ylabel('Frequency')
-                    ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
-                    st.pyplot(fig_bar)
-
-            # Gráfico 3: Porcentaje de estados (no códigos de estado)
-            with col3:
-                if 'RAG Status' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Status Percentage</h4>", unsafe_allow_html=True)
-                    rag_status_counts = df['RAG Status'].value_counts()
-                    if not rag_status_counts.empty:
-                        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
-                        rag_status_counts.plot(
-                            kind='pie',
-                            ax=ax_pie,
-                            autopct='%1.1f%%',
-                            startangle=90,
-                            colors=palette[:len(rag_status_counts)],  # Usar colores dinámicos de la paleta
-                            textprops={'fontsize': 10}
-                        )
-                        ax_pie.set_ylabel('')
+                    st.markdown("<h4 style='text-align: center;'>Status Code Distribution</h4>", unsafe_allow_html=True)
+                    counts = df['RAG Status Code'].value_counts(dropna=False).sort_index()
+                    if not counts.empty:
+                        # Pie chart
+                        fig_pie, ax_pie = plt.subplots(figsize=(5, 3.6))
+                        labels = [str(int(i)) if pd.notna(i) else "NaN" for i in counts.index]
+                        colors = plt.cm.Pastel1(range(len(counts)))
+                        ax_pie.pie(counts.values, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+                        ax_pie.axis('equal')
                         st.pyplot(fig_pie)
 
-            st.markdown("---")
-            
-            # --- Segunda fila: Agent React ---
-            st.header("Agent React Statistics")
-            col1, col2, col3 = st.columns(3)
-
-            # Gráfico 1: Distribución del tiempo de respuesta (frecuencia en intervalos de 1 segundo)
-            with col1:
-                if 'AgentReact Response Time' in df.columns and df['AgentReact Response Time'].notna().any():
-                    st.markdown("<h4 style='text-align: center;'>Response Time Distribution</h4>", unsafe_allow_html=True)
-                    fig_rt, ax_rt = plt.subplots(figsize=(4, 4))
-                    df['AgentReact Response Time'].dropna().plot(kind='hist', bins=range(0, int(df['AgentReact Response Time'].max()) + 2), ax=ax_rt, color=palette[0], alpha=0.8)
-                    ax_rt.set_xlabel('Seconds')
-                    ax_rt.set_ylabel('Frequency')
-                    ax_rt.grid(axis='y', linestyle='--', alpha=0.5)
-                    st.pyplot(fig_rt)
-
-            # Gráfico 2: Frecuencia de códigos de estado
-            with col2:
-                if 'AgentReact Status Code' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Status Code Frequency</h4>", unsafe_allow_html=True)
-                    fig_bar, ax_bar = plt.subplots(figsize=(4, 4))
-                    agent_status_code_counts = df['AgentReact Status Code'].value_counts()
-                    agent_status_code_counts.plot(kind='bar', ax=ax_bar, color=palette[0], alpha=0.8)
-                    ax_bar.set_xlabel('Status Code')
-                    ax_bar.set_ylabel('Frequency')
-                    ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
-                    st.pyplot(fig_bar)
-
-            # Gráfico 3: Porcentaje de estados (no códigos de estado)
-            with col3:
-                if 'AgentReact Status' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Status Percentage</h4>", unsafe_allow_html=True)
-                    agent_status_counts = df['AgentReact Status'].value_counts()
-                    if not agent_status_counts.empty:
-                        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
-                        agent_status_counts.plot(
-                            kind='pie',
-                            ax=ax_pie,
-                            autopct='%1.1f%%',
-                            startangle=90,
-                            colors=palette[:len(agent_status_counts)],  # Usar colores dinámicos de la paleta
-                            textprops={'fontsize': 10}
-                        )
-                        ax_pie.set_ylabel('')
-                        st.pyplot(fig_pie)
-
-            # --- Tablas finales ---
-            st.markdown("---")            
-            st.header("Error Messages")
-            # Dos tablas en la misma fila
-            col_1, col_2 = st.columns(2)
-            with col_1:
-                st.markdown("### RAG")
-                if 'RAG Error Message' in df.columns:
-                    rag_error_counts = df['RAG Error Message'].value_counts()
-                    st.table(rag_error_counts)
-
-            with col_2:
-                st.markdown("### Agent React")
-                if 'AgentReact Error Message' in df.columns:
-                    agent_error_counts = df['AgentReact Error Message'].value_counts()
-                    st.table(agent_error_counts)
-            
-            st.markdown("---")
-
-            # Dos tablas en la misma fila            
-            st.header("Contexts")
-            col_1, col_2 = st.columns(2)
-            with col_1:
-                st.markdown("### RAG")
-                if 'RAG Context' in df.columns:
-                    rag_context_counts = df['RAG Context'].value_counts().head(5)
-                    st.table(rag_context_counts)
-            with col_2:
-                st.markdown("### Agent React")
-                if 'AgentReact Context' in df.columns:
-                    agent_context_counts = df['AgentReact Context'].value_counts().head(5)
-                    st.table(agent_context_counts)
-            
-            st.markdown("---")
-            # Descargar CSV
-            st.header("All Interactions")
-            st.download_button(
-                label="Download CSV",
-                data=df.to_csv(index=False).encode('utf-8'),
-                file_name="statistics.csv",
-                mime="text/csv"
-            )
-            st.dataframe(df, width='stretch')
-        else:
-            st.info("No statistics available yet.")
+                        # Bar chart (frecuencias)
+                        st.markdown("<h5 style='text-align: center;'>Status Code Frequency</h5>", unsafe_allow_html=True)
+                        fig_bar, ax_bar = plt.subplots(figsize=(5, 3.6))
+                        ax_bar.bar(labels, counts.values, color='#8c564b', alpha=0.9)
+                        ax_bar.set_xlabel('Status Code')
+                        ax_bar.set_ylabel('Count')
+                        ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
+                        st.pyplot(fig_bar)
+                    else:
+                        st.info("No status code data.")
+                else:
+                    st.info("No 'RAG Status Code' column.")
 
 # =====================
 # 5. Visualización de la base de datos vectorial
@@ -571,3 +567,8 @@ elif menu == "Vector Database":
     except Exception as e:
         logger.exception(f"Error querying ChromaDB: {e}")
         st.error(f"Error querying ChromaDB: {e}")
+
+# Ejemplo de uso al inicio de la app Streamlit:
+# rag_url = "http://rag:8000"  # o desde config
+# if not wait_ready(rag_url):
+#     st.stop()

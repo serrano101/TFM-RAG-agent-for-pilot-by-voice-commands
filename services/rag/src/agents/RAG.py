@@ -18,8 +18,7 @@ class RAG:
         prompt: Union[str, PromptTemplate],
         output_no_context_answer: str,
         output_not_match_answer_context: str,
-        search_type: Optional[str] = None,
-        search_kwargs: Optional[dict] = None
+        k: Optional[int]
     ) -> None:
         """
         Inicializa el RAG con los componentes necesarios.
@@ -47,10 +46,9 @@ class RAG:
                 self.prompt = PromptTemplate(input_variables=['context', 'input'], template=prompt)
             else:
                 self.prompt = prompt
-            self._search_type = search_type
-            self._search_kwargs = search_kwargs or {}
             self.output_no_context_answer = output_no_context_answer
             self.output_not_match_answer_context = output_not_match_answer_context
+            self.k = k
 
             logger.info("[RAG] Inicializado correctamente.")
         except Exception as e:
@@ -119,23 +117,20 @@ class RAG:
             # Recupera documentos relevantes
             docs = self.vector_db.search(
                 query=query,
-                top_k=self._search_kwargs.get("k", 5),
-                # search_type=self._search_type,
-                # score_threshold=self._search_kwargs,
+                k=self.k if self.k is not None else 5,
                 return_score=True
             )
             logger.debug(f"[RAG] Documentos recuperados: {len(docs)}")
 
             # Concatena el contenido de los documentos
             context_text = "\n<other_procedure>\n".join([doc.page_content for doc, _score in docs])
-            score_list = []
-            score_list.extend(round(_score, 2) for doc, _score in docs)
             
             context_full_streamlit = []
             for doc, _score in docs:
                 context_full_streamlit.append({
                     "content": doc.page_content,
-                    "score": round(_score, 2)
+                    "score": round(_score, 2),
+                    "page_number": doc.metadata.get("page_number", "unknown"),
                 })
 
             # Si no hay documentos, devuelve respuesta por defecto
@@ -149,24 +144,18 @@ class RAG:
             
             # Invocar el modelo LLM
             logger.debug(f"[RAG] Documentos: \n {context_text}")
-            result = self.llm.client.invoke(self.prompt.format(input=query, context=context_text))
+            prompt_formatted = self.prompt.format(input=query, context=context_text)
+            logger.debug(f"[RAG] Prompt formateado:\n{prompt_formatted}")
+            result = self.llm.client.invoke(prompt_formatted)
             logger.debug(f"[RAG] Respuesta del RAG:\n{result}")
 
             # Convertir result.content a un diccionario o manejarlo como string
             try:
                 if isinstance(result.content, str):
-                    # Eliminar comillas iniciales y finales si existen
-                    cleaned_content = result.content.strip().strip("'")
-                    logger.debug(f"[RAG] Respuesta limpia del RAG:\n{cleaned_content}")
-                    
-                    # Intentar encapsular en un objeto JSON si no es válido
-                    if not cleaned_content.startswith("{") and not cleaned_content.startswith("["):
-                        cleaned_content = "{" + cleaned_content + "}"
-                    
-                    # Intentar cargar como JSON
-                    result_content = json.loads(cleaned_content)
-                else:
+                    # Cargar como JSON
                     result_content = json.loads(result.content)
+                elif isinstance(result.content, dict):
+                    result_content = json.loads(json.dumps(result.content))  # Asegura que es un dict
             except json.JSONDecodeError as e:
                 logger.error(f"[RAG] La respuesta del modelo no es un JSON válido: {e}")
                 result_content = result.content.strip()
