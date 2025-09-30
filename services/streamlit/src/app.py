@@ -1,7 +1,7 @@
 # =====================
 # 1. Cargar configuración y logging
 # =====================
-import time, requests, streamlit as st
+import time, requests, base64, streamlit as st
 from urllib.parse import urlparse
 import os
 import csv
@@ -9,7 +9,8 @@ import yaml
 import logging
 import chromadb
 from src.utils.logger import setup_logger
-from src.utils.interaction import query_services, manager_input, fetch_supported_languages
+from src.utils.interaction import query_services, manager_input, fetch_supported_languages, synthesize_tts 
+from src.utils.cleaning import clean_rag_answer, format_clean_answer
 import pandas as pd
 import matplotlib.pyplot as plt
 # Cargar configuración desde config.yaml
@@ -76,6 +77,7 @@ ASR_URL_LANGUAGES = config.get("ASR", {}).get("LANGUAGES_URL", "http://asr:8000/
 RAG_URL = config.get("RAG", {}).get("WEBHOOK_RAG_URL", "http://rag:8000/rag_result")
 # AGENT_REACT_URL = config.get("RAG", {}).get("WEBHOOK_AGENT_REACT_URL", "http://rag:8000/react_agent_result")
 CHROMADB_URL = config.get("VECTOR_DB", {}).get("URL", "http://chromadb:8000")
+TTS_URL = os.environ.get("TTS_URL") or config.get("TTS_URL") or "http://tts:8000"
 
 # Timeouts configurable desde config.yaml
 _timeouts_cfg = config.get("TIMEOUTS", {})
@@ -99,6 +101,8 @@ menu = st.sidebar.radio("Navigation", ["Chatbot", "Vector Database"])
 if not wait_ready("http://asr:8000", label="Inicializando ASR..."):
     st.stop()
 if not wait_ready("http://rag:8000", label="Inicializando RAG..."):
+    st.stop()
+if not wait_ready("http://tts:8000", label="Inicializando TTS..."):
     st.stop()
 # =====================
 # 4. Lógica del Chatbot
@@ -149,7 +153,7 @@ if menu == "Chatbot":
             asr_timeout=ASR_TIMEOUT,
             language=language
         )
-        # Si hay input (texto o audio transcrito), consultar RAG y Agent React
+        # Si hay input (texto o audio transcrito), consultar RAG
         if text_input:
             logger.info(f"Usuario ha enviado la consulta: {text_input}")
             # Use centralized _query_services to perform calls and update UI
@@ -161,6 +165,22 @@ if menu == "Chatbot":
                 # agent_timeout=AGENT_TIMEOUT, 
                 output_not_match_answer_context=OUTPUT_NOT_MATCH_ANSWER_CONTEXT
             )
+            # Tras obtener resultados del RAG
+            if results.get("rag_answer", ""):
+                raw_answer = results.get("rag_answer", "")
+                clean_dict = clean_rag_answer(raw_answer)
+                pretty_text = format_clean_answer(clean_dict)
+                # Opción de generar audio
+                st.markdown("### Audio de la respuesta (TTS)")
+                cache_key = f"tts_audio::{hash(pretty_text)}"
+                if cache_key not in st.session_state:
+                    audio_bytes = synthesize_tts(pretty_text, TTS_URL, None)
+                    st.session_state[cache_key] = audio_bytes
+                audio_bytes = st.session_state.get(cache_key)
+                if audio_bytes:
+                    st.audio(audio_bytes, format="audio/wav")
+                else:
+                    st.info("No se pudo generar audio TTS.")
             # Guardar info de la interacción en CSV usando los resultados retornados
             os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)
 

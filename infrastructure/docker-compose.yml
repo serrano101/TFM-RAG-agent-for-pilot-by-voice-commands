@@ -118,6 +118,30 @@ services:
       - rag
       - chromadb
       - ollama
+      - tts
+  tts:
+    build:
+      context: ../services/tts
+      dockerfile: Dockerfile
+    container_name: tts_service
+    ports:
+      - "5003:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TTS_HOME=/root/.local/share/tts
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      - ../services/tts:/app
+      - ../infrastructure/config.yaml:/app/config.yaml
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 volumes:
   ollama:
 

@@ -6,6 +6,7 @@ import streamlit as st
 from fastapi import UploadFile, File
 from queue import Queue
 import threading
+import base64
 
 logger = logging.getLogger(__name__)
 
@@ -462,3 +463,26 @@ def format_rag_answer(rag_answer: dict) -> str:
 
     # Unir las líneas con saltos de línea
     return "\n\n".join(formatted_answer)
+
+def synthesize_tts(text: str, tts_url: str, speaker: str | None = None, timeout: int = 30) -> bytes | None:
+    """
+    Llama al microservicio TTS y devuelve WAV bytes (decodificando base64).
+    """
+    if not text.strip():
+        return None
+    try:
+        payload = {"text": text, "speaker": speaker, "raw_wav": False}
+        r = requests.post(f"{tts_url.rstrip('/')}/synthesize", json=payload, timeout=timeout)
+        if r.status_code != 200:
+            logger.warning(f"TTS fallo status={r.status_code}: {r.text[:120]}")
+            return None
+        data = r.json()
+        b64audio = data.get("audio_base64")
+        if not b64audio:
+            logger.warning("TTS sin audio_base64")
+            return None
+        return base64.b64decode(b64audio)
+    except Exception as e:
+        logger.warning(f"Error TTS: {e}")
+        return None
+    
