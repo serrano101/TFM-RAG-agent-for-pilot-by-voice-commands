@@ -9,9 +9,12 @@ import yaml
 import logging
 import chromadb
 from src.utils.logger import setup_logger
-from src.utils.interaction import query_services, manager_input, fetch_supported_languages
+from src.utils.interaction import query_services, manager_input, fetch_supported_languages, synthesize_tts 
+from src.utils.cleaning import clean_rag_answer, format_clean_answer
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
+import re
 # Cargar configuración desde config.yaml
 try:
     with open("/app/config.yaml", "r") as f:
@@ -76,6 +79,7 @@ ASR_URL_LANGUAGES = config.get("ASR", {}).get("LANGUAGES_URL", "http://asr:8000/
 RAG_URL = config.get("RAG", {}).get("WEBHOOK_RAG_URL", "http://rag:8000/rag_result")
 # AGENT_REACT_URL = config.get("RAG", {}).get("WEBHOOK_AGENT_REACT_URL", "http://rag:8000/react_agent_result")
 CHROMADB_URL = config.get("VECTOR_DB", {}).get("URL", "http://chromadb:8000")
+TTS_URL = os.environ.get("TTS_URL") or config.get("TTS_URL") or "http://tts:8000"
 
 # Timeouts configurable desde config.yaml
 _timeouts_cfg = config.get("TIMEOUTS", {})
@@ -99,6 +103,8 @@ menu = st.sidebar.radio("Navigation", ["Chatbot", "Vector Database"])
 if not wait_ready("http://asr:8000", label="Inicializando ASR..."):
     st.stop()
 if not wait_ready("http://rag:8000", label="Inicializando RAG..."):
+    st.stop()
+if not wait_ready("http://tts:8000", label="Inicializando TTS..."):
     st.stop()
 # =====================
 # 4. Lógica del Chatbot
@@ -149,7 +155,7 @@ if menu == "Chatbot":
             asr_timeout=ASR_TIMEOUT,
             language=language
         )
-        # Si hay input (texto o audio transcrito), consultar RAG y Agent React
+        # Si hay input (texto o audio transcrito), consultar RAG
         if text_input:
             logger.info(f"Usuario ha enviado la consulta: {text_input}")
             # Use centralized _query_services to perform calls and update UI
@@ -161,6 +167,30 @@ if menu == "Chatbot":
                 # agent_timeout=AGENT_TIMEOUT, 
                 output_not_match_answer_context=OUTPUT_NOT_MATCH_ANSWER_CONTEXT
             )
+            # Tras obtener resultados del RAG
+            if results.get("rag_answer", ""):
+                raw_answer = results.get("rag_answer", "")
+                clean_dict = clean_rag_answer(raw_answer)
+                pretty_text = format_clean_answer(clean_dict)
+                # Opción de generar audio
+                st.markdown("### Audio de la respuesta (TTS)")
+                cache_key = f"tts_audio::{hash(pretty_text)}"
+                if cache_key not in st.session_state:
+                    audio_bytes, tts_time = synthesize_tts(pretty_text, TTS_URL, None)
+                    st.session_state[cache_key] = {
+                        "audio": audio_bytes,
+                        "time": tts_time
+                    }
+                cached = st.session_state.get(cache_key, {})
+                audio_bytes = cached.get("audio")
+                tts_time = cached.get("time")
+                st.session_state["last_tts_time"] = tts_time
+                if audio_bytes:
+                    st.audio(audio_bytes, format="audio/wav")
+                    if tts_time is not None:
+                        st.info(f"TTS generation time: {tts_time:.2f} s", icon="⏱️")
+                else:
+                    st.info("No se pudo generar audio TTS.")
             # Guardar info de la interacción en CSV usando los resultados retornados
             os.makedirs(os.path.dirname(STATS_FILE), exist_ok=True)
 
@@ -204,8 +234,12 @@ if menu == "Chatbot":
                 'RAG Answer', 'RAG Response Time',
                 'RAG Context Size', 'RAG Top Score', 'RAG Avg Score',
                 'RAG Top Page', 'RAG Pages',
+                'TTS Generation Time',  # nueva columna
                 'Date'
             ]
+
+            # Truncar TTS para persistencia
+            tts_time_trunc = round(float(tts_time), 3) if tts_time is not None else None
 
             row = [
                 input_text, input_audio, transcription_time,
@@ -213,6 +247,7 @@ if menu == "Chatbot":
                 rag_answer, rag_time,
                 rag_context_size, rag_top_score, rag_avg_score,
                 rag_top_page, rag_pages_serialized,
+                tts_time_trunc,                # <- truncado
                 today
             ]
 
@@ -248,155 +283,278 @@ if menu == "Chatbot":
         if os.path.exists(STATS_FILE):
             df = pd.read_csv(STATS_FILE)
 
-            # Convertir columnas numéricas de manera segura
-            for col_name in [
-                'Transcription Time',
-                'RAG Response Time',
-                # 'RAG Context Size',  # eliminado: el contexto siempre es 3-4, no aporta
-                'RAG Top Score',
-                'RAG Avg Score'
-            ]:
-                if col_name in df.columns:
-                    df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+            # --- Normalización columnas numéricas ---
+            num_cols_map = {
+                'Transcription Time': 'ASR Time',
+                'RAG Response Time': 'RAG Time',
+                'TTS Generation Time': 'TTS Time'
+            }
+            for col in num_cols_map.keys():
+                if col in df.columns:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
 
-            # KPIs
-            st.subheader("Overview")
-            kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-            with kpi1:
-                st.metric("Total Interactions", len(df))
-            with kpi2:
-                st.metric("Today", df['Date'].eq(time.strftime('%d/%m/%Y')).sum() if 'Date' in df.columns else 0)
-            with kpi3:
-                avg_transc = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
-                st.metric("Avg Transcription (s)", f"{avg_transc:.2f}" if avg_transc is not None and not pd.isna(avg_transc) else "—")
-            with kpi4:
-                avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
+            # --- Métricas base ---
+            total_interactions = len(df)
+            today_str = time.strftime('%d/%m/%Y')
+            today_interactions = df['Date'].eq(today_str).sum() if 'Date' in df.columns else 0
+
+            avg_asr = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
+            avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
+            avg_tts = df['TTS Generation Time'].mean() if 'TTS Generation Time' in df.columns else None
+
+            # --- Tema más repetido (se toma la cadena completa) ---
+            most_text = None
+            if 'Text Input' in df.columns and df['Text Input'].notna().any():
+                most_text = df['Text Input'].value_counts().idxmax()
+
+            most_audio = None
+            if 'Audio Input' in df.columns and df['Audio Input'].notna().any():
+                most_audio = df['Audio Input'].value_counts().idxmax()
+
+            # --- Procedimientos más repetidos ---
+            proc_counter = {}
+            if 'RAG Answer' in df.columns:
+                for raw in df['RAG Answer'].astype(str).tolist():
+                    proc = None
+                    # Intentar JSON
+                    raw_strip = raw.strip()
+                    if raw_strip.startswith("{") or raw_strip.startswith("["):
+                        try:
+                            obj = json.loads(raw_strip)
+                            if isinstance(obj, dict) and 'procedure' in obj:
+                                proc = obj.get('procedure')
+                        except Exception:
+                            pass
+                    if not proc:
+                        # Regex estilo "Procedure: LANDING"
+                        m = re.search(r'(?i)procedure\s*[:\-]\s*([A-Za-z0-9 _\-\/]+)', raw)
+                        if m:
+                            proc = m.group(1).strip()
+                    if proc:
+                        proc_counter[proc] = proc_counter.get(proc, 0) + 1
+            top_procs = sorted(proc_counter.items(), key=lambda x: x[1], reverse=True)[:10]
+
+            # --- Clasificación status success / no_match ---
+            status_col = df.get('RAG Status')
+            status_counts = {}
+            if status_col is not None:
+                # Normalizamos no_match
+                def norm_status(s):
+                    if isinstance(s, str):
+                        s_low = s.lower().strip()
+                        if 'no_match' in s_low or 'not_match' in s_low or 'not match' in s_low:
+                            return 'no_match'
+                        if 'success' in s_low:
+                            return 'success'
+                    return s
+                norm_statuses = status_col.apply(norm_status)
+                status_counts = norm_statuses.value_counts(dropna=False)
+
+            # --- Páginas (hist) ---
+            page_freq = {}
+            if 'RAG Pages' in df.columns:
+                for entry in df['RAG Pages'].dropna().astype(str):
+                    for p in entry.split(';'):
+                        p_clean = p.strip()
+                        if not p_clean:
+                            continue
+                        page_freq[p_clean] = page_freq.get(p_clean, 0) + 1
+            pages_items = sorted(page_freq.items(), key=lambda x: (pd.to_numeric(x[0], errors='coerce'), x[0]))
+
+            # =============== LAYOUT ===============
+            st.subheader("KPI Overview")
+            c1, c2, c3, c4, c5 = st.columns(5)
+            with c1:
+                st.metric("Total Interactions", total_interactions)
+            with c2:
+                st.metric("Interactions Today", today_interactions)
+            with c3:
                 st.metric("Avg RAG (s)", f"{avg_rag:.2f}" if avg_rag is not None and not pd.isna(avg_rag) else "—")
+            with c4:
+                st.metric("Avg TTS (s)", f"{avg_tts:.2f}" if avg_tts is not None and not pd.isna(avg_tts) else "—")
+            with c5:
+                st.metric("Avg ASR (s)", f"{avg_asr:.2f}" if avg_asr is not None and not pd.isna(avg_asr) else "—")
 
-            # Solo mantenemos Avg Top Score (quitamos Avg Context Size)
-            kpi5 = st.container()
-            with kpi5:
-                avg_top_score = df['RAG Top Score'].mean() if 'RAG Top Score' in df.columns else None
-                st.metric("Avg Top Score", f"{avg_top_score:.3f}" if avg_top_score is not None and not pd.isna(avg_top_score) else "—")
+            st.markdown("### Most Frequent Themes")
+            col_t1, col_t2, col_t3 = st.columns(3)
+            with col_t1:
+                st.write("Most repeated Text Input:")
+                st.code(most_text or "—", language="text")
+            with col_t2:
+                st.write("Most repeated Audio Input:")
+                st.code(most_audio or "—", language="text")
+            with col_t3:
+                if top_procs:
+                    st.write("Top Procedures:")
+                    for p, cnt in top_procs:
+                        st.markdown(f"- {p} ({cnt})")
+                else:
+                    st.write("No procedures detected.")
 
             st.markdown("---")
-            palette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
+            col_pie, col_pages = st.columns([1,1])
 
-            # Top Score Distribution (a ancho completo). Eliminada la gráfica de Context Size.
-            if 'RAG Top Score' in df.columns and df['RAG Top Score'].notna().any():
-                st.markdown("<h4 style='text-align: center;'>Top Score Distribution</h4>", unsafe_allow_html=True)
-                fig_ts, ax_ts = plt.subplots(figsize=(8, 4))
-                df['RAG Top Score'].dropna().plot(kind='hist', bins=20, ax=ax_ts, color=palette[0], alpha=0.85)
-                ax_ts.set_xlabel('Score')
-                ax_ts.set_ylabel('Frequency')
-                ax_ts.grid(axis='y', linestyle='--', alpha=0.5)
-                st.pyplot(fig_ts)
-            else:
-                st.info("No data to plot Top Score Distribution.")
-
-            # Response time vs top score (left) AND Pages frequency (right) side by side
-            col_left, col_right = st.columns(2)
-
-            with col_left:
-                if {'RAG Response Time', 'RAG Top Score'}.issubset(df.columns):
-                    st.markdown("<h4 style='text-align: center;'>Response Time vs Top Score</h4>", unsafe_allow_html=True)
-                    mask = df['RAG Response Time'].notna() & df['RAG Top Score'].notna()
-                    if mask.any():
-                        fig_sc, ax_sc = plt.subplots(figsize=(5, 4))
-                        ax_sc.scatter(df.loc[mask, 'RAG Response Time'], df.loc[mask, 'RAG Top Score'], color=palette[2], alpha=0.7)
-                        ax_sc.set_xlabel('RAG Response Time (s)')
-                        ax_sc.set_ylabel('Top Score')
-                        ax_sc.grid(axis='both', linestyle='--', alpha=0.4)
-                        st.pyplot(fig_sc)
-                    else:
-                        st.info("No data to plot.")
+            # Pie chart status (success vs no_match vs otros)
+            with col_pie:
+                st.markdown("#### Status Distribution (success vs no_match)")
+                if not status_counts.empty:
+                    # Map unify
+                    labels = []
+                    values = []
+                    for k, v in status_counts.items():
+                        label = k if k in ('success', 'no_match') else 'other'
+                        labels.append(label)
+                        values.append(v)
+                    # Aggregate duplicates (success / no_match / other)
+                    agg = {}
+                    for l, val in zip(labels, values):
+                        agg[l] = agg.get(l, 0) + val
+                    fig_status, ax_status = plt.subplots(figsize=(4, 4))
+                    ax_status.pie(agg.values(), labels=agg.keys(), autopct='%1.1f%%', startangle=90,
+                                  colors=['#2ca02c', '#d62728', '#7f7f7f'][:len(agg)])
+                    ax_status.axis('equal')
+                    st.pyplot(fig_status)
                 else:
-                    st.info("Missing columns to plot.")
+                    st.info("No status data.")
 
-            with col_right:
-                if 'RAG Pages' in df.columns and df['RAG Pages'].notna().any():
-                    st.markdown("<h4 style='text-align: center;'>Pages Frequency (across all responses)</h4>", unsafe_allow_html=True)
-                    all_pages = []
-                    for s in df['RAG Pages'].dropna().astype(str).tolist():
-                        all_pages.extend([p for p in s.split(';') if p])
-                    if all_pages:
-                        import collections
-                        page_counts = collections.Counter(all_pages)
-                        # Ordenar por número de página ascendente; no numéricos al final
-                        df_pages = pd.DataFrame(page_counts.items(), columns=["Page", "Count"])
-                        df_pages["Page_num"] = pd.to_numeric(df_pages["Page"], errors="coerce")
-                        df_pages = df_pages.sort_values(by=["Page_num", "Page"], ascending=[True, True])
-                        fig_pg, ax_pg = plt.subplots(figsize=(5, 4))
-                        ax_pg.bar(df_pages["Page"].astype(str), df_pages["Count"], color=palette[3])
-                        ax_pg.set_xlabel('Page')
-                        ax_pg.set_ylabel('Count')
-                        ax_pg.grid(axis='y', linestyle='--', alpha=0.5)
-                        plt.xticks(rotation=45, ha='right')
-                        st.pyplot(fig_pg)
-                    else:
-                        st.info("No pages data.")
+            # Histograma (en realidad bar) de páginas
+            with col_pages:
+                st.markdown("#### Page Query Frequency")
+                if pages_items:
+                    pages_df = pd.DataFrame(pages_items, columns=['Page', 'Count'])
+                    fig_pages, ax_pages = plt.subplots(figsize=(5, 4))
+                    ax_pages.bar(pages_df['Page'].astype(str), pages_df['Count'], color='#1f77b4')
+                    ax_pages.set_xlabel("Page")
+                    ax_pages.set_ylabel("Frequency")
+                    ax_pages.grid(axis='y', linestyle='--', alpha=0.5)
+                    plt.xticks(rotation=45, ha='right')
+                    st.pyplot(fig_pages)
                 else:
-                    st.info("No 'RAG Pages' data.")
+                    st.info("No pages data.")
 
-            # --- Nueva fila: Response Time y Frecuencia por Status Code ---
             st.markdown("---")
-            st.markdown("### Response Time and Frequency by Status Code")
-            col_sleft, col_sright = st.columns(2)
+            col1, col2 = st.columns([1,1])
+            with col1:
+                st.markdown("### Boxplots of Response Times (RAG / TTS / ASR)")
+                time_data = []
+                time_labels = []
+                
+                if 'RAG Response Time' in df.columns and df['RAG Response Time'].notna().any():
+                    time_data.append(df['RAG Response Time'].dropna().tolist())
+                    time_labels.append("RAG")
+                if 'TTS Generation Time' in df.columns and df['TTS Generation Time'].notna().any():
+                    time_data.append(df['TTS Generation Time'].dropna().tolist())
+                    time_labels.append("TTS")
+                if 'Transcription Time' in df.columns and df['Transcription Time'].notna().any():
+                    time_data.append(df['Transcription Time'].dropna().tolist())
+                    time_labels.append("ASR")
 
-            with col_sleft:
-                if {'RAG Response Time', 'RAG Status Code'}.issubset(df.columns):
-                    # Filtra válidos
-                    df_rt = df[['RAG Response Time', 'RAG Status Code']].dropna()
-                    if not df_rt.empty:
-                        # Agrupa por status code
-                        grouped = df_rt.groupby('RAG Status Code')['RAG Response Time'].apply(list)
-                        if not grouped.empty:
-                            st.markdown("<h4 style='text-align: center;'>Response Time by Status Code</h4>", unsafe_allow_html=True)
-                            labels = [str(int(k)) if pd.notna(k) else "NaN" for k in grouped.index]
-                            data = [v for v in grouped.values]
-                            fig_box, ax_box = plt.subplots(figsize=(5, 4))
-                            ax_box.boxplot(data, labels=labels, patch_artist=True,
-                                           boxprops=dict(facecolor="#cfe2f3", color="#1f77b4"),
-                                           medianprops=dict(color="#d62728"),
-                                           whiskerprops=dict(color="#1f77b4"),
-                                           capprops=dict(color="#1f77b4"))
-                            ax_box.set_xlabel('Status Code')
-                            ax_box.set_ylabel('RAG Response Time (s)')
-                            ax_box.grid(axis='y', linestyle='--', alpha=0.4)
-                            st.pyplot(fig_box)
+                if time_data:
+                    fig_box_all, ax_box_all = plt.subplots(figsize=(6,4))
+                    ax_box_all.boxplot(time_data, labels=time_labels, patch_artist=True,
+                                    boxprops=dict(facecolor="#cfe2f3", color="#1f77b4"),
+                                    medianprops=dict(color="#d62728"),
+                                    whiskerprops=dict(color="#1f77b4"),
+                                    capprops=dict(color="#1f77b4"))
+                    ax_box_all.set_ylabel("Time (s)")
+                    ax_box_all.grid(axis='y', linestyle='--', alpha=0.4)
+                    st.pyplot(fig_box_all)
+                else:
+                    st.info("No time data for boxplots.")
+            with col2:
+                st.markdown("### RAG Time by Status (success vs no_match)")
+                if 'RAG Response Time' in df.columns and 'RAG Status' in df.columns:
+                    norm_status_series = df['RAG Status'].astype(str).str.lower()
+                    mask_success = norm_status_series.str.contains("success")
+                    mask_nomatch = norm_status_series.str.contains("no_match") | norm_status_series.str.contains("not match") | norm_status_series.str.contains("not_match")
+                    data_box2 = []
+                    labels_box2 = []
+                    if mask_success.any():
+                        data_box2.append(df.loc[mask_success, 'RAG Response Time'].dropna().tolist())
+                        labels_box2.append("success")
+                    if mask_nomatch.any():
+                        data_box2.append(df.loc[mask_nomatch, 'RAG Response Time'].dropna().tolist())
+                        labels_box2.append("no_match")
+                    if data_box2:
+                        fig_box2, ax_box2 = plt.subplots(figsize=(5,4))
+                        ax_box2.boxplot(data_box2, labels=labels_box2, patch_artist=True,
+                                        boxprops=dict(facecolor="#e0d4f7", color="#6a3d9a"),
+                                        medianprops=dict(color="#ff7f0e"),
+                                        whiskerprops=dict(color="#6a3d9a"),
+                                        capprops=dict(color="#6a3d9a"))
+                        ax_box2.set_ylabel("RAG Time (s)")
+                        ax_box2.grid(axis='y', linestyle='--', alpha=0.4)
+                        st.pyplot(fig_box2)
+                    else:
+                        st.info("No success/no_match data for RAG boxplot.")
+                else:
+                    st.info("Missing columns for RAG status boxplot.")
+
+            st.markdown("### RAG Time vs Top Score (Scatter)")
+            if {'RAG Response Time', 'RAG Top Score', 'RAG Status'}.issubset(df.columns):
+                mask_scatter = df['RAG Response Time'].notna() & df['RAG Top Score'].notna()
+                if mask_scatter.any():
+                    fig_sc, ax_sc = plt.subplots(figsize=(6,4))
+                    norm_status_series = df['RAG Status'].astype(str).str.lower()
+                    colors = []
+                    for s in norm_status_series[mask_scatter]:
+                        if 'success' in s:
+                            colors.append('#2ca02c')
+                        elif 'no_match' in s or 'not match' in s or 'not_match' in s:
+                            colors.append('#d62728')
                         else:
-                            st.info("No data to plot Response Time by Status Code.")
-                    else:
-                        st.info("No data to plot Response Time by Status Code.")
+                            colors.append('#7f7f7f')
+                    x_vals = df.loc[mask_scatter, 'RAG Response Time']
+                    y_vals = df.loc[mask_scatter, 'RAG Top Score']
+                    ax_sc.scatter(x_vals, y_vals, c=colors, alpha=0.75, edgecolor='k', linewidth=0.4)
+                    ax_sc.set_xlabel("RAG Response Time (s)")
+                    ax_sc.set_ylabel("Top Score")
+                    ax_sc.grid(axis='both', linestyle='--', alpha=0.4)
+                    # Etiquetas (limitamos a 40 puntos para no saturar)
+                    max_labels = 40
+                    label_indices = x_vals.index[:max_labels]
+                    for idx in label_indices:
+                        txt_short = str(df.loc[idx, 'Text Input'])[:18] + ("..." if len(str(df.loc[idx, 'Text Input'])) > 18 else "")
+                        ax_sc.annotate(txt_short, (df.loc[idx, 'RAG Response Time'], df.loc[idx, 'RAG Top Score']),
+                                       textcoords="offset points", xytext=(4,4), fontsize=7, alpha=0.8)
+                    legend_handles = [
+                        plt.Line2D([0],[0], marker='o', color='w', label='success', markerfacecolor='#2ca02c', markersize=8),
+                        plt.Line2D([0],[0], marker='o', color='w', label='no_match', markerfacecolor='#d62728', markersize=8),
+                        plt.Line2D([0],[0], marker='o', color='w', label='other', markerfacecolor='#7f7f7f', markersize=8),
+                    ]
+                    ax_sc.legend(handles=legend_handles, title="Status", loc='best')
+                    st.pyplot(fig_sc)
                 else:
-                    st.info("Missing columns to plot Response Time by Status Code.")
+                    st.info("Insufficient data for scatter.")
+            else:
+                st.info("Missing columns for RAG scatter plot.")
 
-            with col_sright:
-                if 'RAG Status Code' in df.columns:
-                    st.markdown("<h4 style='text-align: center;'>Status Code Distribution</h4>", unsafe_allow_html=True)
-                    counts = df['RAG Status Code'].value_counts(dropna=False).sort_index()
-                    if not counts.empty:
-                        # Pie chart
-                        fig_pie, ax_pie = plt.subplots(figsize=(5, 3.6))
-                        labels = [str(int(i)) if pd.notna(i) else "NaN" for i in counts.index]
-                        colors = plt.cm.Pastel1(range(len(counts)))
-                        ax_pie.pie(counts.values, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
-                        ax_pie.axis('equal')
-                        st.pyplot(fig_pie)
+            st.markdown("---")
+            st.markdown("### All Interactions (raw CSV)")
+            preferred_order = [
+                'Date',
+                'Text Input', 'Audio Input', 'Transcription Time',
+                'RAG Status Code', 'RAG Status', 'RAG Error Message',
+                'RAG Answer', 'RAG Response Time',
+                'RAG Context Size', 'RAG Top Score', 'RAG Avg Score',
+                'RAG Top Page', 'RAG Pages',
+                'TTS Generation Time'
+            ]
+            cols_existing = [c for c in preferred_order if c in df.columns]
+            cols_remaining = [c for c in df.columns if c not in cols_existing]
+            df_display = df[cols_existing + cols_remaining]
+            st.dataframe(df_display, width='stretch')
 
-                        # Bar chart (frecuencias)
-                        st.markdown("<h5 style='text-align: center;'>Status Code Frequency</h5>", unsafe_allow_html=True)
-                        fig_bar, ax_bar = plt.subplots(figsize=(5, 3.6))
-                        ax_bar.bar(labels, counts.values, color='#8c564b', alpha=0.9)
-                        ax_bar.set_xlabel('Status Code')
-                        ax_bar.set_ylabel('Count')
-                        ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
-                        st.pyplot(fig_bar)
-                    else:
-                        st.info("No status code data.")
-                else:
-                    st.info("No 'RAG Status Code' column.")
-
+            csv_bytes = df_display.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                "Download CSV",
+                data=csv_bytes,
+                file_name="statistics.csv",
+                mime="text/csv",
+                width='stretch'
+            )
+        else:
+            st.info("No statistics data yet.")
 # =====================
 # 5. Visualización de la base de datos vectorial
 # =====================
@@ -475,8 +633,6 @@ elif menu == "Vector Database":
                         ax_pie.pie(df_chunks["Chunks"], labels=df_chunks["Document"], autopct='%1.1f%%', startangle=90, colors=colors)
                         ax_pie.set_title('Chunks Distribution per Document')
                         ax_pie.axis('equal')
-                        st.pyplot(fig_pie)
-            # --- TAB 2: Chunks ---
             with tabs[1]:
                 # Obtener lista de colecciones
                 collection_names = [col.name for col in collections]
