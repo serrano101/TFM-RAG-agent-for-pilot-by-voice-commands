@@ -1,0 +1,5879 @@
+"Input Type (Text, audio, text+audio)",Expected Text,Expected Text Audio,"Level (N1,N2,N3)",¿Expected answer? (Yes/No),Date,Text Input,Transcribed Audio Text,ASR time,WER,RAG Answer,Procedure,RAG Status,¿Answer Correct?(Yes/No),RAG Time,RAG Avg Score,RAG Pages,TTS Time,Total time
+Text,Preflight Procedure,,N1,Yes,12/10/2025,Preflight Procedure,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,4.154,0.8667,"[1.0, 3.0, 2.0]",2.836,6.991
+Text,Cockpit Preparation,,N1,Yes,12/10/2025,Cockpit Preparation,,,,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.798,1.0,"[1.0, 4.0, 10.0]",1.763,3.562
+Text,Engine Start,,N1,Yes,12/10/2025,Engine Start,,,,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.596,1.1067,"[2.0, 6.0, 6.0]",1.789,3.385
+Text,Before Taxi,,N1,Yes,12/10/2025,Before Taxi,,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.291,1.06,"[2.0, 2.0, 6.0]",1.757,3.048
+Text,Taxi,,N1,Yes,12/10/2025,Taxi,,,,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.379,1.08,"[2.0, 2.0, 6.0]",1.517,2.896
+Text,Before Takeoff,,N1,Yes,12/10/2025,Before Takeoff,,,,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.634,0.9633,"[3.0, 3.0, 9.0]",2.046,3.679
+Text,Takeoff,,N1,Yes,12/10/2025,Takeoff,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.426,1.06,"[9.0, 3.0, 3.0]",1.316,2.742
+Text,After Takeoff and Climb,,N1,Yes,12/10/2025,After Takeoff and Climb,,,,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.521,0.8667,"[3.0, 3.0, 8.0]",1.37,2.891
+Text,Cruise,,N1,Yes,12/10/2025,Cruise,,,,"**Procedure:**
+
+CRUISE
+
+**Conditions:**
+
+Aircraft established at cruise altitude.
+
+**Steps:**
+
+1. The cruise power is set.
+
+2. The fuel monitoring is performed.
+
+3. The systems are checked regularly.
+
+4. The position reports are made as required.
+
+**Notes:**
+
+Maintain situational awareness at all times.",CRUISE,success,yes,1.373,1.63,"[4.0, 1.0, 11.0]",1.306,2.679
+Text,Descent Preparation,,N1,Yes,12/10/2025,Descent Preparation,,,,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.535,1.0567,"[4.0, 11.0, 5.0]",1.038,2.573
+Text,Approach,,N1,Yes,12/10/2025,Approach,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.489,1.4667,"[5.0, 4.0, 8.0]",1.469,2.958
+Text,Landing,,N1,Yes,12/10/2025,Landing,,,,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+1. Landing roll is monitored until safe taxi speed is reached.
+
+2. Air Traffic Control is informed as soon as possible.",LANDING,success,yes,3.306,1.03,"[5.0, 9.0, 8.0]",1.535,4.841
+Text,After Landing,,N1,Yes,12/10/2025,After Landing,,,,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.806,0.9467,"[5.0, 5.0, 8.0]",1.125,2.931
+Text,Parking and Securing Aircraft,,N1,Yes,12/10/2025,Parking and Securing Aircraft,,,,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. 1. The parking brake is set.
+
+2. 2. The beacon light is set OFF.
+
+3. 3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. 4. The seat belt signs are set OFF.
+
+5. 5. The external power is connected if available.
+
+6. 6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,2.041,1.1733,"[6.0, 9.0, 5.0]",1.529,3.57
+Text,Engine Fire on Ground,,N1,Yes,12/10/2025,Engine Fire on Ground,,,,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+ - If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.939,0.9133,"[6.0, 6.0, 10.0]",1.528,3.467
+Text,Engine Fire in Flight,,N1,Yes,12/10/2025,Engine Fire in Flight,,,,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.274,0.8633,"[6.0, 6.0, 10.0]",1.934,4.208
+Text,Rapid Decompression,,N1,Yes,12/10/2025,Rapid Decompression,,,,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.813,1.1533,"[7.0, 11.0, 7.0]",1.441,3.254
+Text,Stall Recovery,,N1,Yes,12/10/2025,Stall Recovery,,,,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.575,1.13,"[7.0, 7.0, 9.0]",1.518,3.093
+Text,Unreliable Airspeed,,N1,Yes,12/10/2025,Unreliable Airspeed,,,,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. 1. The autopilot is set to OFF.
+
+2. 2. The autothrust is set to OFF.
+
+3. 3. The flight directors are set to OFF.
+
+4. 4. Pitch and thrust are adjusted according to reference tables.
+
+5. 5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+- Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,2.616,1.3067,"[8.0, 8.0, 11.0]",1.563,4.179
+Text,TCAS RA,,N1,Yes,12/10/2025,TCAS RA,,,,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The pitch guidance from TCAS is followed.
+
+3. 3. No maneuver is made opposite to the RA order.
+
+4. 4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.606,1.2067,"[8.0, 3.0, 11.0]",1.041,2.647
+Text,Go-Around,,N1,Yes,12/10/2025,Go-Around,,,,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.693,1.5867,"[8.0, 11.0, 11.0]",1.323,3.016
+Text,Rejected Takeoff,,N1,Yes,12/10/2025,Rejected Takeoff,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.398,1.0433,"[9.0, 8.0, 3.0]",1.3,2.698
+Text,Ditching,,N1,Yes,12/10/2025,Ditching,,,,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. 1. The ditching pushbutton is pressed.
+
+2. 2. Cabin crew and passengers are informed.
+
+3. 3. The approach is configured with landing gear up.
+
+4. 4. The impact is prepared with the brace position.
+
+**Notes:**
+
+- Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.596,1.4533,"[9.0, 5.0, 10.0]",1.426,3.023
+Text,Evacuation,,N1,Yes,12/10/2025,Evacuation,,,,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.369,1.1167,"[9.0, 7.0, 11.0]",0.971,2.34
+Text,Loss of Braking,,N1,Yes,12/10/2025,Loss of Braking,,,,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+_No data available_",LOSS OF BRAKING,success,yes,1.768,1.2333,"[10.0, 9.0, 7.0]",1.37,3.138
+Text,Smoke or Fumes,,N1,Yes,12/10/2025,Smoke or Fumes,,,,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. 1. Oxygen masks are set ON with 100% oxygen.
+
+2. 2. Crew communication is established.
+
+3. 3. If necessary, smoke or fumes removal procedures are applied.
+
+4. 4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+_No data available_",SMOKE OR FUMES,success,yes,1.513,1.3133,"[10.0, 6.0, 6.0]",1.213,2.726
+Text,Fuel Leak,,N1,Yes,12/10/2025,Fuel Leak,,,,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+_No data available_",FUEL LEAK,success,yes,2.893,1.2467,"[10.0, 7.0, 6.0]",1.306,4.199
+Text,Emergency Descent,,N1,Yes,12/10/2025,Emergency Descent,,,,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.666,1.0367,"[11.0, 9.0, 9.0]",1.358,3.024
+Text,EGPWS Warning,,N1,Yes,12/10/2025,EGPWS Warning,,,,"**Procedure:**
+
+EGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The side stick is pulled fully back.
+
+3. 3. Thrust is set to TOGA.
+
+4. 4. Wings are leveled.
+
+5. 5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",EGPWS WARNING (TERRAIN / PULL UP),success,yes,1.735,1.2967,"[11.0, 10.0, 8.0]",1.302,3.037
+Text,Windshear Escape Maneuver,,N1,Yes,12/10/2025,Windshear Escape Maneuver,,,,"**Procedure:**
+
+WINDSHEAR ESCAPE MANEUVER
+
+**Conditions:**
+
+Encounter with windshear.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The autopilot is kept ON if appropriate.
+
+3. The SRS orders are followed.
+
+4. Configuration is not changed until out of windshear.
+
+**Notes:**
+
+The priority is to avoid loss of control and maintain a safe climb.",WINDSHEAR ESCAPE MANEUVER,success,yes,1.539,1.0567,"[11.0, 11.0, 8.0]",0.955,2.495
+Text,Preflight Procedure,,N1,Yes,12/10/2025,Preflight Procedure,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,1.744,0.8667,"[1.0, 3.0, 2.0]",1.04,2.784
+Text,Cockpit Preparation,,N1,Yes,12/10/2025,Cockpit Preparation,,,,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.619,1.0,"[1.0, 4.0, 10.0]",1.097,2.716
+Text,Engine Start,,N1,Yes,12/10/2025,Engine Start,,,,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.527,1.1067,"[2.0, 6.0, 6.0]",1.021,2.548
+Text,Before Taxi,,N1,Yes,12/10/2025,Before Taxi,,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.274,1.06,"[2.0, 2.0, 6.0]",1.071,2.344
+Text,Taxi,,N1,Yes,12/10/2025,Taxi,,,,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.275,1.08,"[2.0, 2.0, 6.0]",0.905,2.18
+Text,Before Takeoff,,N1,Yes,12/10/2025,Before Takeoff,,,,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.522,0.9633,"[3.0, 3.0, 9.0]",1.175,2.697
+Text,Takeoff,,N1,Yes,12/10/2025,Takeoff,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.381,1.06,"[9.0, 3.0, 3.0]",0.896,2.277
+Text,After Takeoff and Climb,,N1,Yes,12/10/2025,After Takeoff and Climb,,,,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.521,0.8667,"[3.0, 3.0, 8.0]",0.842,2.363
+Text,Cruise,,N1,Yes,12/10/2025,Cruise,,,,"**Procedure:**
+
+CRUISE
+
+**Conditions:**
+
+Aircraft established at cruise altitude.
+
+**Steps:**
+
+1. The cruise power is set.
+
+2. The fuel monitoring is performed.
+
+3. The systems are checked regularly.
+
+4. The position reports are made as required.
+
+**Notes:**
+
+Maintain situational awareness at all times.",CRUISE,success,yes,1.351,1.63,"[4.0, 1.0, 11.0]",0.86,2.211
+Text,Descent Preparation,,N1,Yes,12/10/2025,Descent Preparation,,,,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.543,1.0567,"[4.0, 11.0, 5.0]",1.008,2.551
+Text,Approach,,N1,Yes,12/10/2025,Approach,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.487,1.4667,"[5.0, 4.0, 8.0]",1.018,2.505
+Text,Landing,,N1,Yes,12/10/2025,Landing,,,,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+1. Landing roll is monitored until safe taxi speed is reached.
+
+2. Air Traffic Control is informed as soon as possible.",LANDING,success,yes,1.602,1.03,"[5.0, 9.0, 8.0]",1.278,2.88
+Text,After Landing,,N1,Yes,12/10/2025,After Landing,,,,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.439,0.9467,"[5.0, 5.0, 8.0]",1.001,2.44
+Text,Parking and Securing Aircraft,,N1,Yes,12/10/2025,Parking and Securing Aircraft,,,,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. 1. The parking brake is set.
+
+2. 2. The beacon light is set OFF.
+
+3. 3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. 4. The seat belt signs are set OFF.
+
+5. 5. The external power is connected if available.
+
+6. 6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.911,1.1733,"[6.0, 9.0, 5.0]",1.312,3.224
+Text,Engine Fire on Ground,,N1,Yes,12/10/2025,Engine Fire on Ground,,,,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+ - If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.93,0.9133,"[6.0, 6.0, 10.0]",1.475,3.404
+Text,Engine Fire in Flight,,N1,Yes,12/10/2025,Engine Fire in Flight,,,,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.131,0.8633,"[6.0, 6.0, 10.0]",1.461,3.592
+Text,Rapid Decompression,,N1,Yes,12/10/2025,Rapid Decompression,,,,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.71,1.1533,"[7.0, 11.0, 7.0]",1.195,2.906
+Text,Stall Recovery,,N1,Yes,12/10/2025,Stall Recovery,,,,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.537,1.13,"[7.0, 7.0, 9.0]",1.226,2.763
+Text,Unreliable Airspeed,,N1,Yes,12/10/2025,Unreliable Airspeed,,,,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. 1. The autopilot is set to OFF.
+
+2. 2. The autothrust is set to OFF.
+
+3. 3. The flight directors are set to OFF.
+
+4. 4. Pitch and thrust are adjusted according to reference tables.
+
+5. 5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+- Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.854,1.3067,"[8.0, 8.0, 11.0]",1.148,3.002
+Text,TCAS RA,,N1,Yes,12/10/2025,TCAS RA,,,,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The pitch guidance from TCAS is followed.
+
+3. 3. No maneuver is made opposite to the RA order.
+
+4. 4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.524,1.2067,"[8.0, 3.0, 11.0]",1.141,2.666
+Text,Go-Around,,N1,Yes,12/10/2025,Go-Around,,,,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.603,1.5867,"[8.0, 11.0, 11.0]",0.941,2.544
+Text,Rejected Takeoff,,N1,Yes,12/10/2025,Rejected Takeoff,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.399,1.0433,"[9.0, 8.0, 3.0]",1.126,2.525
+Text,Ditching,,N1,Yes,12/10/2025,Ditching,,,,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. 1. The ditching pushbutton is pressed.
+
+2. 2. Cabin crew and passengers are informed.
+
+3. 3. The approach is configured with landing gear up.
+
+4. 4. The impact is prepared with the brace position.
+
+**Notes:**
+
+- Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.553,1.4533,"[9.0, 5.0, 10.0]",0.98,2.533
+Text,Evacuation,,N1,Yes,12/10/2025,Evacuation,,,,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.336,1.1167,"[9.0, 7.0, 11.0]",0.904,2.241
+Text,Car Maintenance,,N1,No,12/10/2025,Car Maintenance,,,,The question does not match with the context provided.,,no_match,yes,0.457,1.43,"[2.0, 2.0, 10.0]",0.161,0.618
+Text,Gardening Tips,,N1,No,12/10/2025,Gardening Tips,,,,The question does not match with the context provided.,,no_match,yes,0.42,1.7333,"[5.0, 11.0, 6.0]",0.074,0.493
+Text,Cooking Pasta,,N1,No,12/10/2025,Cooking Pasta,,,,The question does not match with the context provided.,,no_match,yes,0.496,1.8367,"[1.0, 3.0, 6.0]",0.074,0.569
+Text,History of Art,,N1,No,12/10/2025,History of Art,,,,The question does not match with the context provided.,,no_match,yes,0.408,1.9033,"[5.0, 2.0, 5.0]",0.074,0.482
+Text,Learning Guitar,,N1,No,12/10/2025,Learning Guitar,,,,The question does not match with the context provided.,,no_match,yes,0.467,1.9,"[4.0, 5.0, 2.0]",0.073,0.54
+Text,Latest Movie Reviews,,N1,No,12/10/2025,Latest Movie Reviews,,,,The question does not match with the context provided.,,no_match,yes,0.49,1.78,"[11.0, 8.0, 5.0]",0.075,0.565
+Text,What are the steps for the preflight procedure?,,N2,Yes,12/10/2025,What are the steps for the preflight procedure?,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,1.709,0.6933,"[1.0, 1.0, 3.0]",0.914,2.623
+Text,How do I perform the cockpit preparation?,,N2,Yes,12/10/2025,How do I perform the cockpit preparation?,,,,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.557,0.81,"[1.0, 4.0, 5.0]",1.06,2.616
+Text,What is the procedure for engine start?,,N2,Yes,12/10/2025,What is the procedure for engine start?,,,,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.508,0.8933,"[2.0, 1.0, 2.0]",0.844,2.353
+Text,Explain the 'Before Taxi' procedure.,,N2,Yes,12/10/2025,Explain the 'Before Taxi' procedure.,,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+1. Brake check must be performed as soon as aircraft moves.
+
+2. If the fire continues, an evacuation is considered.",BEFORE TAXI,success,yes,1.639,0.7967,"[2.0, 2.0, 6.0]",1.214,2.853
+Text,What actions are required during the taxi procedure?,,N2,Yes,12/10/2025,What actions are required during the taxi procedure?,,,,"**Procedure:**
+
+TAXİ
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXİ,success,yes,1.279,0.67,"[2.0, 2.0, 5.0]",1.002,2.281
+Text,What must be done before takeoff?,,N2,Yes,12/10/2025,What must be done before takeoff?,,,,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.516,0.7267,"[3.0, 3.0, 2.0]",0.872,2.388
+Text,Describe the takeoff procedure.,,N2,Yes,12/10/2025,Describe the takeoff procedure.,,,,"**Procedure:**
+
+TAKEOFF
+
+**Conditions:**
+
+Takeoff clearance received.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA or FLEX.
+
+2. The aircraft is maintained on centerline.
+
+3. Rotation is performed at VR.
+
+4. Positive climb is confirmed.
+
+5. The landing gear is retracted.
+
+**Notes:**
+
+Monitor engine and flight parameters continuously.",TAKEOFF,success,yes,1.484,0.64,"[3.0, 9.0, 3.0]",1.264,2.748
+Text,What is the after takeoff and climb procedure?,,N2,Yes,12/10/2025,What is the after takeoff and climb procedure?,,,,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.494,0.6367,"[3.0, 3.0, 8.0]",1.09,2.585
+Text,What are the crew's duties during cruise?,,N2,Yes,12/10/2025,What are the crew's duties during cruise?,,,,The question does not match with the context provided.,,no_match,no,0.724,1.1433,"[4.0, 1.0, 9.0]",0.075,0.799
+Text,How do you prepare for descent?,,N2,Yes,12/10/2025,How do you prepare for descent?,,,,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.518,0.9767,"[4.0, 11.0, 3.0]",0.756,2.274
+Text,Explain the approach procedure.,,N2,Yes,12/10/2025,Explain the approach procedure.,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.366,1.17,"[5.0, 4.0, 4.0]",0.963,2.329
+Text,What are the steps for landing?,,N2,Yes,12/10/2025,What are the steps for landing?,,,,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+1. Landing roll is monitored until safe taxi speed is reached.
+
+2. Other procedures may apply depending on the specific circumstances of the landing.",LANDING,success,yes,1.698,0.7233,"[5.0, 8.0, 5.0]",1.381,3.078
+Text,What is the after landing procedure?,,N2,Yes,12/10/2025,What is the after landing procedure?,,,,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.496,0.7,"[5.0, 5.0, 8.0]",0.838,2.335
+Text,How do you park and secure the aircraft?,,N2,Yes,12/10/2025,How do you park and secure the aircraft?,,,,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+:[{ 
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.63,0.92,"[6.0, 5.0, 1.0]",0.578,2.208
+Text,What is the procedure for an engine fire on the ground?,,N2,Yes,12/10/2025,What is the procedure for an engine fire on the ground?,,,,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+ - If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.968,0.8733,"[6.0, 6.0, 1.0]",1.275,3.243
+Text,How to handle an engine fire in flight?,,N2,Yes,12/10/2025,How to handle an engine fire in flight?,,,,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.158,0.8167,"[6.0, 6.0, 10.0]",1.313,3.472
+Text,What is the procedure for a rapid decompression?,,N2,Yes,12/10/2025,What is the procedure for a rapid decompression?,,,,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.715,1.0433,"[7.0, 11.0, 7.0]",0.892,2.607
+Text,Explain the stall recovery maneuver.,,N2,Yes,12/10/2025,Explain the stall recovery maneuver.,,,,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.503,1.08,"[7.0, 9.0, 8.0]",1.038,2.541
+Text,What should I do in case of unreliable airspeed?,,N2,Yes,12/10/2025,What should I do in case of unreliable airspeed?,,,,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.641,1.3,"[8.0, 4.0, 11.0]",1.106,2.747
+Text,How to react to a TCAS RA?,,N2,Yes,12/10/2025,How to react to a TCAS RA?,,,,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. The autopilot is disconnected.
+
+2. The pitch guidance from TCAS is followed.
+
+3. No maneuver is made opposite to the RA order.
+
+4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.434,1.1267,"[8.0, 3.0, 11.0]",0.99,2.424
+Text,What is the go-around procedure?,,N2,Yes,12/10/2025,What is the go-around procedure?,,,,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.553,1.12,"[8.0, 9.0, 5.0]",0.949,2.502
+Text,Explain the rejected takeoff procedure.,,N2,Yes,12/10/2025,Explain the rejected takeoff procedure.,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.38,0.8767,"[9.0, 3.0, 8.0]",1.144,2.525
+Text,What is the ditching procedure?,,N2,Yes,12/10/2025,What is the ditching procedure?,,,,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. The ditching pushbutton is pressed.
+
+2. Cabin crew and passengers are informed.
+
+3. The approach is configured with landing gear up.
+
+4. The impact is prepared with the brace position.
+
+**Notes:**
+
+Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.464,1.0733,"[9.0, 7.0, 5.0]",1.309,2.772
+Text,How is an evacuation initiated?,,N2,Yes,12/10/2025,How is an evacuation initiated?,,,,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The crew directs passengers to the safe exits.",EVACUATION,success,yes,1.52,0.94,"[9.0, 9.0, 6.0]",0.881,2.401
+Text,What is the procedure for a loss of braking?,,N2,Yes,12/10/2025,What is the procedure for a loss of braking?,,,,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+- Prolonged use of the parking brake is avoided to prevent wheel lock.",LOSS OF BRAKING,success,yes,1.756,0.9667,"[10.0, 7.0, 5.0]",1.483,3.238
+Text,What to do if there is smoke or fumes?,,N2,Yes,12/10/2025,What to do if there is smoke or fumes?,,,,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. 1. Oxygen masks are set ON with 100% oxygen.
+
+2. 2. Crew communication is established.
+
+3. 3. If necessary, smoke or fumes removal procedures are applied.
+
+4. 4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+If smoke persists, an immediate diversion is recommended.",SMOKE OR FUMES,success,yes,1.597,1.21,"[10.0, 6.0, 6.0]",1.098,2.695
+Text,How to manage a fuel leak?,,N2,Yes,12/10/2025,How to manage a fuel leak?,,,,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+If safety is compromised, an immediate landing is performed.",FUEL LEAK,success,yes,1.426,1.2133,"[10.0, 7.0, 11.0]",1.153,2.578
+Text,What are the steps for an emergency descent?,,N2,Yes,12/10/2025,What are the steps for an emergency descent?,,,,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.609,0.8333,"[11.0, 9.0, 9.0]",1.0,2.609
+Text,What is the EGPWS warning procedure?,,N2,Yes,12/10/2025,What is the EGPWS warning procedure?,,,,"**Procedure:**
+
+EGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The side stick is pulled fully back.
+
+3. 3. Thrust is set to TOGA.
+
+4. 4. Wings are leveled.
+
+5. 5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",EGPWS WARNING (TERRAIN / PULL UP),success,yes,1.703,1.0867,"[11.0, 10.0, 9.0]",1.226,2.929
+Text,How to perform a windshear escape maneuver?,,N2,Yes,12/10/2025,How to perform a windshear escape maneuver?,,,,"**Procedure:**
+
+WINDSHEAR ESCAPE MANEUVER
+
+**Conditions:**
+
+Encounter with windshear.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The autopilot is kept ON if appropriate.
+
+3. The SRS orders are followed.
+
+4. Configuration is not changed until out of windshear.
+
+**Notes:**
+
+The priority is to avoid loss of control and maintain a safe climb.",WINDSHEAR ESCAPE MANEUVER,success,yes,1.57,1.0033,"[11.0, 11.0, 8.0]",1.217,2.787
+Text,Can you list the actions for the preflight procedure?,,N2,Yes,12/10/2025,Can you list the actions for the preflight procedure?,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,1.727,0.8767,"[1.0, 9.0, 1.0]",0.922,2.649
+Text,What does the cockpit preparation involve?,,N2,Yes,12/10/2025,What does the cockpit preparation involve?,,,,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+1. All systems must be set according to the flight crew operating manual.
+
+2. Ensure all required equipment is onboard and serviceable.",COCKPIT PREPARATION,success,yes,1.613,0.91,"[1.0, 4.0, 1.0]",1.173,2.787
+Text,Tell me the steps to start the engines.,,N2,Yes,12/10/2025,Tell me the steps to start the engines.,,,,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.607,0.8833,"[2.0, 3.0, 2.0]",0.943,2.551
+Text,What is involved in the before taxi checklist?,,N2,Yes,12/10/2025,What is involved in the before taxi checklist?,,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.306,0.9533,"[2.0, 2.0, 3.0]",0.794,2.1
+Text,What are the key points of the taxi procedure?,,N2,Yes,12/10/2025,What are the key points of the taxi procedure?,,,,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.269,0.7733,"[2.0, 2.0, 5.0]",0.835,2.103
+Text,Outline the before takeoff procedure.,,N2,Yes,12/10/2025,Outline the before takeoff procedure.,,,,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.515,0.6167,"[3.0, 3.0, 9.0]",0.707,2.222
+Text,What are the steps to follow for takeoff?,,N2,Yes,12/10/2025,What are the steps to follow for takeoff?,,,,"**Procedure:**
+
+TAKEOFF
+
+**Conditions:**
+
+Takeoff clearance received.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA or FLEX.
+
+2. The aircraft is maintained on centerline.
+
+3. Rotation is performed at VR.
+
+4. Positive climb is confirmed.
+
+5. The landing gear is retracted.
+
+**Notes:**
+
+Monitor engine and flight parameters continuously.",TAKEOFF,success,yes,1.46,0.63,"[3.0, 3.0, 3.0]",1.032,2.492
+Text,Can you describe the after takeoff and climb procedure?,,N2,Yes,12/10/2025,Can you describe the after takeoff and climb procedure?,,,,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.494,0.68,"[3.0, 3.0, 8.0]",1.054,2.548
+Text,What tasks are performed during the cruise phase of flight?,,N2,Yes,12/10/2025,What tasks are performed during the cruise phase of flight?,,,,The question does not match with the context provided.,,no_match,no,0.71,0.96,"[4.0, 1.0, 3.0]",0.076,0.786
+Text,How is the descent preparation carried out?,,N2,Yes,12/10/2025,How is the descent preparation carried out?,,,,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.497,0.9633,"[4.0, 11.0, 3.0]",0.988,2.485
+Text,Can you detail the approach procedure?,,N2,Yes,12/10/2025,Can you detail the approach procedure?,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.391,1.02,"[5.0, 4.0, 4.0]",0.896,2.286
+Text,What are the actions for a normal landing?,,N2,Yes,12/10/2025,What are the actions for a normal landing?,,,,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+1. Landing roll is monitored until safe taxi speed is reached.
+
+2. Air Traffic Control is informed as soon as possible.",LANDING,success,yes,1.617,0.8667,"[5.0, 9.0, 8.0]",1.153,2.771
+Text,What is done immediately after landing?,,N2,Yes,12/10/2025,What is done immediately after landing?,,,,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.383,0.7567,"[5.0, 5.0, 9.0]",0.848,2.231
+Text,Describe how to park and secure the plane.,,N2,Yes,12/10/2025,Describe how to park and secure the plane.,,,,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,no,1.71,0.93,"[6.0, 5.0, 1.0]",0.921,2.63
+Text,What is the emergency procedure for an engine fire on the ground?,,N2,Yes,12/10/2025,What is the emergency procedure for an engine fire on the ground?,,,,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. The AGENT 1 pushbutton is discharged.
+
+4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",ENGINE FIRE ON GROUND,success,yes,1.585,0.7833,"[6.0, 6.0, 9.0]",1.144,2.729
+Text,"If an engine catches fire in flight, what is the procedure?",,N2,Yes,12/10/2025,"If an engine catches fire in flight, what is the procedure?",,,,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.051,0.7733,"[6.0, 6.0, 10.0]",1.356,3.407
+Text,What is the immediate response to a rapid decompression?,,N2,Yes,12/10/2025,What is the immediate response to a rapid decompression?,,,,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.61,1.1167,"[7.0, 11.0, 7.0]",1.141,2.75
+Text,How do you recover from a stall?,,N2,Yes,12/10/2025,How do you recover from a stall?,,,,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.538,1.0667,"[7.0, 7.0, 8.0]",1.107,2.645
+Text,What actions are taken for an unreliable airspeed indication?,,N2,Yes,12/10/2025,What actions are taken for an unreliable airspeed indication?,,,,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.621,1.19,"[8.0, 4.0, 10.0]",1.205,2.826
+Text,What does the TCAS RA procedure entail?,,N2,Yes,12/10/2025,What does the TCAS RA procedure entail?,,,,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The pitch guidance from TCAS is followed.
+
+3. 3. No maneuver is made opposite to the RA order.
+
+4. 4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.488,0.9767,"[8.0, 3.0, 5.0]",1.222,2.711
+Text,How do you execute a go-around?,,N2,Yes,12/10/2025,How do you execute a go-around?,,,,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.568,1.23,"[8.0, 11.0, 5.0]",1.033,2.602
+Text,What is the procedure if you have to reject a takeoff?,,N2,Yes,12/10/2025,What is the procedure if you have to reject a takeoff?,,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.311,0.8433,"[9.0, 3.0, 8.0]",1.024,2.335
+Text,Can you explain the procedure for landing on the water?,,N2,Yes,12/10/2025,Can you explain the procedure for landing on the water?,,,,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. The ditching pushbutton is pressed.
+
+2. Cabin crew and passengers are informed.
+
+3. The approach is configured with landing gear up.
+
+4. The impact is prepared with the brace position.
+
+**Notes:**
+
+Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.477,0.94,"[9.0, 8.0, 5.0]",0.83,2.306
+Text,What are the steps for an emergency evacuation?,,N2,Yes,12/10/2025,What are the steps for an emergency evacuation?,,,,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.326,0.9267,"[9.0, 11.0, 7.0]",0.813,2.138
+Text,What is the recipe for chocolate cake?,,N2,No,12/10/2025,What is the recipe for chocolate cake?,,,,The question does not match with the context provided.,,no_match,yes,0.494,1.7633,"[2.0, 2.0, 6.0]",0.074,0.569
+Text,Can you explain the rules of baseball?,,N2,No,12/10/2025,Can you explain the rules of baseball?,,,,The question does not match with the context provided.,,no_match,yes,0.436,1.6767,"[9.0, 1.0, 7.0]",0.075,0.511
+Text,How do I change the oil in my car?,,N2,No,12/10/2025,How do I change the oil in my car?,,,,The question does not match with the context provided.,,no_match,yes,0.487,1.5833,"[10.0, 6.0, 9.0]",0.074,0.562
+Text,What is the capital of Australia?,,N2,No,12/10/2025,What is the capital of Australia?,,,,The question does not match with the context provided.,,no_match,yes,0.573,1.7967,"[8.0, 3.0, 4.0]",0.074,0.648
+Text,Who wrote the novel 'Pride and Prejudice'?,,N2,No,12/10/2025,Who wrote the novel 'Pride and Prejudice'?,,,,The question does not match with the context provided.,,no_match,yes,0.416,1.9033,"[11.0, 2.0, 11.0]",0.078,0.494
+Text,Can you tell me a funny joke?,,N2,No,12/10/2025,Can you tell me a funny joke?,,,,The question does not match with the context provided.,,no_match,yes,0.429,1.7833,"[5.0, 6.0, 9.0]",0.075,0.504
+Text,The aircraft is on the ground and I suspect a fire in one of the engines. What should I do?,,N3,Yes,12/10/2025,The aircraft is on the ground and I suspect a fire in one of the engines. What should I do?,,,,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. The AGENT 1 pushbutton is discharged.
+
+4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+Air Traffic Control is informed.",ENGINE FIRE ON GROUND,success,yes,1.776,1.0367,"[6.0, 6.0, 10.0]",1.038,2.814
+Text,We are in flight and the fire alarm for an engine goes off. What are the immediate actions?,,N3,Yes,12/10/2025,We are in flight and the fire alarm for an engine goes off. What are the immediate actions?,,,,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.071,0.6867,"[6.0, 6.0, 9.0]",1.492,3.563
+Text,There's a sudden loud bang and a rush of air in the cabin. What is the emergency procedure?,,N3,Yes,12/10/2025,There's a sudden loud bang and a rush of air in the cabin. What is the emergency procedure?,,,,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.638,0.98,"[7.0, 10.0, 9.0]",1.194,2.832
+Text,The stick shaker has activated. How do I recover the aircraft?,,N3,Yes,12/10/2025,The stick shaker has activated. How do I recover the aircraft?,,,,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,no,1.435,1.25,"[5.0, 5.0, 1.0]",0.821,2.256
+Text,My airspeed indicators are all showing different values and are unreliable. What is the procedure?,,N3,Yes,12/10/2025,My airspeed indicators are all showing different values and are unreliable. What is the procedure?,,,,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.632,1.35,"[8.0, 4.0, 10.0]",1.069,2.701
+Text,"The TCAS is shouting ""Climb, Climb"". What are my actions?",,N3,Yes,12/10/2025,"The TCAS is shouting ""Climb, Climb"". What are my actions?",,,,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. The autopilot is disconnected.
+
+2. The pitch guidance from TCAS is followed.
+
+3. No maneuver is made opposite to the RA order.
+
+4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.384,1.3233,"[8.0, 3.0, 3.0]",1.059,2.443
+Text,I'm on final approach but the runway is not clear. What should I do?,,N3,Yes,12/10/2025,I'm on final approach but the runway is not clear. What should I do?,,,,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.573,1.14,"[5.0, 8.0, 2.0]",0.952,2.525
+Text,"During the takeoff roll before V1, a master warning comes on. How do I stop the aircraft?",,N3,Yes,12/10/2025,"During the takeoff roll before V1, a master warning comes on. How do I stop the aircraft?",,,,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.399,1.1067,"[9.0, 6.0, 11.0]",0.849,2.248
+Text,We have to make a forced landing on the sea. How do I configure the aircraft?,,N3,Yes,12/10/2025,We have to make a forced landing on the sea. How do I configure the aircraft?,,,,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. The ditching pushbutton is pressed.
+
+2. Cabin crew and passengers are informed.
+
+3. The approach is configured with landing gear up.
+
+4. The impact is prepared with the brace position.
+
+**Notes:**
+
+Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.474,1.0367,"[9.0, 5.0, 5.0]",0.942,2.417
+Text,"After a crash landing, the cabin needs to be evacuated. What are the captain's responsibilities?",,N3,Yes,12/10/2025,"After a crash landing, the cabin needs to be evacuated. What are the captain's responsibilities?",,,,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.339,0.9733,"[9.0, 7.0, 9.0]",1.066,2.404
+Text,I'm landing and the toe brakes are not working. What actions can I take to stop the plane?,,N3,Yes,12/10/2025,I'm landing and the toe brakes are not working. What actions can I take to stop the plane?,,,,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+_No data available_",LOSS OF BRAKING,success,yes,1.653,1.08,"[10.0, 8.0, 5.0]",1.215,2.868
+Text,There's a strange smell and visible smoke in the cockpit. What's the procedure?,,N3,Yes,12/10/2025,There's a strange smell and visible smoke in the cockpit. What's the procedure?,,,,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. If necessary, smoke or fumes removal procedures are applied.
+
+4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+If smoke persists, an immediate diversion is recommended.",SMOKE OR FUMES,success,yes,1.462,1.0967,"[10.0, 7.0, 1.0]",1.266,2.728
+Text,The fuel quantity is decreasing much faster than planned and there's an imbalance. What could be the cause and what is the procedure?,,N3,Yes,12/10/2025,The fuel quantity is decreasing much faster than planned and there's an imbalance. What could be the cause and what is the procedure?,,,,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+_No data available_",FUEL LEAK,success,yes,1.25,1.5567,"[10.0, 8.0, 10.0]",0.999,2.249
+Text,I need to descend to a lower altitude as quickly as possible due to a medical emergency. How do I do that?,,N3,Yes,12/10/2025,I need to descend to a lower altitude as quickly as possible due to a medical emergency. How do I do that?,,,,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.62,0.99,"[11.0, 7.0, 4.0]",1.014,2.635
+Text,"The EGPWS is shouting ""TERRAIN, TERRAIN, PULL UP"". What are the immediate and mandatory actions?",,N3,Yes,12/10/2025,"The EGPWS is shouting ""TERRAIN, TERRAIN, PULL UP"". What are the immediate and mandatory actions?",,,,"**Procedure:**
+
+EGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The side stick is pulled fully back.
+
+3. 3. Thrust is set to TOGA.
+
+4. 4. Wings are leveled.
+
+5. 5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",EGPWS WARNING (TERRAIN / PULL UP),success,yes,1.723,0.9767,"[11.0, 3.0, 8.0]",1.015,2.738
+Text,We've encountered a sudden loss of airspeed and performance on approach. What maneuver must be flown?,,N3,Yes,12/10/2025,We've encountered a sudden loss of airspeed and performance on approach. What maneuver must be flown?,,,,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,no,1.449,1.19,"[8.0, 5.0, 4.0]",0.918,2.366
+Text,How do I get the aircraft ready after boarding is complete but before pushing back?,,N3,Yes,12/10/2025,How do I get the aircraft ready after boarding is complete but before pushing back?,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,no,1.724,0.9467,"[5.0, 1.0, 8.0]",1.234,2.958
+Text,What are the steps to bring the engines to life?,,N3,Yes,12/10/2025,What are the steps to bring the engines to life?,,,,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.609,1.14,"[2.0, 2.0, 1.0]",0.998,2.608
+Text,What checks must be performed as the aircraft starts to move from the gate?,,N3,Yes,12/10/2025,What checks must be performed as the aircraft starts to move from the gate?,,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. Brake check must be performed as soon as aircraft moves.
+
+2. The ground equipment is cleared.
+
+3. The flaps are set for takeoff.
+
+4. The flight controls are checked.
+
+5. The flight instruments are cross-checked.
+
+6. The taxi clearance is obtained.
+
+**Notes:**
+
+",BEFORE TAXI,success,yes,1.469,0.85,"[6.0, 1.0, 2.0]",1.007,2.476
+Text,What is the sequence of actions from receiving takeoff clearance to retracting the gear?,,N3,Yes,12/10/2025,What is the sequence of actions from receiving takeoff clearance to retracting the gear?,,,,"**Procedure:**
+
+TAKEOFF
+
+**Conditions:**
+
+Takeoff clearance received.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA or FLEX.
+
+2. The aircraft is maintained on centerline.
+
+3. Rotation is performed at VR.
+
+4. Positive climb is confirmed.
+
+5. The landing gear is retracted.
+
+**Notes:**
+
+1. Monitor engine and flight parameters continuously.
+
+2. After takeoff, the pilot should check for any issues with the aircraft's performance.",TAKEOFF,success,yes,1.621,0.9533,"[3.0, 3.0, 9.0]",1.558,3.179
+Text,The cabin is secured and we are cleared for takeoff. What are the final steps before applying power?,,N3,Yes,12/10/2025,The cabin is secured and we are cleared for takeoff. What are the final steps before applying power?,,,,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.2,0.7633,"[1.0, 6.0, 3.0]",1.065,2.266
+Text,"After retracting the flaps and slats, what are the next steps to establish the climb?",,N3,Yes,12/10/2025,"After retracting the flaps and slats, what are the next steps to establish the climb?",,,,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.445,0.8933,"[3.0, 8.0, 7.0]",1.121,2.566
+Text,How do I prepare the aircraft systems for the arrival and approach into the destination airport?,,N3,Yes,12/10/2025,How do I prepare the aircraft systems for the arrival and approach into the destination airport?,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,no,1.505,0.9933,"[5.0, 1.0, 2.0]",0.881,2.386
+Text,How is a stabilized approach ensured before landing?,,N3,Yes,12/10/2025,How is a stabilized approach ensured before landing?,,,,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.488,0.8733,"[5.0, 5.0, 4.0]",0.904,2.392
+Text,"After vacating the runway, what tasks must be completed before taxiing to the gate?",,N3,Yes,12/10/2025,"After vacating the runway, what tasks must be completed before taxiing to the gate?",,,,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,no,1.334,0.8067,"[2.0, 5.0, 2.0]",0.986,2.32
+Text,How do I shut down the aircraft completely after arriving at the stand?,,N3,Yes,12/10/2025,How do I shut down the aircraft completely after arriving at the stand?,,,,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.789,0.9867,"[5.0, 8.0, 6.0]",0.986,2.775
+Text,What electrical systems need to be activated before starting the APU or engines?,,N3,Yes,12/10/2025,What electrical systems need to be activated before starting the APU or engines?,,,,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+_No data available_",PREFLIGHT PROCEDURE,success,yes,1.556,1.1,"[2.0, 1.0, 9.0]",1.007,2.564
+Text,Can you explain the theory of relativity?,,N3,No,12/10/2025,Can you explain the theory of relativity?,,,,The question does not match with the context provided.,,no_match,yes,0.535,1.8167,"[8.0, 2.0, 2.0]",0.075,0.61
+Text,What are the main causes of the French Revolution?,,N3,No,12/10/2025,What are the main causes of the French Revolution?,,,,The question does not match with the context provided.,,no_match,yes,0.417,1.73,"[10.0, 2.0, 9.0]",0.073,0.49
+Text,How does photosynthesis work in plants?,,N3,No,12/10/2025,How does photosynthesis work in plants?,,,,The question does not match with the context provided.,,no_match,yes,0.416,1.79,"[2.0, 5.0, 3.0]",0.084,0.5
+Audio,,Preflight Procedure,N1,Yes,12/10/2025,," for flight procedure.",1.154,1.0,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.497,1.0167,"[4.0, 4.0, 11.0]",1.184,3.835
+Audio,,Cockpit Preparation,N1,Yes,12/10/2025,," Hockpit preparation.",0.392,0.5,The question does not match with the context provided.,,no_match,no,0.598,1.5767,"[10.0, 3.0, 11.0]",0.073,1.064
+Audio,,Engine Start,N1,Yes,12/10/2025,," engine start.",0.167,0.0,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.511,1.1067,"[2.0, 6.0, 9.0]",0.969,2.646
+Audio,,Before Taxi,N1,Yes,12/10/2025,," before taxing.",0.176,0.5,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+Brake check must be performed as soon as aircraft moves.",BEFORE TAXI,success,yes,1.445,1.0767,"[2.0, 2.0, 10.0]",0.954,2.576
+Audio,,Taxi,N1,Yes,12/10/2025,," taxi.",0.151,0.0,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.394,1.1167,"[2.0, 2.0, 10.0]",0.857,2.401
+Audio,,Before Takeoff,N1,Yes,12/10/2025,," before take.",0.164,0.5,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+- Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.532,1.3633,"[3.0, 2.0, 1.0]",0.728,2.425
+Audio,,Takeoff,N1,Yes,12/10/2025,," take.",0.187,1.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+Above V1 the takeoff is continued unless the aircraft cannot fly.",REJECTED TAKEOFF,success,no,1.377,1.7033,"[9.0, 5.0, 8.0]",1.06,2.625
+Audio,,After Takeoff and Climb,N1,Yes,12/10/2025,," After takeoff and climb.",0.212,0.0,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.507,0.86,"[3.0, 3.0, 8.0]",1.028,2.748
+Audio,,Cruise,N1,Yes,12/10/2025,," cruise.",0.15,0.0,The question does not match with the context provided.,,no_match,no,0.46,1.6333,"[4.0, 1.0, 11.0]",0.182,0.793
+Audio,,Descent Preparation,N1,Yes,12/10/2025,," descent preparation.",0.164,0.0,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.514,1.0333,"[4.0, 11.0, 9.0]",1.063,2.741
+Audio,,Approach,N1,Yes,12/10/2025,," approach.",0.163,0.0,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.486,1.5333,"[5.0, 8.0, 9.0]",1.105,2.755
+Audio,,Landing,N1,Yes,12/10/2025,," Londing.",0.182,1.0,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. 1. The strobe lights are set OFF.
+
+2. 2. The landing lights are set OFF.
+
+3. 3. The APU is started if required.
+
+4. 4. The flaps are retracted.
+
+5. 5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,no,1.604,1.8667,"[5.0, 9.0, 3.0]",0.874,2.66
+Audio,,After Landing,N1,Yes,12/10/2025,," after landing.",0.203,0.0,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. 1. The strobe lights are set OFF.
+
+2. 2. The landing lights are set OFF.
+
+3. 3. The APU is started if required.
+
+4. 4. The flaps are retracted.
+
+5. 5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.634,1.0033,"[5.0, 5.0, 8.0]",0.954,2.791
+Audio,,Parking and Securing Aircraft,N1,Yes,12/10/2025,," Hawking and securing aircraft.",0.212,0.25,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.734,1.23,"[5.0, 6.0, 11.0]",0.985,2.931
+Audio,,Engine Fire on Ground,N1,Yes,12/10/2025,," Engine fire on ground.",0.194,0.0,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+ - If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.983,0.9467,"[6.0, 6.0, 10.0]",1.402,3.579
+Audio,,Engine Fire in Flight,N1,Yes,12/10/2025,," Engine, fire and flight.",0.245,0.25,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+ - Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,1.931,1.0233,"[6.0, 6.0, 1.0]",1.23,3.406
+Audio,,Rapid Decompression,N1,Yes,12/10/2025,," Rapid decompression.",0.176,0.0,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.746,1.1367,"[7.0, 11.0, 9.0]",1.038,2.96
+Audio,,Stall Recovery,N1,Yes,12/10/2025,," Stahl recovery.",0.173,0.5,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.61,1.4233,"[7.0, 11.0, 5.0]",1.112,2.895
+Audio,,Unreliable Airspeed,N1,Yes,12/10/2025,," unreliable airspeed.",0.209,0.0,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.734,1.29,"[8.0, 11.0, 9.0]",1.302,3.245
+Audio,,TCAS RA,N1,Yes,12/10/2025,," T. Cassara.",0.192,1.0,The question does not match with the context provided.,,no_match,no,0.563,1.6667,"[8.0, 3.0, 4.0]",0.076,0.832
+Audio,,Go-Around,N1,Yes,12/10/2025,," Oh, we're wrong.",0.735,4.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+Above V1 the takeoff is continued unless the aircraft cannot fly.  ",REJECTED TAKEOFF,success,no,1.248,1.9033,"[8.0, 11.0, 9.0]",1.205,3.189
+Audio,,Rejected Takeoff,N1,Yes,12/10/2025,," rejected takeoff.",0.338,0.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.394,1.0933,"[9.0, 3.0, 5.0]",0.74,2.472
+Audio,,Ditching,N1,Yes,12/10/2025,," stitching.",0.149,1.0,The question does not match with the context provided.,,no_match,no,0.541,1.6433,"[2.0, 9.0, 7.0]",0.074,0.763
+Audio,,Evacuation,N1,Yes,12/10/2025,," evacuation.",0.275,0.0,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The crew directs passengers to the safe exits.",EVACUATION,success,yes,1.442,1.09,"[9.0, 7.0, 11.0]",0.737,2.455
+Audio,,Loss of Braking,N1,Yes,12/10/2025,," loss of braking.",0.208,0.0,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. The reversers are set to MAX.
+
+2. Brake pedals are released.
+
+3. The anti-skid and nose wheel steering are set to OFF.
+
+4. Brake pedals are pressed again.
+
+5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+Prolonged use of the parking brake is avoided to prevent wheel lock.",LOSS OF BRAKING,success,yes,1.764,1.1733,"[10.0, 5.0, 9.0]",0.997,2.969
+Audio,,Smoke or Fumes,N1,Yes,12/10/2025,," smoke or fumes.",0.196,0.0,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. 1. Oxygen masks are set ON with 100% oxygen.
+
+2. 2. Crew communication is established.
+
+3. 3. If necessary, smoke or fumes removal procedures are applied.
+
+4. 4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+_No data available_",SMOKE OR FUMES,success,yes,1.424,1.34,"[10.0, 6.0, 6.0]",1.434,3.054
+Audio,,Fuel Leak,N1,Yes,12/10/2025,," you'll leak.",0.273,1.0,The question does not match with the context provided.,,no_match,no,0.61,1.6033,"[10.0, 7.0, 11.0]",0.079,0.962
+Audio,,Emergency Descent,N1,Yes,12/10/2025,," emergency descent.",0.225,0.0,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.606,1.0767,"[11.0, 9.0, 9.0]",0.883,2.714
+Audio,,EGPWS Warning,N1,Yes,12/10/2025,," It was warning.",0.304,1.0,The question does not match with the context provided.,,no_match,no,0.7,1.43,"[11.0, 6.0, 6.0]",0.114,1.118
+Audio,,Windshear Escape Maneuver,N1,Yes,12/10/2025,," Win sure escape maneuver.",0.377,0.6667,"**Procedure:**
+
+WINDSHEAR ESCAPE MANEUVER
+
+**Conditions:**
+
+Encounter with windshear.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The autopilot is kept ON if appropriate.
+
+3. The SRS orders are followed.
+
+4. Configuration is not changed until out of windshear.
+
+**Notes:**
+
+The priority is to avoid loss of control and maintain a safe climb.",WINDSHEAR ESCAPE MANEUVER,success,yes,1.607,1.17,"[11.0, 8.0, 9.0]",1.022,3.006
+Audio,,Preflight Procedure,N1,Yes,12/10/2025,," Reflect procedure.",0.281,0.5,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,no,1.536,1.24,"[5.0, 2.0, 5.0]",0.996,2.813
+Audio,,Cockpit Preparation,N1,Yes,12/10/2025,," cockpit preparation.",0.188,0.0,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.682,0.9933,"[1.0, 4.0, 10.0]",1.113,2.984
+Audio,,Engine Start,N1,Yes,12/10/2025,," Engine start.",0.18,0.0,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.569,1.1067,"[2.0, 6.0, 9.0]",1.219,2.968
+Audio,,Before Taxi,N1,Yes,12/10/2025,," before taxi.",0.207,0.0,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. 1. The ground equipment is cleared.
+
+2. 2. The flaps are set for takeoff.
+
+3. 3. The flight controls are checked.
+
+4. 4. The flight instruments are cross-checked.
+
+5. 5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.478,1.0567,"[2.0, 2.0, 3.0]",1.11,2.795
+Audio,,Taxi,N1,Yes,12/10/2025,," taxi.",0.228,0.0,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.375,1.1167,"[2.0, 2.0, 10.0]",0.759,2.362
+Audio,,Before Takeoff,N1,Yes,12/10/2025,," before take.",0.206,0.5,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+- Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.508,1.3633,"[3.0, 2.0, 1.0]",0.743,2.458
+Audio,,Takeoff,N1,Yes,12/10/2025,," take.",0.188,1.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+Above V1 the takeoff is continued unless the aircraft cannot fly.",REJECTED TAKEOFF,success,no,1.403,1.7033,"[9.0, 5.0, 8.0]",1.026,2.617
+Audio,,After Takeoff and Climb,N1,Yes,12/10/2025,," after takeoff and climb.",0.205,0.0,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+after initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.526,0.86,"[3.0, 3.0, 8.0]",1.115,2.847
+Audio,,Cruise,N1,Yes,12/10/2025,," cruise.",0.149,0.0,The question does not match with the context provided.,,no_match,no,0.467,1.6333,"[4.0, 1.0, 11.0]",0.073,0.689
+Audio,,Descent Preparation,N1,Yes,12/10/2025,," descent preparation.",0.169,0.0,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.52,1.0333,"[4.0, 11.0, 9.0]",1.123,2.811
+Audio,,Approach,N1,Yes,12/10/2025,," approach.",0.153,0.0,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.505,1.5333,"[5.0, 8.0, 9.0]",1.058,2.716
+Audio,,Landing,N1,Yes,12/10/2025,," Landing.",0.146,0.0,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+1. Landing roll is monitored until safe taxi speed is reached.
+
+2. <other_procedure>",LANDING,success,yes,1.586,1.0733,"[5.0, 9.0, 8.0]",1.115,2.847
+Audio,,After Landing,N1,Yes,12/10/2025,," after landing.",0.158,0.0,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. 1. The strobe lights are set OFF.
+
+2. 2. The landing lights are set OFF.
+
+3. 3. The APU is started if required.
+
+4. 4. The flaps are retracted.
+
+5. 5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.633,1.0033,"[5.0, 5.0, 8.0]",0.822,2.613
+Audio,,Parking and Securing Aircraft,N1,Yes,12/10/2025,," parking and securing aircraft.",0.19,0.0,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.839,1.0767,"[6.0, 9.0, 1.0]",1.427,3.455
+Audio,,Engine Fire on Ground,N1,Yes,12/10/2025,," Engine fire on ground.",0.23,0.0,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+ - If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,2.013,0.9467,"[6.0, 6.0, 10.0]",1.294,3.538
+Audio,,Engine Fire in Flight,N1,Yes,12/10/2025,," engine fire and flight.",0.191,0.25,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.155,0.9467,"[6.0, 6.0, 9.0]",1.458,3.804
+Audio,,Rapid Decompression,N1,Yes,12/10/2025,," rapid decompression.",0.178,0.0,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.625,1.1367,"[7.0, 11.0, 9.0]",1.044,2.847
+Audio,,Stall Recovery,N1,Yes,12/10/2025,," Stahl Recovery.",0.244,0.5,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.575,1.4233,"[7.0, 11.0, 5.0]",1.563,3.383
+Audio,,Unreliable Airspeed,N1,Yes,12/10/2025,," unreliable airspeed.",0.198,0.0,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.727,1.29,"[8.0, 11.0, 9.0]",1.179,3.104
+Audio,,TCAS RA,N1,Yes,12/10/2025,," to you, Cassara.",0.226,1.5,The question does not match with the context provided.,,no_match,no,0.544,1.6833,"[8.0, 3.0, 11.0]",0.171,0.941
+Audio,,Stock Market,N1,No,12/10/2025,," stock market.",0.163,0.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. 1. The thrust levers are set to IDLE.
+
+2. 2. The reversers are deployed to maximum.
+
+3. 3. Braking is applied to maximum.
+
+4. 4. Air Traffic Control is informed.
+
+5. 5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,no,1.18,1.8867,"[7.0, 9.0, 2.0]",1.001,2.344
+Audio,,Famous Painters,N1,No,12/10/2025,," Amos painters.",0.255,0.5,The question does not match with the context provided.,,no_match,yes,0.421,1.8767,"[5.0, 2.0, 9.0]",0.077,0.752
+Audio,,Pet Care,N1,No,12/10/2025,," at Co.",0.164,1.0,The question does not match with the context provided.,,no_match,yes,0.484,1.7633,"[3.0, 4.0, 4.0]",0.076,0.725
+Audio,,Solar System,N1,No,12/10/2025,," Sewer system.",0.21,0.5,The question does not match with the context provided.,,no_match,yes,0.421,1.67,"[9.0, 10.0, 9.0]",0.073,0.704
+Audio,,What is the preflight procedure?,N2,Yes,12/10/2025,," What is the pre-flight procedure?",0.332,0.0,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,1.748,0.7767,"[1.0, 1.0, 3.0]",1.161,3.241
+Audio,,Describe the cockpit preparation steps.,N2,Yes,12/10/2025,," Describe the cockpit preparation steps.",0.226,0.0,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. 1. The overhead panel is checked.
+
+2. 2. The fuel quantity is checked.
+
+3. 3. The flight plan is entered into the MCDU.
+
+4. 4. The flight instruments are checked and set.
+
+5. 5. The takeoff performance data is inserted.
+
+6. 6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.662,0.71,"[1.0, 4.0, 5.0]",1.25,3.138
+Audio,,How should an engine start be conducted?,N2,Yes,12/10/2025,," How should an engine start be conducted?",0.228,0.0,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.635,0.96,"[2.0, 1.0, 2.0]",1.04,2.904
+Audio,,What does the before taxi procedure involve?,N2,Yes,12/10/2025,," What does the before taxi procedure involve?",0.325,0.0,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.25,0.73,"[2.0, 2.0, 5.0]",1.126,2.701
+Audio,,Can you explain the taxi procedure?,N2,Yes,12/10/2025,," Can you explain the taxi procedure?",0.225,0.0,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.367,0.7967,"[2.0, 2.0, 10.0]",0.925,2.517
+Audio,,What is done during the before takeoff procedure?,N2,Yes,12/10/2025,," What is done during the before take-off procedure?",0.298,0.0,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,yes,1.387,0.85,"[3.0, 3.0, 9.0]",1.038,2.723
+Audio,,How is a takeoff performed?,N2,Yes,12/10/2025,," How is a take performed?",0.197,0.2,"**Procedure:**
+
+TAKEOFF
+
+**Conditions:**
+
+Takeoff clearance received.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA or FLEX.
+
+2. The aircraft is maintained on centerline.
+
+3. Rotation is performed at VR.
+
+4. Positive climb is confirmed.
+
+5. The landing gear is retracted.
+
+**Notes:**
+
+1. Monitor engine and flight parameters continuously.
+
+2. Air Traffic Control is informed as soon as possible.",TAKEOFF,success,yes,1.62,1.3267,"[3.0, 9.0, 2.0]",1.227,3.045
+Audio,,What are the after takeoff and climb procedures?,N2,Yes,12/10/2025,," What are the after-takeoff and climb procedures?",0.361,0.25,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.543,0.66,"[3.0, 3.0, 8.0]",0.928,2.831
+Audio,,What are the standard actions during cruise flight?,N2,Yes,12/10/2025,," What are the standard actions during cruise flight?",0.249,0.0,The question does not match with the context provided.,,no_match,no,0.728,1.03,"[4.0, 1.0, 3.0]",0.074,1.051
+Audio,,How should the crew prepare for descent?,N2,Yes,12/10/2025,," How should the crew prepare for a descent?",0.233,0.1429,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.504,0.8667,"[11.0, 4.0, 7.0]",0.822,2.559
+Audio,,Can you outline the approach procedure?,N2,Yes,12/10/2025,," Can you outline the approach procedure?",0.335,0.0,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.39,1.0567,"[5.0, 4.0, 4.0]",0.93,2.655
+Audio,,What are the steps for a normal landing?,N2,Yes,12/10/2025,," What are the steps for a normal landing?",0.27,0.0,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+Landing roll is monitored until safe taxi speed is reached.",LANDING,success,yes,1.498,0.76,"[5.0, 4.0, 5.0]",1.227,2.995
+Audio,,Explain the after landing procedure.,N2,Yes,12/10/2025,," explained the afterlending procedure.",0.215,0.6,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.421,1.3667,"[5.0, 7.0, 1.0]",0.901,2.538
+Audio,,How do you correctly park and secure the aircraft?,N2,Yes,12/10/2025,," How do you correctly park and secure the aircraft?",0.256,0.0,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.672,0.96,"[6.0, 5.0, 1.0]",0.923,2.85
+Audio,,"In case of an engine fire on the ground, what is the procedure?",N2,Yes,12/10/2025,," In case of an engine fire on the ground, what is the procedure?",0.319,0.0,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+6. 6. An evacuation is considered.
+
+**Notes:**
+
+If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.984,0.8567,"[6.0, 6.0, 10.0]",1.528,3.831
+Audio,,What is the procedure if an engine fire occurs in flight?,N2,Yes,12/10/2025,," What is the procedure if an engine fire occurs in flight?",0.321,0.0,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. 1. The thrust lever of the affected engine is set to IDLE.
+
+2. 2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. 3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. 4. The AGENT 1 pushbutton is discharged.
+
+5. 5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. 6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+- Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,2.113,0.7433,"[6.0, 6.0, 9.0]",1.218,3.652
+Audio,,What are the steps to take during a rapid decompression?,N2,Yes,12/10/2025,," What are the steps to take during a rapid decompression?",0.272,0.0,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+4. The seat belt signs are set to ON.
+
+5. Cabin crew and passengers are informed.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.705,0.98,"[7.0, 11.0, 7.0]",1.054,3.031
+Audio,,How do you perform a stall recovery?,N2,Yes,12/10/2025,," How do you perform a stall recovery?",0.248,0.0,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.572,0.9433,"[7.0, 7.0, 8.0]",1.34,3.16
+Audio,,What is the procedure for unreliable airspeed indications?,N2,Yes,12/10/2025,," What is the procedure for unreliable airspeed indications?",0.377,0.0,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.625,1.07,"[8.0, 4.0, 10.0]",0.878,2.88
+Audio,,How should a pilot react to a TCAS RA?,N2,Yes,12/10/2025,," How should a pilot react to a T-CAS RA?",0.308,0.0,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The pitch guidance from TCAS is followed.
+
+3. 3. No maneuver is made opposite to the RA order.
+
+4. 4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.52,1.2367,"[8.0, 11.0, 3.0]",1.069,2.897
+Audio,,What is the procedure for a go-around?,N2,Yes,12/10/2025,," What is the procedure for a go around?",0.306,0.2857,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.573,1.1733,"[8.0, 5.0, 9.0]",1.08,2.96
+Audio,,When and how is a rejected takeoff performed?,N2,Yes,12/10/2025,," when and how is a rejected takeoff performed.",0.284,0.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+_No data available_",REJECTED TAKEOFF,success,yes,1.403,0.85,"[9.0, 3.0, 3.0]",0.924,2.612
+Audio,,What is the procedure for ditching?,N2,Yes,12/10/2025,," What is the procedure for ditching?",0.227,0.0,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. The ditching pushbutton is pressed.
+
+2. Cabin crew and passengers are informed.
+
+3. The approach is configured with landing gear up.
+
+4. The impact is prepared with the brace position.
+
+**Notes:**
+
+Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.447,1.1133,"[9.0, 5.0, 5.0]",0.935,2.609
+Audio,,How is an evacuation of the aircraft carried out?,N2,Yes,12/10/2025,," I was in evacuation of the aircraft carried out.",0.259,0.3333,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.345,1.17,"[9.0, 7.0, 11.0]",0.909,2.514
+Audio,,What is the loss of braking procedure?,N2,Yes,12/10/2025,," What is the loss of breaking procedure?",0.262,0.1429,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+_No data available_",LOSS OF BRAKING,success,yes,1.643,1.2933,"[10.0, 9.0, 7.0]",1.36,3.265
+Audio,,What should be done in case of smoke or fumes in the cockpit?,N2,Yes,12/10/2025,," what should be done in case of smoke or fumes in the cockpit.",0.388,0.0,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. 1. Oxygen masks are set ON with 100% oxygen.
+
+2. 2. Crew communication is established.
+
+3. 3. If necessary, smoke or fumes removal procedures are applied.
+
+4. 4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+_No data available_",SMOKE OR FUMES,success,yes,1.454,0.9933,"[10.0, 7.0, 6.0]",1.045,2.886
+Audio,,How is a fuel leak handled?,N2,Yes,12/10/2025,," How is it fuel leak handled?",0.26,0.1667,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+_No data available_",FUEL LEAK,success,yes,1.235,1.19,"[10.0, 9.0, 7.0]",0.777,2.272
+Audio,,Explain the emergency descent procedure.,N2,Yes,12/10/2025,," explain the emergency descent procedure.",0.199,0.0,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.606,0.8867,"[11.0, 9.0, 7.0]",0.919,2.723
+Audio,,What is the correct response to an EGPWS warning?,N2,Yes,12/10/2025,," What is the correct response to an egg-puzzle warning?",0.52,0.1111,The question does not match with the context provided.,,no_match,no,0.509,1.64,"[6.0, 6.0, 11.0]",0.075,1.104
+Audio,,How is a windshear escape maneuver executed?,N2,Yes,12/10/2025,," How is a winter skip maneuver executed?",0.234,0.2857,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,no,1.554,1.1533,"[8.0, 11.0, 7.0]",1.162,2.95
+Audio,,List the steps for the preflight procedure.,N2,Yes,12/10/2025,," This is the steps for the pro-flight procedure.",0.272,0.4286,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,no,1.492,0.8733,"[4.0, 8.0, 5.0]",0.788,2.553
+Audio,,Tell me about cockpit preparation.,N2,Yes,12/10/2025,," Tell me about cockpit preparation.",0.209,0.0,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+All systems must be set according to the flight crew operating manual.",COCKPIT PREPARATION,success,yes,1.651,0.93,"[1.0, 4.0, 3.0]",1.12,2.98
+Audio,,What is the sequence for starting an engine?,N2,Yes,12/10/2025,," What is the sequence for starting an engine?",0.24,0.0,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.527,1.2033,"[2.0, 1.0, 6.0]",0.932,2.7
+Audio,,What checks are part of the 'Before Taxi' procedure?,N2,Yes,12/10/2025,," What checks are part of the before-taxi procedure?",0.305,0.2222,"**Procedure:**
+
+BEFORE TAXI
+
+**Conditions:**
+
+Engines stabilized and ready to taxi.
+
+**Steps:**
+
+1. The ground equipment is cleared.
+
+2. The flaps are set for takeoff.
+
+3. The flight controls are checked.
+
+4. The flight instruments are cross-checked.
+
+5. The taxi clearance is obtained.
+
+**Notes:**
+
+_No data available_",BEFORE TAXI,success,yes,1.245,0.7767,"[2.0, 2.0, 5.0]",0.929,2.478
+Audio,,What are the guidelines for taxiing?,N2,Yes,12/10/2025,," What are the guidelines for taxing?",0.236,0.1667,"**Procedure:**
+
+TAXI
+
+**Conditions:**
+
+Taxi clearance received.
+
+**Steps:**
+
+1. The taxi lights are set ON.
+
+2. The brakes are checked.
+
+3. The nose wheel steering is confirmed operative.
+
+4. The taxi route is followed as cleared.
+
+**Notes:**
+
+Taxi speed is limited according to airport procedures.",TAXI,success,yes,1.305,1.0467,"[2.0, 2.0, 6.0]",1.131,2.671
+Audio,,Describe the 'Before Takeoff' checklist items.,N2,Yes,12/10/2025,," Describe the before take of checklist items.",0.267,0.3333,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+_No data available_",BEFORE TAKEOFF,success,yes,1.397,1.15,"[1.0, 3.0, 2.0]",1.186,2.849
+Audio,,What actions are taken during the takeoff roll and initial climb?,N2,Yes,12/10/2025,," What actions are taken during the takeoff role and initial climb?",0.299,0.0909,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+_No data available_",AFTER TAKEOFF AND CLIMB,success,yes,1.37,0.8267,"[3.0, 3.0, 9.0]",0.834,2.503
+Audio,,Can you explain the 'After Takeoff and Climb' procedure?,N2,Yes,12/10/2025,," Can you explain the aftertake-off and climb procedure?",0.283,0.2222,"**Procedure:**
+
+AFTER TAKEOFF AND CLIMB
+
+**Conditions:**
+
+After initial climb out.
+
+**Steps:**
+
+1. The landing gear is retracted.
+
+2. The flaps and slats are retracted on schedule.
+
+3. The climb thrust is set.
+
+4. The autopilot is engaged if desired.
+
+5. The after takeoff checklist is completed.
+
+**Notes:**
+
+Transition altitude is observed for setting standard pressure.",AFTER TAKEOFF AND CLIMB,success,yes,1.503,0.8567,"[3.0, 8.0, 3.0]",0.834,2.619
+Audio,,What are the responsibilities during the cruise phase?,N2,Yes,12/10/2025,," What are the responsibilities during the cruise phase?",0.479,0.0,The question does not match with the context provided.,,no_match,no,0.87,1.1167,"[4.0, 1.0, 9.0]",0.167,1.515
+Audio,,What is involved in descent preparation?,N2,Yes,12/10/2025,," what is involved in descent preparation.",0.227,0.0,"**Procedure:**
+
+DESCENT PREPARATION
+
+**Conditions:**
+
+Aircraft approaching top of descent.
+
+**Steps:**
+
+1. The descent clearance is obtained.
+
+2. The STAR and approach are reviewed and inserted.
+
+3. The landing performance is calculated.
+
+4. The briefing is completed.
+
+5. The seat belt signs are set ON.
+
+**Notes:**
+
+Weather and ATIS information is obtained in advance.",DESCENT PREPARATION,success,yes,1.494,1.1033,"[4.0, 11.0, 3.0]",0.937,2.659
+Audio,,Tell me the procedure for an instrument approach.,N2,Yes,12/10/2025,," Tell me the procedure for an instrument approach.",0.26,0.0,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.504,1.24,"[5.0, 2.0, 4.0]",0.963,2.727
+Audio,,What happens during the landing phase?,N2,Yes,12/10/2025,," What happens during the landing phase?",0.212,0.0,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+Landing roll is monitored until safe taxi speed is reached.",LANDING,success,yes,1.496,0.9867,"[5.0, 5.0, 4.0]",0.988,2.696
+Audio,,What are the pilot's actions after landing?,N2,Yes,12/10/2025,," What are the pilot's actions after landing?",0.256,0.0,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+Ground clearance is obtained before taxiing to stand.",AFTER LANDING,success,yes,1.49,0.8867,"[5.0, 5.0, 3.0]",1.135,2.881
+Audio,,How is the aircraft shut down and secured?,N2,Yes,12/10/2025,," How is the aircraft shut down and secured?",0.248,0.0,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+A full securing checklist is completed before leaving cockpit.",PARKING AND SECURING AIRCRAFT,success,yes,1.802,0.9433,"[6.0, 1.0, 3.0]",1.165,3.215
+Audio,,What is the fire fighting procedure for an engine on the ground?,N2,Yes,12/10/2025,," What is the firefighting procedure for an engine on the ground?",0.315,0.1667,"**Procedure:**
+
+ENGINE FIRE ON GROUND
+
+**Conditions:**
+
+Fire warning in engine during taxi or rejected takeoff.
+
+**Steps:**
+
+1. 1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. 2. The ENG FIRE pushbutton of the affected engine is pressed.
+
+3. 3. The AGENT 1 pushbutton is discharged.
+
+4. 4. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+5. 5. Air Traffic Control is informed.
+
+**Notes:**
+
+If the fire cannot be extinguished, an immediate evacuation is initiated.",ENGINE FIRE ON GROUND,success,yes,1.904,0.9,"[6.0, 6.0, 1.0]",1.334,3.554
+Audio,,What is the memory item for an in-flight engine fire?,N2,Yes,12/10/2025,," What is the memory item thrown in Flight Engine Fire?",0.273,0.3,"**Procedure:**
+
+ENGINE FIRE IN FLIGHT
+
+**Conditions:**
+
+Fire warning in engine during flight.
+
+**Steps:**
+
+1. The thrust lever of the affected engine is set to IDLE.
+
+2. The ENGINE MASTER of the affected engine is set to OFF.
+
+3. The ENG FIRE pushbutton of the affected engine is pressed.
+
+4. The AGENT 1 pushbutton is discharged.
+
+5. If the fire continues, the AGENT 2 pushbutton is discharged.
+
+6. Speed and altitude are adjusted for a possible immediate landing.
+
+**Notes:**
+
+Air Traffic Control is contacted for diversion and emergency landing.",ENGINE FIRE IN FLIGHT,success,yes,1.759,1.2267,"[6.0, 6.0, 10.0]",1.218,3.25
+Audio,,What's the first thing to do in a rapid decompression?,N2,Yes,12/10/2025,," What's the first thing to do in a rapid decompression?",0.294,0.0,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.236,1.07,"[7.0, 11.0, 9.0]",0.695,2.225
+Audio,,How can a pilot recover from a stall?,N2,Yes,12/10/2025,," How can a pilot recover from a stall?",0.267,0.0,"**Procedure:**
+
+STALL RECOVERY
+
+**Conditions:**
+
+Indication of stall or stall warning.
+
+**Steps:**
+
+1. Pitch attitude is reduced.
+
+2. Bank angle is leveled.
+
+3. Thrust is applied as required.
+
+4. Speed brakes are retracted.
+
+5. If in landing configuration, flaps are maintained and landing gear is retracted if necessary.
+
+**Notes:**
+
+Aerodynamic recovery is prioritized before any other action.",STALL RECOVERY,success,yes,1.571,1.09,"[7.0, 7.0, 11.0]",1.075,2.913
+Audio,,"If the speed reading is wrong, what should I do?",N2,Yes,12/10/2025,," If the speed reading is wrong, what should I do?",0.35,0.0,The question does not match with the context provided.,,no_match,no,0.58,1.4933,"[8.0, 2.0, 2.0]",0.074,1.004
+Audio,,What is the mandatory action for a TCAS Resolution Advisory?,N2,Yes,12/10/2025,," What is the mandatory action for a TCAS resolution advisory?",0.291,0.0,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. The autopilot is disconnected.
+
+2. The pitch guidance from TCAS is followed.
+
+3. No maneuver is made opposite to the RA order.
+
+4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.432,1.09,"[8.0, 3.0, 5.0]",0.786,2.509
+Audio,,How do you knit a scarf?,N2,No,12/10/2025,," How do you knit a scarf?",0.213,0.0,The question does not match with the context provided.,,no_match,yes,0.415,1.79,"[3.0, 7.0, 11.0]",0.074,0.702
+Audio,,What are the rules of chess?,N2,No,12/10/2025,," What are the rules of chess?",0.225,0.0,The question does not match with the context provided.,,no_match,yes,0.421,1.6033,"[3.0, 5.0, 2.0]",0.074,0.719
+Audio,,Can you recommend a good restaurant in Paris?,N2,No,12/10/2025,," Can you recommend a good restaurant in Paris?",0.247,0.0,The question does not match with the context provided.,,no_match,yes,0.519,1.93,"[5.0, 4.0, 9.0]",0.074,0.84
+Audio,,How old are you?,N2,No,12/10/2025,," How old are you?",0.187,0.0,The question does not match with the context provided.,,no_match,yes,0.523,1.9467,"[9.0, 3.0, 8.0]",0.085,0.795
+Audio,,How do I get the plane ready from a cold and dark state?,N3,Yes,12/10/2025,," How do I get the plane ready from a cold and dark state?",0.307,0.0,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,yes,1.727,1.1433,"[1.0, 3.0, 4.0]",1.235,3.269
+Audio,,What panel should I check before starting the engines?,N3,Yes,12/10/2025,," What panel should I check before starting the engines?",0.25,0.0,"**Procedure:**
+
+COCKPIT PREPARATION
+
+**Conditions:**
+
+Before engine start.
+
+**Steps:**
+
+1. The overhead panel is checked.
+
+2. The fuel quantity is checked.
+
+3. The flight plan is entered into the MCDU.
+
+4. The flight instruments are checked and set.
+
+5. The takeoff performance data is inserted.
+
+6. The briefing is completed.
+
+**Notes:**
+
+_No data available_",COCKPIT PREPARATION,success,yes,1.305,0.9567,"[2.0, 1.0, 1.0]",1.313,2.868
+Audio,,How do I start the second engine after the first one is stabilized?,N3,Yes,12/10/2025,," How do I start the second engine after the first one is stabilized?",0.305,0.0,"**Procedure:**
+
+ENGINE START
+
+**Conditions:**
+
+Aircraft ready for engine start.
+
+**Steps:**
+
+1. The beacon light is set to ON.
+
+2. The parking brake is set.
+
+3. The engine mode selector is set to IGN/START.
+
+4. The engine master switch is set to ON for the engine to be started.
+
+5. Engine parameters are monitored until stabilized.
+
+**Notes:**
+
+Ground crew is informed before start.",ENGINE START,success,yes,1.626,1.16,"[2.0, 2.0, 3.0]",1.299,3.229
+Audio,,"Before calling for pushback, what configuration should the aircraft be in?",N3,Yes,12/10/2025,," Before calling for push pack, what configuration should the aircraft be in?",0.321,0.1818,"**Procedure:**
+
+BEFORE TAKEOFF
+
+**Conditions:**
+
+Lined up or ready for takeoff clearance.
+
+**Steps:**
+
+1. The cabin is secured.
+
+2. The takeoff runway is confirmed.
+
+3. The TCAS is set to TA/RA.
+
+4. The packs are set according to requirement.
+
+5. The flight attendants are advised.
+
+**Notes:**
+
+Final takeoff checklist is completed.",BEFORE TAKEOFF,success,no,1.525,1.2067,"[1.0, 3.0, 9.0]",1.27,3.117
+Audio,,What's the first check I should perform once the aircraft begins to move?,N3,Yes,12/10/2025,," What's the first check I should perform once the aircraft begins to move?",0.357,0.0,The question does not match with the context provided.,,no_match,no,0.597,0.9167,"[2.0, 1.0, 4.0]",0.089,1.042
+Audio,,"The cabin is ready, we are at the holding point. What are the last items to check?",N3,Yes,12/10/2025,," The cabin is ready. We are at the holding point. What are the last items to check?",0.409,0.0,"**Procedure:**
+
+PREFLIGHT PROCEDURE
+
+**Conditions:**
+
+Aircraft is on ground and secured before flight.
+
+**Steps:**
+
+1. The aircraft documents are checked.
+
+2. The circuit breakers are confirmed in normal position.
+
+3. The battery switches are set to ON.
+
+4. The external power is connected if available.
+
+5. The ADIRS selectors are set to NAV.
+
+6. The oxygen pressure is checked.
+
+**Notes:**
+
+Ensure all required equipment is onboard and serviceable.",PREFLIGHT PROCEDURE,success,no,1.656,1.18,"[3.0, 1.0, 1.0]",1.317,3.382
+Audio,,At what point during takeoff do I retract the landing gear?,N3,Yes,12/10/2025,," At what point during take do I retract the landing gear?",0.453,0.0909,"**Procedure:**
+
+TAKEOFF
+
+**Conditions:**
+
+Takeoff clearance received.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA or FLEX.
+
+2. The aircraft is maintained on centerline.
+
+3. Rotation is performed at VR.
+
+4. Positive climb is confirmed.
+
+5. The landing gear is retracted.
+
+**Notes:**
+
+Monitor engine and flight parameters continuously.",TAKEOFF,success,yes,1.356,0.9467,"[3.0, 3.0, 5.0]",1.381,3.19
+Audio,,When should I engage the autopilot after becoming airborne?,N3,Yes,12/10/2025,," When should I engage the autopilot after becoming airborne?",0.283,0.0,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,no,1.647,1.0233,"[5.0, 11.0, 8.0]",1.297,3.227
+Audio,,How can I monitor the aircraft's performance while at cruising altitude?,N3,Yes,12/10/2025,," How can I monitor the aircraft's performance while at cruising altitude?",0.316,0.0,"**Procedure:**
+
+CRUISE
+
+**Conditions:**
+
+Aircraft established at cruise altitude.
+
+**Steps:**
+
+1. The cruise power is set.
+
+2. The fuel monitoring is performed.
+
+3. The systems are checked regularly.
+
+4. The position reports are made as required.
+
+**Notes:**
+
+Maintain situational awareness at all times.",CRUISE,success,yes,1.385,1.21,"[4.0, 11.0, 8.0]",0.962,2.663
+Audio,,"Before starting the descent, what information do I need to review and input?",N3,Yes,12/10/2025,," Before starting the descent, what information do I need to review an input?",0.334,0.0769,The question does not match with the context provided.,,no_match,no,0.494,1.1067,"[4.0, 1.0, 1.0]",0.073,0.901
+Audio,,When should I extend the landing gear during an approach?,N3,Yes,12/10/2025,," When should I extend the landing gear during an approach?",0.277,0.0,"**Procedure:**
+
+APPROACH
+
+**Conditions:**
+
+Aircraft established on approach path.
+
+**Steps:**
+
+1. The approach mode is armed.
+
+2. The navigation aids are tuned and identified.
+
+3. The flaps are extended as required.
+
+4. The landing gear is extended when cleared.
+
+5. The landing checklist is completed.
+
+**Notes:**
+
+Stabilized approach criteria must be met.",APPROACH,success,yes,1.388,1.2233,"[5.0, 3.0, 4.0]",0.977,2.642
+Audio,,What are the primary controls used to land the aircraft smoothly?,N3,Yes,12/10/2025,," What are the primary controls used to land the aircraft smoothly?",0.336,0.0,"**Procedure:**
+
+LANDING
+
+**Conditions:**
+
+Aircraft cleared to land.
+
+**Steps:**
+
+1. The landing configuration is confirmed.
+
+2. The autopilot may be disconnected at minimums or earlier.
+
+3. The aircraft is landed smoothly on main landing gear.
+
+4. Reversers and brakes are used as required.
+
+**Notes:**
+
+Landing roll is monitored until safe taxi speed is reached.",LANDING,success,yes,1.502,0.9867,"[5.0, 5.0, 3.0]",1.136,2.974
+Audio,,"After vacating, what lights should be turned off?",N3,Yes,12/10/2025,," After vacating, what light should be turned off?",0.273,0.125,"**Procedure:**
+
+AFTER LANDING
+
+**Conditions:**
+
+Aircraft has vacated the runway.
+
+**Steps:**
+
+1. The strobe lights are set OFF.
+
+2. The landing lights are set OFF.
+
+3. The APU is started if required.
+
+4. The flaps are retracted.
+
+5. The spoilers are disarmed.
+
+**Notes:**
+
+_No data available_",AFTER LANDING,success,yes,1.239,1.3467,"[5.0, 2.0, 6.0]",0.799,2.312
+Audio,,What is the sequence for shutting down the engines when parked at the gate?,N3,Yes,12/10/2025,," What is the sequence for shutting down the engines when parked at the gate?",0.355,0.0,"**Procedure:**
+
+PARKING AND SECURING AIRCRAFT
+
+**Conditions:**
+
+Aircraft parked at gate or stand.
+
+**Steps:**
+
+1. The parking brake is set.
+
+2. The beacon light is set OFF.
+
+3. The engines are shut down with ENGINE MASTER set to OFF.
+
+4. The seat belt signs are set OFF.
+
+5. The external power is connected if available.
+
+6. The ADIRS selectors are set to OFF.
+
+**Notes:**
+
+_No data available_",PARKING AND SECURING AIRCRAFT,success,yes,1.517,1.0433,"[6.0, 9.0, 2.0]",1.189,3.061
+Audio,,"If the first fire agent bottle doesn't extinguish the fire, what is the next step?",N3,Yes,12/10/2025,," If the first fire agent bottle doesn't extinguish the fire, what is the next step?",0.398,0.0,The question does not match with the context provided.,,no_match,no,0.508,1.12,"[6.0, 6.0, 10.0]",0.174,1.08
+Audio,,What is the priority during a rapid decompression event?,N3,Yes,12/10/2025,," What is the priority during a rapid decompression event?",0.27,0.0,"**Procedure:**
+
+RAPID DECOMPRESSION
+
+**Conditions:**
+
+Sudden loss of cabin pressure.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. An emergency descent is initiated if required.
+
+**Notes:**
+
+A safe altitude below 10,000 ft is reached as soon as possible.",RAPID DECOMPRESSION,success,yes,1.395,1.16,"[7.0, 11.0, 9.0]",0.997,2.661
+Audio,,"In a stall recovery, what is more important: reducing pitch or adding thrust?",N3,Yes,12/10/2025,," In install recovery, what is more important reducing pitch or adding thrust?",0.312,0.1538,The question does not match with the context provided.,,no_match,no,0.536,1.2367,"[7.0, 9.0, 3.0]",0.074,0.922
+Audio,,"If my flight instruments are unreliable, what should I use as my primary reference?",N3,Yes,12/10/2025,," If my flight instruments are imeliable, what should I use as my primary reference?",0.373,0.0714,"**Procedure:**
+
+UNRELIABLE AIRSPEED
+
+**Conditions:**
+
+Inconsistent or unreliable speed indications.
+
+**Steps:**
+
+1. The autopilot is set to OFF.
+
+2. The autothrust is set to OFF.
+
+3. The flight directors are set to OFF.
+
+4. Pitch and thrust are adjusted according to reference tables.
+
+5. If necessary, attitude and power are used as the primary reference.
+
+**Notes:**
+
+Abrupt maneuvers are avoided until reliable parameters are confirmed.",UNRELIABLE AIRSPEED,success,yes,1.626,1.5133,"[8.0, 1.0, 1.0]",1.061,3.059
+Audio,,Should I follow ATC instructions if they contradict a TCAS RA?,N3,Yes,12/10/2025,," Should I follow ATC instructions if they contradict a TCAS RA?",0.335,0.0,"**Procedure:**
+
+TCAS RA
+
+**Conditions:**
+
+Resolution advisory from TCAS.
+
+**Steps:**
+
+1. The autopilot is disconnected.
+
+2. The pitch guidance from TCAS is followed.
+
+3. No maneuver is made opposite to the RA order.
+
+4. When clear, the aircraft returns to the original flight path.
+
+**Notes:**
+
+Immediate compliance is mandatory.",TCAS RA,success,yes,1.357,1.1167,"[8.0, 3.0, 11.0]",0.981,2.673
+Audio,,"When performing a go-around, when should the flaps be retracted?",N3,Yes,12/10/2025,," When performing a go around, when should the flaps be retracted?",0.301,0.2,"**Procedure:**
+
+GO-AROUND
+
+**Conditions:**
+
+Need to abort landing.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The flaps are set according to the procedure.
+
+3. When positive climb is confirmed, the landing gear is retracted.
+
+4. The flight path is established.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+The published missed approach procedure is followed.",GO-AROUND,success,yes,1.48,1.15,"[8.0, 3.0, 7.0]",1.366,3.148
+Audio,,At what speed is a takeoff no longer recommended to be rejected?,N3,Yes,12/10/2025,," At what speed is a takeoff no longer recommended to be rejected?",0.314,0.0,"**Procedure:**
+
+REJECTED TAKEOFF
+
+**Conditions:**
+
+Critical event detected before V1.
+
+**Steps:**
+
+1. The thrust levers are set to IDLE.
+
+2. The reversers are deployed to maximum.
+
+3. Braking is applied to maximum.
+
+4. Air Traffic Control is informed.
+
+5. If required, an evacuation is initiated.
+
+**Notes:**
+
+Above V1 the takeoff is continued unless the aircraft cannot fly.",REJECTED TAKEOFF,success,yes,1.531,1.2533,"[9.0, 3.0, 3.0]",1.436,3.281
+Audio,,"For a water landing, should the landing gear be up or down?",N3,Yes,12/10/2025,," For a water landing, should the landing gear be up or down?",0.302,0.0,"**Procedure:**
+
+DITCHING
+
+**Conditions:**
+
+Forced landing on water.
+
+**Steps:**
+
+1. The approach is configured with landing gear up.
+
+2. The impact is prepared with the brace position.
+
+**Notes:**
+
+Air Traffic Control and SAR are contacted if possible.",DITCHING,success,yes,1.215,1.1567,"[9.0, 4.0, 5.0]",0.8,2.316
+Audio,,What is the first step in ordering an evacuation?,N3,Yes,12/10/2025,," What is the first step in ordering an evacuation?",0.262,0.0,"**Procedure:**
+
+EVACUATION
+
+**Conditions:**
+
+Order to evacuate the aircraft.
+
+**Steps:**
+
+1. The parking brake is set ON.
+
+2. The evacuation command is initiated.
+
+3. Both engine masters are set to OFF.
+
+4. The APU is set to OFF.
+
+5. Air Traffic Control is informed.
+
+**Notes:**
+
+_No data available_",EVACUATION,success,yes,1.332,0.96,"[9.0, 9.0, 3.0]",1.042,2.635
+Audio,,"If my normal brakes fail, what is the alternative method to slow the aircraft down?",N3,Yes,12/10/2025,," If my normal brakes fail, what is the alternative method to slow the aircraft down?",0.36,0.0,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+- Prolonged use of the parking brake is avoided to prevent wheel lock.",LOSS OF BRAKING,success,yes,1.758,1.2467,"[10.0, 8.0, 2.0]",1.482,3.6
+Audio,,"If smoke appears, what is the first thing the pilots should do for themselves?",N3,Yes,12/10/2025,," If smoke appears, what is the first thing the pilot should do for themselves?",0.322,0.0714,"**Procedure:**
+
+SMOKE OR FUMES
+
+**Conditions:**
+
+Detection of smoke or fumes in the cabin or avionics.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. If necessary, smoke or fumes removal procedures are applied.
+
+4. Ventilation conditions are adjusted.
+
+**Notes:**
+
+If smoke persists, an immediate diversion is recommended.",SMOKE OR FUMES,success,yes,1.469,1.09,"[10.0, 4.0, 1.0]",1.007,2.798
+Audio,,Can you write a short poem about the seasons?,N3,No,12/10/2025,," Can you write a short poem about the seasons?",0.265,0.0,The question does not match with the context provided.,,no_match,yes,0.491,1.89,"[11.0, 10.0, 5.0]",0.073,0.829
+Audio,,What is the chemical formula for water?,N3,No,12/10/2025,," What is the chemical formula for water?",0.23,0.0,The question does not match with the context provided.,,no_match,yes,0.494,1.8433,"[9.0, 10.0, 6.0]",0.074,0.799
+Audio + Text,Fuel Leak,Procedure for,N1,Yes,12/10/2025,Fuel Leak," procedure for.",0.157,0.0,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+_No data available_",FUEL LEAK,success,yes,1.237,1.0767,"[10.0, 7.0, 11.0]",0.975,2.369
+Audio + Text,Emergency Descent,Procedure for,N1,Yes,12/10/2025,Emergency Descent," procedure for.",0.161,0.0,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.623,0.7833,"[11.0, 4.0, 9.0]",1.249,3.033
+Audio + Text,EGPWS Warning,Explain,N1,Yes,12/10/2025,EGPWS Warning," Explain.",0.147,0.0,"**Procedure:**
+
+EGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The side stick is pulled fully back.
+
+3. 3. Thrust is set to TOGA.
+
+4. 4. Wings are leveled.
+
+5. 5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",EGPWS WARNING (TERRAIN / PULL UP),success,yes,1.679,1.28,"[11.0, 10.0, 9.0]",0.886,2.712
+Audio + Text,Windshear Escape Maneuver,What is the,N1,Yes,12/10/2025,Windshear Escape Maneuver," What is them?",0.171,0.3333,"**Procedure:**
+
+WINDSHEAR ESCAPE MANEUVER
+
+**Conditions:**
+
+Encounter with windshear.
+
+**Steps:**
+
+1. 1. The thrust levers are set to TOGA.
+
+2. 2. The autopilot is kept ON if appropriate.
+
+3. 3. The SRS orders are followed.
+
+4. 4. Configuration is not changed until out of windshear.
+
+**Notes:**
+
+- The priority is to avoid loss of control and maintain a safe climb.",WINDSHEAR ESCAPE MANEUVER,success,yes,1.642,1.1267,"[11.0, 11.0, 9.0]",0.967,2.78
+Audio + Text,Loss of Braking,Procedure for,N1,Yes,12/10/2025,Loss of Braking," Procedure for",0.186,0.0,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+- Prolonged use of the parking brake is avoided to prevent wheel lock.",LOSS OF BRAKING,success,yes,1.816,0.9667,"[10.0, 2.0, 7.0]",1.13,3.132
+Audio + Text,Football,How to play,N1,No,12/10/2025,Football," had to play.",0.186,0.3333,The question does not match with the context provided.,,no_match,yes,0.417,1.6767,"[8.0, 5.0, 5.0]",0.075,0.678
+Audio + Text,for a fuel leak?,What is the procedure,N2,Yes,12/10/2025,for a fuel leak?," What is the procedure?",0.205,0.0,"**Procedure:**
+
+FUEL LEAK
+
+**Conditions:**
+
+Indications of a fuel leak.
+
+**Steps:**
+
+1. The ENGINE MASTER of the affected engine is set to OFF.
+
+2. The IDG of the affected engine is set to OFF.
+
+3. Air Traffic Control is informed.
+
+4. Fuel imbalance is monitored.
+
+**Notes:**
+
+If safety is compromised, an immediate landing is performed.",FUEL LEAK,success,yes,1.486,1.0633,"[10.0, 7.0, 10.0]",1.197,2.888
+Audio + Text,an emergency descent?,How do you perform,N2,Yes,12/10/2025,an emergency descent?," How do you perform?",0.182,0.0,"**Procedure:**
+
+EMERGENCY DESCENT
+
+**Conditions:**
+
+Urgent need to lose altitude rapidly.
+
+**Steps:**
+
+1. Oxygen masks are set ON with 100% oxygen.
+
+2. Crew communication is established.
+
+3. Speed is set to maximum or appropriate.
+
+4. Spoilers are set to full.
+
+5. The selected altitude is confirmed and descent is initiated.
+
+**Notes:**
+
+Air Traffic Control is informed as soon as possible.",EMERGENCY DESCENT,success,yes,1.639,0.9767,"[11.0, 9.0, 9.0]",0.936,2.756
+Audio + Text,to an EGPWS warning?,What is the response,N2,Yes,12/10/2025,to an EGPWS warning?," What is the response?",0.188,0.0,"**Procedure:**
+
+ECGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. The autopilot is disconnected.
+
+2. The side stick is pulled fully back.
+
+3. Thrust is set to TOGA.
+
+4. Wings are leveled.
+
+5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",ECGPWS WARNING (TERRAIN / PULL UP),success,yes,1.518,1.2833,"[11.0, 10.0, 8.0]",0.999,2.705
+Audio + Text,the windshear escape maneuver?,Can you explain,N2,Yes,12/10/2025,the windshear escape maneuver?," Can you explain?",0.177,0.0,"**Procedure:**
+
+WINDSHEAR ESCAPE MANEUVER
+
+**Conditions:**
+
+Encounter with windshear.
+
+**Steps:**
+
+1. The thrust levers are set to TOGA.
+
+2. The autopilot is kept ON if appropriate.
+
+3. The SRS orders are followed.
+
+4. Configuration is not changed until out of windshear.
+
+**Notes:**
+
+The priority is to avoid loss of control and maintain a safe climb.",WINDSHEAR ESCAPE MANEUVER,success,yes,1.436,1.0733,"[11.0, 11.0, 9.0]",0.788,2.401
+Audio + Text,for a loss of braking?,What are the steps to follow,N2,Yes,12/10/2025,for a loss of braking?," What are the steps to follow?",0.235,0.0,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. 1. The reversers are set to MAX.
+
+2. 2. Brake pedals are released.
+
+3. 3. The anti-skid and nose wheel steering are set to OFF.
+
+4. 4. Brake pedals are pressed again.
+
+5. 5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+_No data available_",LOSS OF BRAKING,success,yes,1.631,0.96,"[10.0, 7.0, 8.0]",1.161,3.028
+Audio + Text,of Spain?,Who is the current king,N2,No,12/10/2025,of Spain?," Who is the current king?",0.2,0.0,The question does not match with the context provided.,,no_match,yes,0.535,1.9233,"[4.0, 8.0, 3.0]",0.073,0.809
+Audio + Text,What must I do?,"I have an EGPWS PULL UP warning, but I am in the clouds.",N3,Yes,12/10/2025,What must I do?," I have an egg quiz pull up warning, but I am in the clouds.",0.336,0.1538,"**Procedure:**
+
+EGPWS WARNING (TERRAIN / PULL UP)
+
+**Conditions:**
+
+Ground proximity warning from EGPWS.
+
+**Steps:**
+
+1. 1. The autopilot is disconnected.
+
+2. 2. The side stick is pulled fully back.
+
+3. 3. Thrust is set to TOGA.
+
+4. 4. Wings are leveled.
+
+5. 5. Configuration is maintained until clear of terrain.
+
+**Notes:**
+
+Visual confirmation of terrain is not attempted before maneuvering.",EGPWS WARNING (TERRAIN / PULL UP),success,yes,1.675,1.4967,"[11.0, 11.0, 6.0]",0.896,2.907
+Audio + Text,How do I stop the aircraft?,"After a heavy landing in bad weather, I realize I have no brakes.",N3,Yes,12/10/2025,How do I stop the aircraft?," After a heavy landing in bed, I realize I have no brakes.",0.312,0.1538,"**Procedure:**
+
+LOSS OF BRAKING
+
+**Conditions:**
+
+Loss of braking during landing or taxi.
+
+**Steps:**
+
+1. The reversers are set to MAX.
+
+2. Brake pedals are released.
+
+3. The anti-skid and nose wheel steering are set to OFF.
+
+4. Brake pedals are pressed again.
+
+5. If braking is not restored, the parking brake is applied in short intervals.
+
+**Notes:**
+
+Prolonged use of the parking brake is avoided to prevent wheel lock.",LOSS OF BRAKING,success,yes,1.687,1.1667,"[10.0, 9.0, 5.0]",0.957,2.956
+Audio + Text,of the global economy.,Provide a detailed analysis,N3,No,12/10/2025,of the global economy.," Provide a detailed analysis.",0.207,0.0,The question does not match with the context provided.,,no_match,yes,0.415,1.6767,"[7.0, 4.0, 5.0]",0.076,0.698

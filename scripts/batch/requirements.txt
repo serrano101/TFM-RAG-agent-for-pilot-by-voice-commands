@@ -1,0 +1,5 @@
+jiwer
+seaborn
+matplotlib
+pandas
+plotly

@@ -113,7 +113,7 @@ if menu == "Chatbot":
     tabs = st.tabs(["Chat", "History", "Statistics"])
     with tabs[0]:
         st.header("Interactive Chatbot")
-        st.write("Type your query below. You will get responses from RAG and Agent React in parallel.")
+        st.write("Type your query below. You will get responses from RAG.")
 
         ## Inicializar historial de chat en la sesión si no existe
         if "chat_history" not in st.session_state:
