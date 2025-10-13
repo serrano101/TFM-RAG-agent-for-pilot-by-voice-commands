@@ -89,6 +89,64 @@ RAG_TIMEOUT = int(_timeouts_cfg.get("RAG", 60))
 
 # Errores
 OUTPUT_NOT_MATCH_ANSWER_CONTEXT = config.get("RAG", {}).get("OUTPUT_NOT_MATCH_ANSWER_CONTEXT", "The question does not match with the context provided.")
+def extract_procedure_from_answer(raw: str) -> str | None:
+    """
+    Extrae el nombre del procedimiento desde RAG Answer.
+    - Soporta JSON (claves: procedure, procedure_name, Procedure, etc.).
+    - Soporta Markdown: "**Procedure:**\\n\\nNAME", "**Procedure:** NAME", "Procedure: NAME".
+    - Soporta español: "Procedimiento".
+    """
+    if not raw:
+        return None
+    text = str(raw).strip()
+
+    # 1) JSON
+    try:
+        obj = json.loads(text)
+        def find_in(o):
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    kl = str(k).strip().lower()
+                    if kl in ("procedure", "procedure_name", "procedimiento", "procedure title", "procedure_title"):
+                        if isinstance(v, (str, int, float)):
+                            return str(v).strip()
+                        if isinstance(v, dict):
+                            for subk in ("name", "title", "titulo"):
+                                if subk in v and isinstance(v[subk], (str, int, float)):
+                                    return str(v[subk]).strip()
+                    found = find_in(v)
+                    if found: return found
+            elif isinstance(o, list):
+                for it in o:
+                    found = find_in(it)
+                    if found: return found
+            return None
+        val = find_in(obj)
+        if val: return val
+    except Exception:
+        pass
+
+    # 2) Texto/Markdown: limpiar un poco para evitar conflictos con '**'
+    txt = text
+
+    # Patrones: admitir asteriscos de markdown antes/después y el ':' con o sin '**'
+    patterns = [
+        # Título en la línea siguiente (Procedure / Procedimiento)
+        r'(?is)\*{0,3}\s*procedure\s*\*{0,3}\s*:?\s*\**\s*(?:\r?\n)+\s*([^\n\r#*]+)',
+        r'(?is)\*{0,3}\s*procedimiento\s*\*{0,3}\s*:?\s*\**\s*(?:\r?\n)+\s*([^\n\r#*]+)',
+        # En la misma línea
+        r'(?is)\bprocedure\b\s*[:\-]\s*([^\n\r]+)',
+        r'(?is)\bprocedimiento\b\s*[:\-]\s*([^\n\r]+)',
+    ]
+    for pat in patterns:
+        m = re.search(pat, txt)
+        if m:
+            val = m.group(1).strip(" -*:_").strip()
+            # quitar dobles asteriscos residuales
+            val = val.replace("**", "").strip()
+            return val or None
+
+    return None
 
 # =====================
 # 3. Configuración de la interfaz Streamlit
@@ -215,7 +273,7 @@ if menu == "Chatbot":
             rag_avg_score = (sum(rag_scores) / len(rag_scores)) if rag_scores else None
             # Página más frecuente (excluye unknown si hay otras)
             from collections import Counter
-            pages_counter = Counter([p for p in rag_pages_list if p is not None])
+            pages_counter = Counter([p for p in rag_pages_list if p not in (None, "unknown")])
             if pages_counter:
                 # Si hay páginas válidas distintas de 'unknown', priorízalas
                 pages_no_unknown = Counter([p for p in rag_pages_list if p not in (None, "", "unknown")])
@@ -301,7 +359,15 @@ if menu == "Chatbot":
             avg_asr = df['Transcription Time'].mean() if 'Transcription Time' in df.columns else None
             avg_rag = df['RAG Response Time'].mean() if 'RAG Response Time' in df.columns else None
             avg_tts = df['TTS Generation Time'].mean() if 'TTS Generation Time' in df.columns else None
-
+            # Medias de tiempo total (sin ASR y con ASR)
+            avg_total_no_asr = None
+            avg_total_with_asr = None
+            if {'RAG Response Time', 'TTS Generation Time'}.issubset(df.columns):
+                total_no_asr = df[['RAG Response Time', 'TTS Generation Time']].sum(axis=1, min_count=2)
+                avg_total_no_asr = total_no_asr.mean()
+            if {'Transcription Time', 'RAG Response Time', 'TTS Generation Time'}.issubset(df.columns):
+                total_with_asr = df[['Transcription Time', 'RAG Response Time', 'TTS Generation Time']].sum(axis=1, min_count=3)
+                avg_total_with_asr = total_with_asr.mean()
             # --- Tema más repetido (se toma la cadena completa) ---
             most_text = None
             if 'Text Input' in df.columns and df['Text Input'].notna().any():
@@ -315,24 +381,11 @@ if menu == "Chatbot":
             proc_counter = {}
             if 'RAG Answer' in df.columns:
                 for raw in df['RAG Answer'].astype(str).tolist():
-                    proc = None
-                    # Intentar JSON
-                    raw_strip = raw.strip()
-                    if raw_strip.startswith("{") or raw_strip.startswith("["):
-                        try:
-                            obj = json.loads(raw_strip)
-                            if isinstance(obj, dict) and 'procedure' in obj:
-                                proc = obj.get('procedure')
-                        except Exception:
-                            pass
-                    if not proc:
-                        # Regex estilo "Procedure: LANDING"
-                        m = re.search(r'(?i)procedure\s*[:\-]\s*([A-Za-z0-9 _\-\/]+)', raw)
-                        if m:
-                            proc = m.group(1).strip()
+                    proc = extract_procedure_from_answer(raw)
                     if proc:
                         proc_counter[proc] = proc_counter.get(proc, 0) + 1
-            top_procs = sorted(proc_counter.items(), key=lambda x: x[1], reverse=True)[:10]
+            # Mostrar solo top 3 procedimientos más frecuentes
+            top_procs = sorted(proc_counter.items(), key=lambda x: x[1], reverse=True)[:3]
 
             # --- Clasificación status success / no_match ---
             status_col = df.get('RAG Status')
@@ -363,7 +416,7 @@ if menu == "Chatbot":
 
             # =============== LAYOUT ===============
             st.subheader("KPI Overview")
-            c1, c2, c3, c4, c5 = st.columns(5)
+            c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
             with c1:
                 st.metric("Total Interactions", total_interactions)
             with c2:
@@ -374,6 +427,10 @@ if menu == "Chatbot":
                 st.metric("Avg TTS (s)", f"{avg_tts:.2f}" if avg_tts is not None and not pd.isna(avg_tts) else "—")
             with c5:
                 st.metric("Avg ASR (s)", f"{avg_asr:.2f}" if avg_asr is not None and not pd.isna(avg_asr) else "—")
+            with c6:
+                st.metric("Avg Total sin ASR (s)", f"{avg_total_no_asr:.2f}" if avg_total_no_asr is not None and not pd.isna(avg_total_no_asr) else "—")
+            with c7:
+                st.metric("Avg Total con ASR (s)", f"{avg_total_with_asr:.2f}" if avg_total_with_asr is not None and not pd.isna(avg_total_with_asr) else "—")
 
             st.markdown("### Most Frequent Themes")
             col_t1, col_t2, col_t3 = st.columns(3)
@@ -494,7 +551,8 @@ if menu == "Chatbot":
             if {'RAG Response Time', 'RAG Top Score', 'RAG Status'}.issubset(df.columns):
                 mask_scatter = df['RAG Response Time'].notna() & df['RAG Top Score'].notna()
                 if mask_scatter.any():
-                    fig_sc, ax_sc = plt.subplots(figsize=(6,4))
+                    # Figura más pequeña
+                    fig_sc, ax_sc = plt.subplots(figsize=(4, 3))
                     norm_status_series = df['RAG Status'].astype(str).str.lower()
                     colors = []
                     for s in norm_status_series[mask_scatter]:
@@ -504,26 +562,29 @@ if menu == "Chatbot":
                             colors.append('#d62728')
                         else:
                             colors.append('#7f7f7f')
-                    x_vals = df.loc[mask_scatter, 'RAG Response Time']
-                    y_vals = df.loc[mask_scatter, 'RAG Top Score']
-                    ax_sc.scatter(x_vals, y_vals, c=colors, alpha=0.75, edgecolor='k', linewidth=0.4)
-                    ax_sc.set_xlabel("RAG Response Time (s)")
-                    ax_sc.set_ylabel("Top Score")
+                    # Invertir ejes: X = Top Score, Y = RAG Response Time
+                    x_vals = df.loc[mask_scatter, 'RAG Top Score']
+                    y_vals = df.loc[mask_scatter, 'RAG Response Time']
+                    ax_sc.scatter(x_vals, y_vals, c=colors, alpha=0.75, edgecolor='k', linewidth=0.4, s=18)
+                    ax_sc.set_xlabel("Top Score", fontsize=10)
+                    ax_sc.set_ylabel("RAG Response Time (s)", fontsize=10)
+                    ax_sc.tick_params(labelsize=9)
                     ax_sc.grid(axis='both', linestyle='--', alpha=0.4)
                     # Etiquetas (limitamos a 40 puntos para no saturar)
                     max_labels = 40
                     label_indices = x_vals.index[:max_labels]
                     for idx in label_indices:
                         txt_short = str(df.loc[idx, 'Text Input'])[:18] + ("..." if len(str(df.loc[idx, 'Text Input'])) > 18 else "")
-                        ax_sc.annotate(txt_short, (df.loc[idx, 'RAG Response Time'], df.loc[idx, 'RAG Top Score']),
-                                       textcoords="offset points", xytext=(4,4), fontsize=7, alpha=0.8)
+                        ax_sc.annotate(txt_short, (df.loc[idx, 'RAG Top Score'], df.loc[idx, 'RAG Response Time']),
+                                    textcoords="offset points", xytext=(4,4), fontsize=6, alpha=0.8)
                     legend_handles = [
                         plt.Line2D([0],[0], marker='o', color='w', label='success', markerfacecolor='#2ca02c', markersize=8),
                         plt.Line2D([0],[0], marker='o', color='w', label='no_match', markerfacecolor='#d62728', markersize=8),
                         plt.Line2D([0],[0], marker='o', color='w', label='other', markerfacecolor='#7f7f7f', markersize=8),
                     ]
-                    ax_sc.legend(handles=legend_handles, title="Status", loc='best')
-                    st.pyplot(fig_sc)
+                    ax_sc.legend(handles=legend_handles, title="Status", loc='best', prop={'size':8}, title_fontsize=9)
+                    plt.tight_layout()
+                    st.pyplot(fig_sc, use_container_width=False)
                 else:
                     st.info("Insufficient data for scatter.")
             else:
@@ -575,64 +636,68 @@ elif menu == "Vector Database":
         else:
             # --- TAB 1: Estadísticas ---
             with tabs[0]:
-                st.markdown("## Vector Database Statistics")
-                total_chunks = 0
-                doc_filenames = {}
-                col_names = []
-                for col in collections:
-                    col_names.append(col.name)
-                    collection = client.get_collection(col.name)
-                    docs = collection.get()
-                    embeddings = docs.get("embeddings", [])
-                    metadatas = docs.get("metadatas", [])
-                    total_chunks += len(metadatas)
-                    for meta in metadatas:
-                        if isinstance(meta, dict):
-                            if "origin" in meta:
-                                origin = meta.get("origin")
-                                filename = None
-                                import json
-                                if origin:
-                                    try:
-                                        if isinstance(origin, str):
-                                            origin_dict = json.loads(origin)
-                                        else:
-                                            origin_dict = origin
-                                        filename = origin_dict.get("filename")
-                                    except Exception:
-                                        filename = None
-                                if filename:
-                                    doc_filenames.setdefault(filename, 0)
-                                    doc_filenames[filename] += 1
-                            elif "filename" in meta:
-                                filename = meta.get("filename")
-                                if filename:
-                                    doc_filenames.setdefault(filename, 0)
-                                    doc_filenames[filename] += 1
-                # Gráficos visuales
-                st.markdown(f"**Total collections:** {len(col_names)}")
-                st.markdown(f"**Collections:** {', '.join(col_names)}")
-                st.markdown(f"**Total chunks:** {total_chunks}")
-                st.markdown(f"**Total unique documents:** {len(doc_filenames)}")
-                # Chunks per document - two charts in the same row
+                # Más espacio para la gráfica
+                col1, col2 = st.columns([1, 2])
+                with col1:
+                    st.markdown("## Vector Database Statistics")
+                    total_chunks = 0
+                    doc_filenames = {}
+                    col_names = []
+                    for col in collections:
+                        col_names.append(col.name)
+                        collection = client.get_collection(col.name)
+                        docs = collection.get()
+                        embeddings = docs.get("embeddings", [])
+                        metadatas = docs.get("metadatas", [])
+                        total_chunks += len(metadatas)
+                        for meta in metadatas:
+                            if isinstance(meta, dict):
+                                if "origin" in meta:
+                                    origin = meta.get("origin")
+                                    filename = None
+                                    import json
+                                    if origin:
+                                        try:
+                                            if isinstance(origin, str):
+                                                origin_dict = json.loads(origin)
+                                            else:
+                                                origin_dict = origin
+                                            filename = origin_dict.get("filename")
+                                        except Exception:
+                                            filename = None
+                                    if filename:
+                                        doc_filenames.setdefault(filename, 0)
+                                        doc_filenames[filename] += 1
+                                elif "filename" in meta:
+                                    filename = meta.get("filename")
+                                    if filename:
+                                        doc_filenames.setdefault(filename, 0)
+                                        doc_filenames[filename] += 1
+                    # Gráficos visuales
+                    st.markdown(f"**Total collections:** {len(col_names)}")
+                    st.markdown(f"**Collections:** {', '.join(col_names)}")
+                    st.markdown(f"**Total chunks:** {total_chunks}")
+                    st.markdown(f"**Total unique documents:** {len(doc_filenames)}")
+                # Chunks per document - single chart
                 if doc_filenames:
                     df_chunks = pd.DataFrame(list(doc_filenames.items()), columns=["Document", "Chunks"])
-                    st.markdown("### Chunks per document:")
-                    col_bar, col_pie = st.columns(2)
-                    with col_bar:
-                        fig_bar, ax_bar = plt.subplots()
-                        df_chunks.plot(kind='bar', x='Document', y='Chunks', ax=ax_bar, legend=False, color='#1f77b4')
-                        ax_bar.set_ylabel('Chunks')
-                        ax_bar.set_title('Chunks per Document')
-                        ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
-                        plt.xticks(rotation=45, ha='right')
-                        st.pyplot(fig_bar)
-                    with col_pie:
-                        fig_pie, ax_pie = plt.subplots()
+                    with col2:
+                        st.markdown("## Chunks per document:")
+                        fig_pie, ax_pie = plt.subplots(figsize=(8, 4))
                         colors = plt.cm.Paired(range(len(df_chunks)))
-                        ax_pie.pie(df_chunks["Chunks"], labels=df_chunks["Document"], autopct='%1.1f%%', startangle=90, colors=colors)
-                        ax_pie.set_title('Chunks Distribution per Document')
-                        ax_pie.axis('equal')
+                        ax_pie.pie(
+                            df_chunks["Chunks"],
+                            labels=df_chunks["Document"],
+                            autopct="%1.1f%%",
+                            startangle=90,
+                            colors=colors,
+                            pctdistance=0.8,
+                            labeldistance=1.05,
+                        )
+                        ax_pie.set_title("Chunks Distribution per Document")
+                        ax_pie.axis("equal")
+                        plt.tight_layout()
+                        st.pyplot(fig_pie, use_container_width=True)
             with tabs[1]:
                 # Obtener lista de colecciones
                 collection_names = [col.name for col in collections]
