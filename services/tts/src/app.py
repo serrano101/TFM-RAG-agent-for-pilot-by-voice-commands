@@ -38,7 +38,7 @@ async def synthesize_endpoint(req: Request, body: SynthesisRequest):
         return JSONResponse(status_code=503, content={"status": "not_ready", "message": "TTS not initialized. Call /warmup first."})
 
     tcfg = config["TTS"]
-    max_len = tcfg.get("MAX_TEXT_LENGTH", 500)
+    max_len = tcfg.get("MAX_TEXT_LENGTH", 1000)
     if len(body.text) > max_len:
         return JSONResponse(
             status_code=400,

@@ -46,7 +46,7 @@ TTS:
   DEFAULT_SPEAKER: p245
   SAMPLE_RATE: 22050
   WARMUP_TEXT: "System warmup completed."
-  MAX_TEXT_LENGTH: 500
+  MAX_TEXT_LENGTH: 1000
   RETURN_BASE64: true
 
 # Timeouts (segundos) para las llamadas HTTP desde Streamlit
