@@ -1,0 +1,10 @@
+TTS
+transformers
+accelerate
+sentencepiece
+phonemizer
+librosa
+soundfile
+numpy
+protobuf<4
+huggingface_hub>=0.23
